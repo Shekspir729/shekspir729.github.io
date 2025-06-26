@@ -230,9 +230,9 @@
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-        // Короткий ID таблицы и имя листа
         const sheetID = '1KzNU2JgqydPPF25y-BWr--4uj3iznjlC6KA0mqNi0z4';
         const sheetName = 'Московский';
+
         google.charts.load('current', {'packages':['table']});
         google.charts.setOnLoadCallback(drawTable);
 
@@ -249,8 +249,32 @@
                 return;
             }
             const data = response.getDataTable();
+            const result = [['Название команды', 'Сумма баллов', 'Кол-во игр', 'Средний балл']];
+            for (let i = 0; i < data.getNumberOfRows(); i++) {
+                const name = data.getValue(i, 0);
+                let sum = 0;
+                let count = 0;
+                // Столбцы с баллами: с 1 по 15 (B-P, индексы 1-15)
+                for (let j = 1; j <= 15; j++) {
+                    const val = data.getValue(i, j);
+                    if (typeof val === 'number') {
+                        sum += val;
+                        count++;
+                    }
+                }
+                if (name && count > 0) {
+                    result.push([
+                        name,
+                        sum,
+                        count,
+                        (sum / count).toFixed(2)
+                    ]);
+                }
+            }
+            // Рисуем новую таблицу
+            const dataTable = google.visualization.arrayToDataTable(result);
             const table = new google.visualization.Table(document.getElementById('table_div'));
-            table.draw(data, {
+            table.draw(dataTable, {
                 showRowNumber: false,
                 width: '100%',
                 height: '100%',
