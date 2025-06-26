@@ -187,6 +187,31 @@
             padding: 32px 24px;
             overflow-x: auto;
         }
+        .city-switcher {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+        }
+        .city-btn {
+            background: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            padding: 18px 36px;
+            font-size: 2.2rem;
+            font-family: 'Arial', sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(52,152,219,0.08);
+        }
+        .city-btn.active, .city-btn:hover {
+            background: #217dbb;
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(52,152,219,0.18);
+        }
         table.custom-table {
             width: 100%;
             border-collapse: separate;
@@ -224,6 +249,10 @@
             .custom-table-container {
                 padding: 12px 2px;
             }
+            .city-btn {
+                font-size: 1.2rem;
+                padding: 10px 16px;
+            }
             table.custom-table th, table.custom-table td {
                 padding: 12px 2px;
                 font-size: 2.2rem;
@@ -240,14 +269,26 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
         const sheetID = '1KzNU2JgqydPPF25y-BWr--4uj3iznjlC6KA0mqNi0z4';
-        const sheetName = 'Московский';
+        const cities = [
+            { name: 'Московский', label: 'Московский' },
+            { name: 'Н-Ф', label: 'Н-Ф' },
+            { name: 'Митино', label: 'Митино' },
+            { name: 'Бутово', label: 'Бутово' },
+            { name: 'Подольск', label: 'Подольск' },
+            { name: 'Красногорск', label: 'Красногорск' },
+            { name: 'Отрадное', label: 'Отрадное' }
+        ];
+        let currentCity = cities[0].name;
 
         google.charts.load('current', {'packages':['table']});
-        google.charts.setOnLoadCallback(drawTable);
+        google.charts.setOnLoadCallback(() => drawTable(currentCity));
 
-        function drawTable() {
+        function drawTable(city) {
+            currentCity = city;
+            document.getElementById('table_div').innerHTML = 'Загрузка таблицы...';
+            updateActiveButton(city);
             const queryString = encodeURIComponent('SELECT *');
-            const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${sheetName}&tq=${queryString}`;
+            const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${city}&tq=${queryString}`;
             const query = new google.visualization.Query(url);
             query.send(handleQueryResponse);
         }
@@ -304,12 +345,30 @@
                 allowHtml: true
             });
         }
+
+        function updateActiveButton(city) {
+            const btns = document.querySelectorAll('.city-btn');
+            btns.forEach(btn => {
+                if (btn.dataset.city === city) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
     </script>
 </head>
 <body style="background: #f5f7fa;">
     <div class="custom-table-container">
-        <h1 style="text-align:center; font-size:2.2rem; margin-bottom: 8px; color:#222;">🏆 Рейтинг НФ</h1>
+        <h1 style="text-align:center; font-size:6.6rem; margin-bottom: 8px; color:#222;">🏆 Рейтинг НФ</h1>
         <p style="text-align:center; color:#666; margin-bottom: 24px;">Актуальная таблица лидеров</p>
+        <div class="city-switcher">
+            <script>
+                document.write(
+                    cities.map(city => `<button class='city-btn' data-city='${city.name}' onclick='drawTable("${city.name}")'>${city.label}</button>`).join('')
+                );
+            </script>
+        </div>
         <div id="table_div">Загрузка таблицы...</div>
     </div>
 </body>
