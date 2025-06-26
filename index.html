@@ -352,17 +352,21 @@
 
         function drawTable(city) {
             currentCity = city;
-            document.getElementById('table_div').innerHTML = 'Загрузка таблицы...';
-            updateActiveButton(city);
-            const queryString = encodeURIComponent('SELECT *');
-            const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${city}&tq=${queryString}`;
-            const query = new google.visualization.Query(url);
-            query.send(handleQueryResponse);
+            // Fade out контейнер
+            gsap.to("#table_fade", {duration: 0.4, autoAlpha: 0, onComplete: () => {
+                document.getElementById('table_div').innerHTML = 'Загрузка таблицы...';
+                updateActiveButton(city);
+                const queryString = encodeURIComponent('SELECT *');
+                const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${city}&tq=${queryString}`;
+                const query = new google.visualization.Query(url);
+                query.send(handleQueryResponse);
+            }});
         }
 
         function handleQueryResponse(response) {
             if (response.isError()) {
                 document.getElementById('table_div').innerHTML = 'Ошибка загрузки данных: ' + response.getMessage();
+                gsap.to("#table_fade", {duration: 0.4, autoAlpha: 1});
                 return;
             }
             const data = response.getDataTable();
@@ -443,6 +447,7 @@
                 height: '100%',
                 allowHtml: true
             });
+            gsap.to("#table_fade", {duration: 0.6, autoAlpha: 1});
         }
 
         function updateActiveButton(city) {
@@ -593,11 +598,13 @@
                         <div class="city-switcher">
                             <script>
                                 document.write(
-                                    cities.map(city => `<button class='city-btn' data-city='${city.name}' onclick='drawTable("${city.name}")'>${city.label}</button>`).join('')
+                                    cities.map(city => `<button class='city-btn' data-city='${city.name}' onclick='drawTable(\"${city.name}\")'>${city.label}</button>`).join('')
                                 );
                             </script>
                         </div>
-                        <div id="table_div">Загрузка таблицы...</div>
+                        <div id="table_fade">
+                            <div id="table_div">Загрузка таблицы...</div>
+                        </div>
                     </div>
                 </div>
             </div>
