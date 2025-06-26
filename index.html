@@ -352,8 +352,8 @@
 
         function drawTable(city) {
             currentCity = city;
-            // Fade out контейнер
-            gsap.to("#table_fade", {duration: 0.4, autoAlpha: 0, onComplete: () => {
+            // Flip out по X
+            gsap.to("#table_fade", {duration: 0.5, rotationX: 90, autoAlpha: 0, transformOrigin: '50% 50%', ease: "power4.in", onComplete: () => {
                 document.getElementById('table_div').innerHTML = 'Загрузка таблицы...';
                 updateActiveButton(city);
                 const queryString = encodeURIComponent('SELECT *');
@@ -366,7 +366,7 @@
         function handleQueryResponse(response) {
             if (response.isError()) {
                 document.getElementById('table_div').innerHTML = 'Ошибка загрузки данных: ' + response.getMessage();
-                gsap.to("#table_fade", {duration: 0.4, autoAlpha: 1});
+                gsap.to("#table_fade", {duration: 0.5, rotationX: 0, autoAlpha: 1, transformOrigin: '50% 50%', ease: "power4.out"});
                 return;
             }
             const data = response.getDataTable();
@@ -447,7 +447,7 @@
                 height: '100%',
                 allowHtml: true
             });
-            gsap.to("#table_fade", {duration: 0.6, autoAlpha: 1});
+            gsap.fromTo("#table_fade", {rotationX: 90, autoAlpha: 0, transformOrigin: '50% 50%'}, {duration: 0.7, rotationX: 0, autoAlpha: 1, ease: "power4.out"});
         }
 
         function updateActiveButton(city) {
