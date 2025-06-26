@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Рейтинг НФ</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
         /* Основные стили */
         .rating-container {
@@ -265,6 +267,71 @@
         p {
             font-size: 2.4rem !important;
         }
+
+        /* Vue.js анимации */
+        .page {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .center {
+            position: relative;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Стили для анимированных переходов */
+        .fade { background: linear-gradient(135deg, #461467 0%, #6a1b9a 100%); }
+        .slide { background: linear-gradient(135deg, #ffba57 0%, #ff9800 100%); }
+        .zoom { background: linear-gradient(135deg, #ff7655 0%, #e64a19 100%); }
+        .flipX { background: linear-gradient(135deg, #00aca0 0%, #00838f 100%); }
+        .flipY { background: linear-gradient(135deg, #8ed3c9 0%, #4db6ac 100%); }
+        .slideUp { background: linear-gradient(135deg, #fcf5d8 0%, #fff3e0 100%); }
+
+        /* Контролы анимаций */
+        .animation-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: rgba(0,0,0,0.8);
+            border-radius: 15px;
+            padding: 15px;
+        }
+
+        .animation-controls ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .animation-controls li {
+            opacity: 0.6;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Arial', sans-serif;
+            background: #505050;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .animation-controls li.active {
+            background: #3498db;
+            opacity: 1;
+        }
+
+        .animation-controls li:hover {
+            opacity: 1;
+            transform: translateY(-2px);
+        }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -388,20 +455,164 @@
                 }
             });
         }
+
+        // Vue.js приложение для анимаций
+        new Vue({
+            el: '#app',
+            data: {
+                state: {
+                    animations: ['fade', 'slide', 'slideUp', 'zoom', 'flipX', 'flipY'],
+                    view: 'slide'
+                }
+            },
+            methods: {
+                setView(animation) {
+                    this.state.view = animation;
+                    // Перерисовываем таблицу с новой анимацией
+                    drawTable(currentCity);
+                },
+                enter(el, done) {
+                    const animation = this.state.view;
+                    
+                    switch(animation) {
+                        case 'fade':
+                            gsap.fromTo(el, 1, {
+                                autoAlpha: 0,
+                                scale: 1.5,
+                            }, {
+                                autoAlpha: 1,
+                                scale: 1,
+                                transformOrigin: '50% 50%',
+                                ease: "power4.out",
+                                onComplete: done
+                            });
+                            break;
+                            
+                        case 'slide':
+                            const tl = gsap.timeline({onComplete: done});
+                            tl.set(el, {
+                                x: window.innerWidth * 1.5,
+                                scale: 0.8,
+                                transformOrigin: '50% 50%'
+                            });
+                            tl.to(el, 0.5, {
+                                x: 0,
+                                ease: "power4.out"
+                            });
+                            tl.to(el, 1, {
+                                scale: 1,
+                                ease: "power4.out"
+                            });
+                            break;
+                            
+                        case 'slideUp':
+                            const tl2 = gsap.timeline({onComplete: done});
+                            tl2.set(el, {
+                                y: window.innerHeight * 1.5,
+                                scale: 0.8,
+                                transformOrigin: '50% 50%'
+                            });
+                            tl2.to(el, 0.5, {
+                                y: 0,
+                                ease: "power4.out"
+                            });
+                            tl2.to(el, 1, {
+                                scale: 1,
+                                ease: "power4.out"
+                            });
+                            break;
+                            
+                        case 'zoom':
+                            const tl3 = gsap.timeline({onComplete: done});
+                            tl3.set(el, {
+                                autoAlpha: 0,
+                                scale: 2,
+                                transformOrigin: '50% 50%'
+                            });
+                            tl3.to(el, 1, {
+                                autoAlpha: 1,
+                                scale: 1,
+                                ease: "power4.out"
+                            });
+                            break;
+                            
+                        case 'flipX':
+                            const tl4 = gsap.timeline({onComplete: done});
+                            tl4.set(el, {
+                                autoAlpha: 0,
+                                rotationX: 90,
+                                transformOrigin: '50% 50%'
+                            });
+                            tl4.to(el, 1, {
+                                autoAlpha: 1,
+                                rotationX: 0,
+                                ease: "power4.out"
+                            });
+                            break;
+                            
+                        case 'flipY':
+                            const tl5 = gsap.timeline({onComplete: done});
+                            tl5.set(el, {
+                                autoAlpha: 0,
+                                rotationY: 90,
+                                transformOrigin: '50% 50%'
+                            });
+                            tl5.to(el, 1, {
+                                autoAlpha: 1,
+                                rotationY: 0,
+                                ease: "power4.out"
+                            });
+                            break;
+                    }
+                },
+                leave(el, done) {
+                    gsap.to(el, 1, {
+                        autoAlpha: 0,
+                        scale: 0.8,
+                        ease: "power4.out",
+                        onComplete: done
+                    });
+                }
+            }
+        });
     </script>
 </head>
 <body style="background: #f5f7fa;">
-    <div class="custom-table-container">
-        <h1 style="text-align:center; font-size:6.6rem; margin-bottom: 8px; color:#222;">🏆 Рейтинг НФ</h1>
-        <p style="text-align:center; color:#666; margin-bottom: 24px;">Актуальная таблица лидеров</p>
-        <div class="city-switcher">
-            <script>
-                document.write(
-                    cities.map(city => `<button class='city-btn' data-city='${city.name}' onclick='drawTable("${city.name}")'>${city.label}</button>`).join('')
-                );
-            </script>
+    <div id="app">
+        <transition 
+            v-on:enter="enter" 
+            v-on:leave="leave"
+            v-bind:css="false"
+            appear
+        >
+            <div class="page" v-bind:class="state.view">
+                <div class="center">
+                    <div class="custom-table-container">
+                        <h1 style="text-align:center; font-size:6.6rem; margin-bottom: 8px; color:#222;">🏆 Рейтинг НФ</h1>
+                        <p style="text-align:center; color:#666; margin-bottom: 24px;">Актуальная таблица лидеров</p>
+                        <div class="city-switcher">
+                            <script>
+                                document.write(
+                                    cities.map(city => `<button class='city-btn' data-city='${city.name}' onclick='drawTable("${city.name}")'>${city.label}</button>`).join('')
+                                );
+                            </script>
+                        </div>
+                        <div id="table_div">Загрузка таблицы...</div>
+                    </div>
+                </div>
+            </div>
+        </transition>
+        
+        <!-- Контролы анимаций -->
+        <div class="animation-controls">
+            <ul>
+                <li v-for="(animation, index) in state.animations" 
+                    @click.prevent="setView(animation)" 
+                    v-bind:class="{ 'active': animation === state.view }">
+                    {{ animation }}
+                </li>
+            </ul>
         </div>
-        <div id="table_div">Загрузка таблицы...</div>
     </div>
 </body>
 </html> 
