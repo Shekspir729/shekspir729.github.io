@@ -352,21 +352,18 @@
 
         function drawTable(city) {
             currentCity = city;
-            // Flip out по X
-            gsap.to("#table_fade", {duration: 0.5, rotationX: 90, autoAlpha: 0, transformOrigin: '50% 50%', ease: "power4.in", onComplete: () => {
-                document.getElementById('table_div').innerHTML = 'Загрузка таблицы...';
-                updateActiveButton(city);
-                const queryString = encodeURIComponent('SELECT *');
-                const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${city}&tq=${queryString}`;
-                const query = new google.visualization.Query(url);
-                query.send(handleQueryResponse);
-            }});
+            // Мгновенно меняем данные
+            document.getElementById('table_div').innerHTML = 'Загрузка таблицы...';
+            updateActiveButton(city);
+            const queryString = encodeURIComponent('SELECT *');
+            const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${city}&tq=${queryString}`;
+            const query = new google.visualization.Query(url);
+            query.send(handleQueryResponse);
         }
 
         function handleQueryResponse(response) {
             if (response.isError()) {
                 document.getElementById('table_div').innerHTML = 'Ошибка загрузки данных: ' + response.getMessage();
-                gsap.to("#table_fade", {duration: 0.5, rotationX: 0, autoAlpha: 1, transformOrigin: '50% 50%', ease: "power4.out"});
                 return;
             }
             const data = response.getDataTable();
@@ -447,7 +444,7 @@
                 height: '100%',
                 allowHtml: true
             });
-            gsap.fromTo("#table_fade", {rotationX: 90, autoAlpha: 0, transformOrigin: '50% 50%'}, {duration: 0.7, rotationX: 0, autoAlpha: 1, ease: "power4.out"});
+            gsap.fromTo("#table_fade", {y: -100, autoAlpha: 0}, {duration: 0.7, y: 0, autoAlpha: 1, ease: "power4.out"});
         }
 
         function updateActiveButton(city) {
