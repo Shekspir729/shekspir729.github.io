@@ -360,13 +360,8 @@
 
         function drawTable(city) {
             currentCity = city;
-            // Копируем старое содержимое в table_fade_old
-            const oldDiv = document.getElementById('table_fade_old');
+            // Показываем старый слой (если есть)
             const newDiv = document.getElementById('table_fade_new');
-            oldDiv.innerHTML = lastTableHTML || document.getElementById('table_div')?.innerHTML || '';
-            oldDiv.style.zIndex = 1;
-            oldDiv.style.opacity = 1;
-            oldDiv.style.transform = 'translateX(0)';
             newDiv.innerHTML = '<div id="table_div">Загрузка таблицы...</div>';
             newDiv.style.zIndex = 2;
             newDiv.style.opacity = 1;
@@ -379,17 +374,10 @@
         }
 
         function handleQueryResponse(response) {
-            const oldDiv = document.getElementById('table_fade_old');
             const newDiv = document.getElementById('table_fade_new');
             if (response.isError()) {
                 newDiv.innerHTML = '<div id="table_div">Ошибка загрузки данных: ' + response.getMessage() + '</div>';
-                gsap.to(newDiv, {duration: 0.8, x: 0, autoAlpha: 1, ease: "power4.out"});
-                gsap.to(oldDiv, {duration: 0.8, x: '-100%', autoAlpha: 1, ease: "power4.out"});
-                setTimeout(() => {
-                    oldDiv.innerHTML = '';
-                    oldDiv.style.transform = 'translateX(0)';
-                    newDiv.style.transform = 'translateX(0)';
-                }, 900);
+                gsap.fromTo(newDiv, {x: '100%', autoAlpha: 1}, {duration: 1.2, x: 0, autoAlpha: 1, ease: "power4.out"});
                 return;
             }
             newDiv.innerHTML = '<div id="table_div"></div>';
@@ -472,12 +460,12 @@
                 allowHtml: true
             });
             lastTableHTML = newDiv.innerHTML;
-            // Анимация: новый въезжает справа, старый уезжает влево
-            gsap.to(newDiv, {duration: 1.2, x: 0, autoAlpha: 1, ease: "power4.out"});
-            gsap.to(oldDiv, {duration: 1.2, x: '-100%', autoAlpha: 1, ease: "power4.out"});
+            // Анимация: новый въезжает справа
+            gsap.fromTo(newDiv, {x: '100%', autoAlpha: 1}, {duration: 1.2, x: 0, autoAlpha: 1, ease: "power4.out"});
+            // После анимации сбрасываем старый слой
             setTimeout(() => {
-                oldDiv.innerHTML = '';
-                oldDiv.style.transform = 'translateX(0)';
+                document.getElementById('table_fade_old').innerHTML = '';
+                document.getElementById('table_fade_old').style.transform = 'translateX(0)';
                 newDiv.style.transform = 'translateX(0)';
             }, 1300);
         }
