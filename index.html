@@ -252,6 +252,7 @@
             const result = [['Название команды', 'Сумма баллов', 'Кол-во игр', 'Средний балл']];
             for (let i = 0; i < data.getNumberOfRows(); i++) {
                 const name = data.getValue(i, 0);
+                if (name === 'название команды') continue; // Пропускаем строку-заголовок
                 let sum = 0;
                 let count = 0;
                 // Столбцы с баллами: с 1 по 15 (B-P, индексы 1-15)
