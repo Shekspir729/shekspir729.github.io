@@ -230,18 +230,15 @@
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-        // Вставьте сюда ваш ID таблицы
-        const sheetID = '2PACX-1vQVHxRnHzYbWOU7rMIn4h0joR418FVp1GD9tEv7m9iDF2nAHvve-wj9yDWfZPf5jCxNf7e22E5sYSsk';
-        // Если не работает, попробуйте ID из обычной ссылки между /d/ и /edit
-        // const sheetID = '1KzNU2JgqydPPF25y-BWr--4uj3iznjlC6KA0mqNi0z4';
-        const sheetGID = '0'; // Обычно 0 — это первый лист
-
+        // Короткий ID таблицы и имя листа
+        const sheetID = '1KzNU2JgqydPPF25y-BWr--4uj3iznjlC6KA0mqNi0z4';
+        const sheetName = 'Московский';
         google.charts.load('current', {'packages':['table']});
         google.charts.setOnLoadCallback(drawTable);
 
         function drawTable() {
             const queryString = encodeURIComponent('SELECT *');
-            const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=Лист1&tq=${queryString}`;
+            const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${sheetName}&tq=${queryString}`;
             const query = new google.visualization.Query(url);
             query.send(handleQueryResponse);
         }
@@ -257,16 +254,7 @@
                 showRowNumber: false,
                 width: '100%',
                 height: '100%',
-                allowHtml: true,
-                cssClassNames: {
-                    headerRow: 'custom-table-header',
-                    tableRow: 'custom-table-row',
-                    oddTableRow: 'custom-table-row-odd',
-                    selectedTableRow: 'custom-table-row-selected',
-                    hoverTableRow: 'custom-table-row-hover',
-                    headerCell: 'custom-table-th',
-                    tableCell: 'custom-table-td'
-                }
+                allowHtml: true
             });
         }
     </script>
