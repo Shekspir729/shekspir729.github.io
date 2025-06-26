@@ -249,7 +249,8 @@
                 return;
             }
             const data = response.getDataTable();
-            const result = [['Название команды', 'Сумма баллов', 'Кол-во игр', 'Средний балл']];
+            const result = [['Место', 'Название команды', 'Сумма баллов', 'Кол-во игр', 'Средний балл']];
+            let teams = [];
             for (let i = 0; i < data.getNumberOfRows(); i++) {
                 const name = data.getValue(i, 0);
                 if (name === 'название команды') continue; // Пропускаем строку-заголовок
@@ -264,14 +265,26 @@
                     }
                 }
                 if (name && count > 0) {
-                    result.push([
-                        name,
-                        sum,
-                        count,
-                        (sum / count).toFixed(2)
-                    ]);
+                    teams.push({
+                        name: name,
+                        sum: sum,
+                        count: count,
+                        avg: (sum / count).toFixed(2)
+                    });
                 }
             }
+            // Сортируем по сумме баллов по убыванию
+            teams.sort((a, b) => b.sum - a.sum);
+            // Формируем итоговую таблицу с местом
+            teams.forEach((team, idx) => {
+                result.push([
+                    idx + 1,
+                    team.name,
+                    team.sum,
+                    team.count,
+                    team.avg
+                ]);
+            });
             // Рисуем новую таблицу
             const dataTable = google.visualization.arrayToDataTable(result);
             const table = new google.visualization.Table(document.getElementById('table_div'));
