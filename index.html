@@ -183,7 +183,7 @@
         .custom-table-container {
             max-width: 1800px;
             margin: 40px auto;
-            background: #181818;
+            background: #181818 !important;
             border-radius: 32px;
             box-shadow: 0 8px 48px rgba(0,0,0,0.32);
             padding: 32px 24px;
@@ -194,25 +194,25 @@
             justify-content: center;
             gap: 24px;
             margin-bottom: 32px;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
         }
         .city-btn {
-            background: #232323;
-            color: #fff;
-            border: 1px solid #444;
+            background: #FFD600 !important;
+            color: #222 !important;
+            border: none !important;
             border-radius: 12px;
             padding: 18px 36px;
             font-size: 2.2rem;
             font-family: 'Arial', sans-serif;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.2s, box-shadow 0.2s;
-            box-shadow: 0 2px 8px rgba(52,152,219,0.08);
+            transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+            box-shadow: 0 2px 8px rgba(255,214,0,0.08);
         }
         .city-btn.active, .city-btn:hover {
-            background: #444;
-            color: #fff;
-            box-shadow: 0 4px 16px rgba(52,152,219,0.18);
+            background: #FFC107 !important;
+            color: #000 !important;
+            box-shadow: 0 4px 16px rgba(255,214,0,0.18);
         }
         table.custom-table {
             width: 100%;
@@ -220,32 +220,32 @@
             border-spacing: 0;
             font-family: 'Arial', sans-serif;
             font-size: 4.2rem;
-            background: #222;
+            background: #222 !important;
             border-radius: 32px;
             overflow: hidden;
             box-shadow: 0 6px 24px rgba(0,0,0,0.08);
-            color: #fff;
+            color: #fff !important;
         }
         table.custom-table th, table.custom-table td {
             padding: 24px 12px;
             text-align: center;
-            border-bottom: 3px solid #333;
+            border-bottom: 3px solid #333 !important;
             line-height: 1.4;
             height: 80px;
-            background: #222;
-            color: #fff;
+            background: #222 !important;
+            color: #fff !important;
         }
         table.custom-table th {
-            background: #181818;
+            background: #181818 !important;
             font-weight: bold;
-            color: #fff;
+            color: #fff !important;
             font-size: 4.5rem;
         }
         table.custom-table tr:nth-child(even) {
-            background: #232323;
+            background: #232323 !important;
         }
         table.custom-table tr:hover {
-            background: #333;
+            background: #333 !important;
         }
         table.custom-table tr:last-child td {
             border-bottom: none;
@@ -264,12 +264,7 @@
                 height: 48px;
             }
         }
-        h1 {
-            font-size: 6.6rem !important;
-            color: #fff !important;
-        }
-        p {
-            font-size: 2.4rem !important;
+        h1, p {
             color: #fff !important;
         }
 
