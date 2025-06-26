@@ -332,6 +332,12 @@
             opacity: 1;
             transform: translateY(-2px);
         }
+
+        .table-fade {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            will-change: transform, opacity;
+        }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -350,10 +356,22 @@
         google.charts.load('current', {'packages':['table']});
         google.charts.setOnLoadCallback(() => drawTable(currentCity));
 
+        let lastTableHTML = '';
+
         function drawTable(city) {
             currentCity = city;
-            // Мгновенно меняем данные
-            document.getElementById('table_div').innerHTML = 'Загрузка таблицы...';
+            // Копируем старое содержимое в table_fade_old
+            const oldDiv = document.getElementById('table_fade_old');
+            const newDiv = document.getElementById('table_fade_new');
+            oldDiv.innerHTML = lastTableHTML || document.getElementById('table_div')?.innerHTML || '';
+            oldDiv.style.zIndex = 1;
+            oldDiv.style.opacity = 1;
+            oldDiv.style.transform = 'translateY(0)';
+            // Показываем старый слой
+            newDiv.innerHTML = '<div id="table_div">Загрузка таблицы...</div>';
+            newDiv.style.zIndex = 2;
+            newDiv.style.opacity = 1;
+            newDiv.style.transform = 'translateY(-100%)';
             updateActiveButton(city);
             const queryString = encodeURIComponent('SELECT *');
             const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${city}&tq=${queryString}`;
@@ -362,10 +380,18 @@
         }
 
         function handleQueryResponse(response) {
+            const newDiv = document.getElementById('table_fade_new');
             if (response.isError()) {
-                document.getElementById('table_div').innerHTML = 'Ошибка загрузки данных: ' + response.getMessage();
+                newDiv.innerHTML = '<div id="table_div">Ошибка загрузки данных: ' + response.getMessage() + '</div>';
+                gsap.to(newDiv, {duration: 0.8, y: 0, autoAlpha: 1, ease: "power4.out"});
+                // После анимации очищаем старый слой
+                setTimeout(() => {
+                    document.getElementById('table_fade_old').innerHTML = '';
+                }, 900);
                 return;
             }
+            // Вставляем новый table_div внутрь table_fade_new
+            newDiv.innerHTML = '<div id="table_div"></div>';
             const data = response.getDataTable();
             const result = [['Место', 'Название команды', 'Сумма баллов', 'Сумма Р.Б.', 'Кол-во игр', 'Средний балл', 'Средний Р.Б.']];
             let teams = [];
@@ -444,7 +470,13 @@
                 height: '100%',
                 allowHtml: true
             });
-            gsap.fromTo("#table_fade", {y: -100, autoAlpha: 0}, {duration: 0.7, y: 0, autoAlpha: 1, ease: "power4.out"});
+            gsap.fromTo("#table_fade_new", {y: '-100%', autoAlpha: 1}, {duration: 1.2, y: 0, autoAlpha: 1, ease: "power4.out"});
+            // После анимации очищаем старый слой
+            setTimeout(() => {
+                document.getElementById('table_fade_old').innerHTML = '';
+            }, 1300);
+            // После отрисовки таблицы:
+            lastTableHTML = newDiv.innerHTML;
         }
 
         function updateActiveButton(city) {
@@ -599,8 +631,9 @@
                                 );
                             </script>
                         </div>
-                        <div id="table_fade">
-                            <div id="table_div">Загрузка таблицы...</div>
+                        <div class="table-stack" style="position:relative; width:100%; min-height:400px;">
+                            <div id="table_fade_old" class="table-fade"></div>
+                            <div id="table_fade_new" class="table-fade"></div>
                         </div>
                     </div>
                 </div>
