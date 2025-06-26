@@ -177,160 +177,105 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-    </style>
-</head>
-<body>
-    <div class="rating-container fade-in">
-        <div class="rating-header">
-            <h1>🏆 Рейтинг НФ</h1>
-            <p>Актуальная таблица лидеров</p>
-        </div>
 
-        <div class="stats">
-            <div class="stat-item">
-                <span class="stat-number">100+</span>
-                <span class="stat-label">Команд</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number">134</span>
-                <span class="stat-label">Тура</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number">∞</span>
-                <span class="stat-label">Возможностей</span>
-            </div>
-        </div>
-
-        <div class="controls">
-            <button class="control-btn" onclick="toggleTheme()">🌙 Сменить тему</button>
-            <button class="control-btn" onclick="resizeTable('small')">📱 Маленький</button>
-            <button class="control-btn" onclick="resizeTable('medium')">💻 Средний</button>
-            <button class="control-btn" onclick="resizeTable('large')">🖥️ Большой</button>
-            <button class="control-btn" onclick="refreshTable()">🔄 Обновить</button>
-        </div>
-
-        <div class="table-wrapper">
-            <div class="loading" id="loading">
-                <div class="spinner"></div>
-                <p>Загрузка рейтинга...</p>
-            </div>
-            
-            <iframe 
-                class="rating-iframe"
-                id="ratingTable"
-                src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQVHxRnHzYbWOU7rMIn4h0joR418FVp1GD9tEv7m9iDF2nAHvve-wj9yDWfZPf5jCxNf7e22E5sYSsk/pubhtml?widget=true&headers=false"
-                title="Рейтинг НФ"
-                onload="hideLoading()">
-            </iframe>
-        </div>
-    </div>
-
-    <script>
-        // Скрыть загрузку
-        function hideLoading() {
-            document.getElementById('loading').style.display = 'none';
+        .custom-table-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            padding: 32px 16px;
+            overflow-x: auto;
         }
-
-        // Смена темы
-        function toggleTheme() {
-            const container = document.querySelector('.rating-container');
-            container.classList.toggle('dark-theme');
-            
-            const btn = event.target;
-            if (container.classList.contains('dark-theme')) {
-                btn.textContent = '☀️ Светлая тема';
-                btn.classList.add('active');
-            } else {
-                btn.textContent = '🌙 Сменить тему';
-                btn.classList.remove('active');
+        table.custom-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-family: 'Arial', sans-serif;
+            font-size: 1rem;
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        table.custom-table th, table.custom-table td {
+            padding: 12px 8px;
+            text-align: center;
+            border-bottom: 1px solid #eaeaea;
+        }
+        table.custom-table th {
+            background: #f5f7fa;
+            font-weight: bold;
+            color: #222;
+            font-size: 1.1rem;
+        }
+        table.custom-table tr:nth-child(even) {
+            background: #f9fafb;
+        }
+        table.custom-table tr:hover {
+            background: #e6f0fa;
+        }
+        table.custom-table tr:last-child td {
+            border-bottom: none;
+        }
+        @media (max-width: 600px) {
+            .custom-table-container {
+                padding: 8px 2px;
+            }
+            table.custom-table th, table.custom-table td {
+                padding: 6px 2px;
+                font-size: 0.9rem;
             }
         }
+    </style>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        // Вставьте сюда ваш ID таблицы
+        const sheetID = '2PACX-1vQVHxRnHzYbWOU7rMIn4h0joR418FVp1GD9tEv7m9iDF2nAHvve-wj9yDWfZPf5jCxNf7e22E5sYSsk';
+        // Если не работает, попробуйте ID из обычной ссылки между /d/ и /edit
+        // const sheetID = '1KzNU2JgqydPPF25y-BWr--4uj3iznjlC6KA0mqNi0z4';
+        const sheetGID = '0'; // Обычно 0 — это первый лист
 
-        // Изменение размера
-        function resizeTable(size) {
-            const iframe = document.getElementById('ratingTable');
-            const buttons = document.querySelectorAll('.control-btn');
-            
-            // Убираем активный класс со всех кнопок размера
-            buttons.forEach(btn => {
-                if (btn.textContent.includes('Маленький') || 
-                    btn.textContent.includes('Средний') || 
-                    btn.textContent.includes('Большой')) {
-                    btn.classList.remove('active');
+        google.charts.load('current', {'packages':['table']});
+        google.charts.setOnLoadCallback(drawTable);
+
+        function drawTable() {
+            const queryString = encodeURIComponent('SELECT *');
+            const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=Лист1&tq=${queryString}`;
+            const query = new google.visualization.Query(url);
+            query.send(handleQueryResponse);
+        }
+
+        function handleQueryResponse(response) {
+            if (response.isError()) {
+                document.getElementById('table_div').innerHTML = 'Ошибка загрузки данных: ' + response.getMessage();
+                return;
+            }
+            const data = response.getDataTable();
+            const table = new google.visualization.Table(document.getElementById('table_div'));
+            table.draw(data, {
+                showRowNumber: false,
+                width: '100%',
+                height: '100%',
+                allowHtml: true,
+                cssClassNames: {
+                    headerRow: 'custom-table-header',
+                    tableRow: 'custom-table-row',
+                    oddTableRow: 'custom-table-row-odd',
+                    selectedTableRow: 'custom-table-row-selected',
+                    hoverTableRow: 'custom-table-row-hover',
+                    headerCell: 'custom-table-th',
+                    tableCell: 'custom-table-td'
                 }
             });
-            
-            // Добавляем активный класс к нажатой кнопке
-            event.target.classList.add('active');
-            
-            switch(size) {
-                case 'small':
-                    iframe.style.height = '400px';
-                    break;
-                case 'medium':
-                    iframe.style.height = '600px';
-                    break;
-                case 'large':
-                    iframe.style.height = '800px';
-                    break;
-            }
         }
-
-        // Обновление таблицы
-        function refreshTable() {
-            const iframe = document.getElementById('ratingTable');
-            const loading = document.getElementById('loading');
-            
-            loading.style.display = 'block';
-            iframe.style.opacity = '0.5';
-            
-            const currentSrc = iframe.src;
-            iframe.src = '';
-            
-            setTimeout(() => {
-                iframe.src = currentSrc;
-                iframe.style.opacity = '1';
-            }, 500);
-        }
-
-        // Настройка через URL
-        function setupFromURL() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const theme = urlParams.get('theme');
-            const size = urlParams.get('size');
-            
-            if (theme === 'dark') {
-                toggleTheme();
-            }
-            
-            if (size) {
-                resizeTable(size);
-            }
-        }
-
-        // Инициализация
-        document.addEventListener('DOMContentLoaded', function() {
-            setupFromURL();
-            
-            // Автообновление каждые 10 минут
-            setInterval(refreshTable, 600000);
-        });
-
-        // Горячие клавиши
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey || e.metaKey) {
-                switch(e.key) {
-                    case 'r':
-                        e.preventDefault();
-                        refreshTable();
-                        break;
-                    case 't':
-                        e.preventDefault();
-                        toggleTheme();
-                        break;
-                }
-            }
-        });
     </script>
+</head>
+<body style="background: #f5f7fa;">
+    <div class="custom-table-container">
+        <h1 style="text-align:center; font-size:2.2rem; margin-bottom: 8px; color:#222;">🏆 Рейтинг НФ</h1>
+        <p style="text-align:center; color:#666; margin-bottom: 24px;">Актуальная таблица лидеров</p>
+        <div id="table_div">Загрузка таблицы...</div>
+    </div>
 </body>
 </html> 
