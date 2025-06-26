@@ -299,44 +299,70 @@
                 return;
             }
             const data = response.getDataTable();
-            const result = [['Место', 'Название команды', 'Сумма баллов', 'Кол-во игр', 'Средний балл']];
+            const result = [['Место', 'Название команды', 'Сумма баллов', 'Сумма Р.Б.', 'Кол-во игр', 'Средний балл', 'Средний Р.Б.']];
             let teams = [];
+            
             for (let i = 0; i < data.getNumberOfRows(); i++) {
                 const name = data.getValue(i, 0);
                 if (name === 'название команды') continue; // Пропускаем строку-заголовок
-                let sum = 0;
+                
+                let sumRegular = 0; // Сумма обычных баллов
+                let sumRating = 0;  // Сумма рейтинговых баллов
                 let count = 0;
-                // Для Московского: баллы с 1 по 14 (B-O, индексы 1-14), P (15) — сумма, не учитываем
-                // Для остальных: баллы с 1 по 13 (B-N, индексы 1-13), O (14) — сумма, не учитываем
+                
+                // Определяем количество игр в зависимости от города
                 let lastGameCol = (currentCity === 'Московский') ? 14 : 13;
+                
+                // Обрабатываем обычные баллы (столбцы B-N или B-O)
                 for (let j = 1; j <= lastGameCol; j++) {
                     const val = data.getValue(i, j);
                     if (typeof val === 'number') {
-                        sum += val;
+                        sumRegular += val;
                         count++;
                     }
                 }
+                
+                // Обрабатываем рейтинговые баллы (столбцы после обычных баллов)
+                // Для Московского: рейтинговые баллы с 15 по 27 (P-AA, индексы 15-26), исключаем AE (27) - сумма Р.Б.
+                // Для остальных: рейтинговые баллы с 14 по 25 (O-Y, индексы 14-24), исключаем AD (25) - сумма Р.Б.
+                let ratingStartCol = lastGameCol + 1;
+                let ratingEndCol = (currentCity === 'Московский') ? 26 : 24; // Исключаем столбцы сумм Р.Б.
+                
+                for (let j = ratingStartCol; j <= ratingEndCol; j++) {
+                    const val = data.getValue(i, j);
+                    if (typeof val === 'number') {
+                        sumRating += val;
+                    }
+                }
+                
                 if (name && count > 0) {
                     teams.push({
                         name: name,
-                        sum: sum,
+                        sumRegular: sumRegular,
+                        sumRating: sumRating,
                         count: count,
-                        avg: (sum / count).toFixed(2)
+                        avgRegular: (sumRegular / count).toFixed(2),
+                        avgRating: (sumRating / count).toFixed(2)
                     });
                 }
             }
-            // Сортируем по сумме баллов по убыванию
-            teams.sort((a, b) => b.sum - a.sum);
+            
+            // Сортируем по сумме обычных баллов по убыванию
+            teams.sort((a, b) => b.sumRegular - a.sumRegular);
+            
             // Формируем итоговую таблицу с местом
             teams.forEach((team, idx) => {
                 result.push([
                     idx + 1,
                     team.name,
-                    team.sum,
+                    team.sumRegular,
+                    team.sumRating,
                     team.count,
-                    team.avg
+                    team.avgRegular,
+                    team.avgRating
                 ]);
             });
+            
             // Рисуем новую таблицу
             const dataTable = google.visualization.arrayToDataTable(result);
             const table = new google.visualization.Table(document.getElementById('table_div'));
