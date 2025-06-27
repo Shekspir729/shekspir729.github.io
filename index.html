@@ -188,6 +188,7 @@
             border-radius: 32px;
             padding: 32px 96px;
             overflow-x: auto;
+            transition: padding 0.3s;
         }
         .city-switcher {
             display: flex;
@@ -208,6 +209,7 @@
             cursor: pointer;
             transition: background 0.2s, box-shadow 0.2s, color 0.2s;
             box-shadow: 0 2px 8px rgba(255,214,0,0.08);
+            white-space: nowrap !important;
         }
         .city-btn.active, .city-btn:hover {
             background: #FFC107 !important;
@@ -412,6 +414,26 @@
         }
         #table_div td {
             font-weight: 700 !important;
+        }
+        #table_div table {
+            font-size: 2.2rem !important;
+            transition: font-size 0.3s;
+        }
+        @media (max-width: 1400px) {
+            .custom-table-container {
+                padding: 24px 32px;
+            }
+            #table_div table {
+                font-size: 1.7rem !important;
+            }
+        }
+        @media (max-width: 900px) {
+            .custom-table-container {
+                padding: 8px 4px;
+            }
+            #table_div table {
+                font-size: 1.1rem !important;
+            }
         }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -720,17 +742,6 @@
                 </div>
             </div>
         </transition>
-        
-        <!-- Контролы анимаций -->
-        <div class="animation-controls">
-            <ul>
-                <li v-for="(animation, index) in state.animations" 
-                    @click.prevent="setView(animation)" 
-                    v-bind:class="{ 'active': animation === state.view }">
-                    {{ animation }}
-                </li>
-            </ul>
-        </div>
     </div>
 </body>
 </html> 
