@@ -455,7 +455,7 @@
             }
             newDiv.innerHTML = '<div id="table_div"></div>';
             const data = response.getDataTable();
-            const result = [['Место', 'Название команды', 'Сумма баллов', 'Сумма Р.Б.', 'Кол-во игр', 'Средний балл', 'Средний Р.Б.']];
+            const result = [['Место', 'Название команды', 'Сумма баллов', 'Сумма Р.Б.', 'Игр', 'Средний балл', 'Средний Р.Б.']];
             let teams = [];
             
             for (let i = 0; i < data.getNumberOfRows(); i++) {
