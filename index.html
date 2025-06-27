@@ -421,18 +421,18 @@
         }
         @media (max-width: 1400px) {
             .custom-table-container {
-                padding: 24px 32px;
+                padding: 8px 8px;
             }
             #table_div table {
-                font-size: 1.7rem !important;
+                font-size: 1.2rem !important;
             }
         }
         @media (max-width: 900px) {
             .custom-table-container {
-                padding: 8px 4px;
+                padding: 2px 2px;
             }
             #table_div table {
-                font-size: 1.1rem !important;
+                font-size: 0.9rem !important;
             }
         }
     </style>
@@ -479,7 +479,7 @@
             }
             newDiv.innerHTML = '<div id="table_div"></div>';
             const data = response.getDataTable();
-            const result = [['Место', 'Название команды', 'Сумма баллов', 'Сумма Р.Б.', 'Кол-во игр', 'Средний балл', 'Средний Р.Б.']];
+            const result = [['Место', 'Название команды', 'Сумма баллов', 'Сумма Р.Б.', 'Игры', 'Средний балл', 'Средний Р.Б.']];
             let teams = [];
             
             for (let i = 0; i < data.getNumberOfRows(); i++) {
