@@ -208,7 +208,6 @@
             cursor: pointer;
             transition: background 0.2s, box-shadow 0.2s, color 0.2s;
             box-shadow: 0 2px 8px rgba(255,214,0,0.08);
-            white-space: nowrap !important;
         }
         .city-btn.active, .city-btn:hover {
             background: #FFC107 !important;
@@ -241,7 +240,6 @@
             font-weight: bold;
             color: #111 !important;
             font-size: 4.5rem;
-            white-space: nowrap !important;
         }
         table.custom-table tr:nth-child(even) {
             background: #f5f5f5 !important;
@@ -391,7 +389,6 @@
             font-weight: 900 !important;
             border-bottom: 3px solid #FFD600 !important;
             letter-spacing: 0.04em;
-            white-space: nowrap !important;
         }
         #table_div tr {
             background: #ededed !important;
@@ -413,18 +410,6 @@
         }
         #table_div td {
             font-weight: 700 !important;
-        }
-        #table_div table {
-            font-size: 2.2rem !important;
-            transition: font-size 0.3s;
-        }
-        @media (max-width: 1400px), (max-width: 900px) {
-            .custom-table-container {
-                padding: 32px 24px;
-            }
-            #table_div table {
-                font-size: 2.2rem !important;
-            }
         }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -470,7 +455,7 @@
             }
             newDiv.innerHTML = '<div id="table_div"></div>';
             const data = response.getDataTable();
-            const result = [['Место', 'Название команды', 'Сумма баллов', 'Сумма Р.Б.', 'Игры', 'Средний балл', 'Средний Р.Б.']];
+            const result = [['Место', 'Название команды', 'Сумма баллов', 'Сумма Р.Б.', 'Кол-во игр', 'Средний балл', 'Средний Р.Б.']];
             let teams = [];
             
             for (let i = 0; i < data.getNumberOfRows(); i++) {
@@ -676,7 +661,7 @@
                                 rotationX: 0,
                                 ease: "power4.out"
                             });
-                            break;
+                        break;
                             
                         case 'flipY':
                             const tl5 = gsap.timeline({onComplete: done});
@@ -690,7 +675,7 @@
                                 rotationY: 0,
                                 ease: "power4.out"
                             });
-                            break;
+                        break;
                     }
                 },
                 leave(el, done) {
@@ -733,6 +718,17 @@
                 </div>
             </div>
         </transition>
+        
+        <!-- Контролы анимаций -->
+        <div class="animation-controls">
+            <ul>
+                <li v-for="(animation, index) in state.animations" 
+                    @click.prevent="setView(animation)" 
+                    v-bind:class="{ 'active': animation === state.view }">
+                    {{ animation }}
+                </li>
+            </ul>
+        </div>
     </div>
 </body>
 </html> 
