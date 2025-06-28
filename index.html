@@ -189,8 +189,6 @@
             padding: 32px 24px;
             overflow-x: auto;
         }
-        
-
         .city-switcher {
             display: flex;
             justify-content: center;
@@ -413,122 +411,6 @@
         #table_div td {
             font-weight: 700 !important;
         }
-        .place-cell {
-            transition: color 0.2s, font-size 0.2s;
-        }
-        .place-icon {
-            font-size: 2.6rem;
-            transition: font-size 0.2s;
-        }
-        .gchart-row-hover .place-cell {
-            color: #FFC107 !important;
-            text-shadow: 0 0 2px #000, 0 1px 2px #000;
-        }
-        .gchart-row-hover .place-icon {
-            font-size: 3.2rem !important;
-        }
-        th.gchart-header-cell:first-child {
-            pointer-events: none;
-            opacity: 0.8;
-        }
-
-        /* Стили для детальной таблицы */
-        .team-details {
-            display: none;
-            background: #f8f9fa;
-            border-radius: 16px;
-            margin: 0;
-            overflow: hidden;
-            transition: all 0.3s ease-in-out;
-            max-height: 0;
-        }
-
-        .team-details.active {
-            display: block;
-            max-height: 500px; /* Достаточно для отображения содержимого */
-            margin: 16px 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .details-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            font-family: 'Arial', sans-serif;
-            font-size: 1.8rem;
-        }
-
-        .details-table th {
-            background: #e0e0e0;
-            color: #111;
-            padding: 12px 8px;
-            font-weight: 700;
-            text-align: center;
-            border-bottom: 2px solid #FFD600;
-        }
-
-        .details-table td {
-            padding: 12px 8px;
-            text-align: center;
-            background: #fff;
-            color: #111;
-            font-weight: 500;
-        }
-
-        .details-table tr:first-child td {
-            background: #f5f5f5;
-        }
-
-        .details-table tr:last-child td {
-            color: #FFC107;
-            font-weight: 700;
-        }
-
-        /* Анимация для строк таблицы */
-        .gchart-row {
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-        }
-
-        .gchart-row.active {
-            background: #ffe082 !important;
-            box-shadow: 0 4px 12px rgba(255,214,0,0.2);
-        }
-
-        /* Оптимизация для мобильных устройств */
-        @media (max-width: 768px) {
-            .details-table {
-                font-size: 1.4rem;
-            }
-            
-            .details-table th,
-            .details-table td {
-                padding: 8px 4px;
-            }
-            
-            .team-details.active {
-                margin: 8px 0;
-            }
-        }
-
-        /* Стили для плавной анимации */
-        .details-fade-enter-active,
-        .details-fade-leave-active {
-            transition: opacity 0.3s, transform 0.3s;
-        }
-
-        .details-fade-enter,
-        .details-fade-leave-to {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-
-        /* Оптимизация производительности */
-        .team-details {
-            will-change: transform, opacity, max-height;
-            transform: translateZ(0);
-            backface-visibility: hidden;
-        }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -543,80 +425,25 @@
             { name: 'Отрадное', label: 'Отрадное' }
         ];
         let currentCity = cities[0].name;
-        let activeTeamRow = null;
-        let cachedTeamDetails = new Map();
 
         google.charts.load('current', {'packages':['table']});
         google.charts.setOnLoadCallback(() => drawTable(currentCity));
 
         let lastTableHTML = '';
 
-        function getTeamDetails(data, teamName, rowIndex) {
-            // Проверяем кэш
-            const cacheKey = `${currentCity}-${teamName}`;
-            if (cachedTeamDetails.has(cacheKey)) {
-                return cachedTeamDetails.get(cacheKey);
-            }
-
-            const details = {
-                games: [],
-                scores: [],
-                ratingPoints: []
-            };
-
-            // Определяем диапазон столбцов в зависимости от города
-            const regularEndCol = (currentCity === 'Московский') ? 14 : 13;
-            const ratingStartCol = regularEndCol + 2;
-            const ratingEndCol = (currentCity === 'Московский') ? 29 : 27;
-
-            // Собираем данные об играх
-            for (let i = 1; i <= regularEndCol; i++) {
-                const gameNumber = 120 + i;
-                const score = data.getValue(rowIndex, i);
-                const ratingPoints = data.getValue(rowIndex, ratingStartCol + i - 1);
-
-                if (typeof score === 'number' || typeof ratingPoints === 'number') {
-                    details.games.push(gameNumber);
-                    details.scores.push(score || '-');
-                    details.ratingPoints.push(ratingPoints || '-');
-                }
-            }
-
-            // Сохраняем в кэш
-            cachedTeamDetails.set(cacheKey, details);
-            return details;
-        }
-
-        function createDetailsTable(details) {
-            const table = document.createElement('div');
-            table.className = 'team-details';
-            
-            let html = '<table class="details-table">';
-            
-            // Заголовки с номерами игр
-            html += '<tr><th>Показатель</th>';
-            details.games.forEach(game => {
-                html += `<th>Игра №${game}</th>`;
-            });
-            html += '</tr>';
-            
-            // Баллы
-            html += '<tr><td><strong>Баллы</strong></td>';
-            details.scores.forEach(score => {
-                html += `<td>${score}</td>`;
-            });
-            html += '</tr>';
-            
-            // Рейтинговые баллы
-            html += '<tr><td><strong>Р.Б.</strong></td>';
-            details.ratingPoints.forEach(points => {
-                html += `<td>${points}</td>`;
-            });
-            html += '</tr>';
-            
-            html += '</table>';
-            table.innerHTML = html;
-            return table;
+        function drawTable(city) {
+            currentCity = city;
+            // Показываем старый слой (если есть)
+            const newDiv = document.getElementById('table_fade_new');
+            newDiv.innerHTML = '<div id="table_div">Загрузка таблицы...</div>';
+            newDiv.style.zIndex = 2;
+            newDiv.style.opacity = 1;
+            newDiv.style.transform = 'translateX(100%)';
+            updateActiveButton(city);
+            const queryString = encodeURIComponent('SELECT *');
+            const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${city}&tq=${queryString}`;
+            const query = new google.visualization.Query(url);
+            query.send(handleQueryResponse);
         }
 
         function handleQueryResponse(response) {
@@ -633,14 +460,19 @@
             
             for (let i = 0; i < data.getNumberOfRows(); i++) {
                 const name = data.getValue(i, 0);
-                if (name === 'название команды') continue;
+                if (name === 'название команды') continue; // Пропускаем строку-заголовок
                 
-                let sumRegular = 0;
-                let sumRating = 0;
+                let sumRegular = 0; // Сумма обычных баллов
+                let sumRating = 0;  // Сумма рейтинговых баллов
                 let count = 0;
                 
+                // Определяем количество игр в зависимости от города
                 let lastGameCol = (currentCity === 'Московский') ? 14 : 13;
-                let regularEndCol = (currentCity === 'Московский') ? 14 : 13;
+                
+                // Обрабатываем обычные баллы, исключаем столбцы сумм
+                // Для Московского: обычные баллы B-O (индексы 1-14), исключаем P (15) - сумма обычных баллов
+                // Для остальных: обычные баллы B-N (индексы 1-13), исключаем O (14) - сумма обычных баллов
+                let regularEndCol = (currentCity === 'Московский') ? 14 : 13; // До столбца с суммой обычных баллов
                 
                 for (let j = 1; j <= regularEndCol; j++) {
                     const val = data.getValue(i, j);
@@ -650,8 +482,11 @@
                     }
                 }
                 
-                let ratingStartCol = regularEndCol + 2;
-                let ratingEndCol = (currentCity === 'Московский') ? 29 : 27;
+                // Обрабатываем рейтинговые баллы (столбцы после обычных баллов)
+                // Для Московского: рейтинговые баллы Q-AD (индексы 16-29), исключаем AE (30) - сумма Р.Б., AF (31) - средний Р.Б.
+                // Для остальных: рейтинговые баллы P-AB (индексы 15-27), исключаем AC (28) - сумма Р.Б., AD (29) - средний Р.Б.
+                let ratingStartCol = regularEndCol + 2; // Пропускаем столбец суммы обычных баллов
+                let ratingEndCol = (currentCity === 'Московский') ? 29 : 27; // До столбца суммы Р.Б.
                 
                 for (let j = ratingStartCol; j <= ratingEndCol; j++) {
                     const val = data.getValue(i, j);
@@ -672,15 +507,16 @@
                 }
             }
             
+            // Сортируем по сумме обычных баллов по убыванию
             teams.sort((a, b) => b.sumRegular - a.sumRegular);
             
+            // Формируем итоговую таблицу с местом
             teams.forEach((team, idx) => {
                 let placeIcon = '';
-                if (idx === 0) placeIcon = '<span class="place-cell place-icon">🏆</span>';
-                else if (idx === 1) placeIcon = '<span class="place-cell place-icon">🥈</span>';
-                else if (idx === 2) placeIcon = '<span class="place-cell place-icon">🥉</span>';
-                else placeIcon = `<span class='place-cell'>#${idx + 1}</span>`;
-                
+                if (idx === 0) placeIcon = '🏆';
+                else if (idx === 1) placeIcon = '🥈';
+                else if (idx === 2) placeIcon = '🥉';
+                else placeIcon = `#${idx + 1}`;
                 result.push([
                     placeIcon,
                     team.name,
@@ -692,6 +528,7 @@
                 ]);
             });
             
+            // Рисуем новую таблицу
             const dataTable = google.visualization.arrayToDataTable(result);
             const table = new google.visualization.Table(document.getElementById('table_div'));
             table.draw(dataTable, {
@@ -708,85 +545,17 @@
                     hoverTableRow: 'gchart-row-hover',
                     tableCell: 'gchart-cell',
                     headerCell: 'gchart-header-cell'
-                },
-                sortColumn: 2,
-                sortAscending: false
+                }
             });
-
             lastTableHTML = newDiv.innerHTML;
+            // Анимация: новый въезжает справа
             gsap.fromTo(newDiv, {x: '100%', autoAlpha: 1}, {duration: 1.2, x: 0, autoAlpha: 1, ease: "power4.out"});
-            
+            // После анимации сбрасываем старый слой
             setTimeout(() => {
                 document.getElementById('table_fade_old').innerHTML = '';
                 document.getElementById('table_fade_old').style.transform = 'translateX(0)';
                 newDiv.style.transform = 'translateX(0)';
             }, 1300);
-        }
-
-        function handleRowClick(e) {
-            console.log('handleRowClick called');
-            const row = e.target.closest('tr');
-            if (!row || row.classList.contains('gchart-header')) {
-                console.log('Invalid row or header clicked');
-                return;
-            }
-
-            const teamNameCell = row.cells[1]; // Ячейка с названием команды
-            if (!teamNameCell) {
-                console.log('Team name cell not found');
-                return;
-            }
-
-            console.log('Processing click for team:', teamNameCell.textContent);
-            const teamName = teamNameCell.textContent;
-            const tableDiv = document.getElementById('table_div');
-            
-            // Находим существующую детальную таблицу
-            const existingDetails = tableDiv.querySelector('.team-details.active');
-            
-            // Если кликнули по той же строке - просто скрываем детали
-            if (activeTeamRow === row) {
-                console.log('Closing details for current team');
-                if (existingDetails) {
-                    existingDetails.classList.remove('active');
-                    setTimeout(() => existingDetails.remove(), 300);
-                }
-                row.classList.remove('active');
-                activeTeamRow = null;
-                return;
-            }
-
-            // Удаляем предыдущую активную строку и детали
-            if (activeTeamRow) {
-                console.log('Removing previous team details');
-                activeTeamRow.classList.remove('active');
-                if (existingDetails) {
-                    existingDetails.classList.remove('active');
-                    setTimeout(() => existingDetails.remove(), 300);
-                }
-            }
-
-            // Активируем новую строку
-            console.log('Activating new row');
-            row.classList.add('active');
-            activeTeamRow = row;
-
-            // Получаем данные команды
-            const dataTable = table.getDataTable();
-            const rowIndex = row.rowIndex - 1; // -1 because of header row
-            console.log('Getting details for row index:', rowIndex);
-            const details = getTeamDetails(dataTable, teamName, rowIndex);
-
-            // Создаем и вставляем новую детальную таблицу
-            console.log('Creating details table');
-            const detailsTable = createDetailsTable(details);
-            row.parentNode.insertBefore(detailsTable, row.nextSibling);
-            
-            // Активируем с небольшой задержкой для анимации
-            requestAnimationFrame(() => {
-                console.log('Activating details table');
-                detailsTable.classList.add('active');
-            });
         }
 
         function updateActiveButton(city) {
