@@ -869,6 +869,23 @@
                     });
                 });
                 // === Конец нового обработчика ===
+
+                // === Делегирование клика для мини-таблицы ===
+                const tableDiv = document.getElementById('table_div');
+                if (tableDiv && !tableDiv._miniTableClickHandler) {
+                    tableDiv._miniTableClickHandler = function(e) {
+                        let tr = e.target.closest('tr');
+                        if (tr && tr.parentNode && tr.parentNode.tagName === 'TBODY') {
+                            // вычисляем индекс строки
+                            const rows = Array.from(tr.parentNode.children);
+                            const idx = rows.indexOf(tr);
+                            if (idx >= 0) {
+                                toggleMiniTable(tr, data, idx);
+                            }
+                        }
+                    };
+                    tableDiv.addEventListener('click', tableDiv._miniTableClickHandler);
+                }
             } catch (error) {
                 console.error('Error in handleQueryResponse:', error);
                 const newDiv = document.getElementById('table_fade_new');
