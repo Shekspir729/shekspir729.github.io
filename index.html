@@ -853,21 +853,20 @@
 
                 // === Новый обработчик клика по строке ===
                 google.visualization.events.addListener(table, 'ready', () => {
-                    // Берём только видимую таблицу (которая не display: none)
+                    // Навешиваем обработчики на все таблицы в #table_div
                     const tables = document.querySelectorAll('#table_div table');
-                    let tableElement = null;
-                    tables.forEach(tbl => {
-                        if (getComputedStyle(tbl).display !== 'none') tableElement = tbl;
-                    });
-                    if (tableElement) {
+                    tables.forEach(tableElement => {
                         const rows = tableElement.querySelectorAll('tbody tr');
                         rows.forEach((tr, idx) => {
                             tr.onclick = function() {
-                                toggleMiniTable(this, data, idx);
+                                // Проверяем, что строка содержит реальные данные (например, не пустая)
+                                if (tr.children.length > 1) {
+                                    toggleMiniTable(this, data, idx);
+                                }
                             };
-                            tr.style.cursor = 'pointer'; // визуально показываем, что строка кликабельна
+                            tr.style.cursor = 'pointer';
                         });
-                    }
+                    });
                 });
                 // === Конец нового обработчика ===
             } catch (error) {
