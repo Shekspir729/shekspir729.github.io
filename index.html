@@ -576,8 +576,16 @@
                 const container = document.createElement('div');
                 container.className = 'mini-table-container';
                 
+                // Стили для компактности и скролла
+                container.style.overflowX = 'auto';
+                container.style.padding = '0';
+                
                 const table = document.createElement('table');
                 table.className = 'mini-table';
+                table.style.fontSize = '1.1rem';
+                table.style.fontWeight = '400';
+                table.style.minWidth = '600px';
+                table.style.whiteSpace = 'nowrap';
                 
                 const tbody = document.createElement('tbody');
                 
@@ -585,57 +593,40 @@
                 const regularEndCol = (currentCity === 'Московский') ? 14 : 13;
                 const ratingStartCol = regularEndCol + 2;
                 
-                // Проверяем валидность данных
-                if (!data || typeof data.getValue !== 'function' || rowIndex < 0) {
-                    console.error('Invalid data or rowIndex in createMiniTable');
-                    return container;
-                }
-                
-                // Создаем заголовки с номерами игр
-                const headerRow = document.createElement('tr');
-                headerRow.innerHTML = '<th>Игры</th>';
-                let hasAnyData = false;
-                
-                for (let i = 1; i <= regularEndCol; i++) {
-                    const points = data.getValue(rowIndex, i);
-                    const ratingPoints = data.getValue(rowIndex, ratingStartCol + i - 1);
-                    if (points !== null || ratingPoints !== null) {
-                        headerRow.innerHTML += `<th>Игра ${i}</th>`;
-                        hasAnyData = true;
+                // Получаем заголовки игр из первой строки (B1-O1 или B1-N1)
+                let gameHeaders = [];
+                if (typeof data.getValue === 'function' && data.getNumberOfRows() > 0) {
+                    for (let i = 1; i <= regularEndCol; i++) {
+                        let header = data.getValue(0, i); // 0-я строка, i-й столбец
+                        gameHeaders.push(header ? header : '');
                     }
+                } else {
+                    for (let i = 1; i <= regularEndCol; i++) gameHeaders.push('');
                 }
                 
-                // Если нет данных, добавляем сообщение
-                if (!hasAnyData) {
-                    const messageRow = document.createElement('tr');
-                    messageRow.innerHTML = '<td colspan="2" style="text-align: center;">Нет данных для отображения</td>';
-                    tbody.appendChild(messageRow);
-                    table.appendChild(tbody);
-                    container.appendChild(table);
-                    return container;
+                // Создаём строку заголовков игр
+                const headerRow = document.createElement('tr');
+                headerRow.innerHTML = '<th style="font-weight:600;">Игры</th>';
+                for (let i = 0; i < gameHeaders.length; i++) {
+                    headerRow.innerHTML += `<th style='font-weight:400;'>${gameHeaders[i]}</th>`;
                 }
-                
                 tbody.appendChild(headerRow);
                 
-                // Создаем строку с баллами
+                // Строка с баллами
                 const pointsRow = document.createElement('tr');
-                pointsRow.innerHTML = '<td>Баллы</td>';
+                pointsRow.innerHTML = '<td style="font-weight:600;">Баллы</td>';
                 for (let i = 1; i <= regularEndCol; i++) {
                     const points = data.getValue(rowIndex, i);
-                    if (points !== null || data.getValue(rowIndex, ratingStartCol + i - 1) !== null) {
-                        pointsRow.innerHTML += `<td>${points !== null ? points : '-'}</td>`;
-                    }
+                    pointsRow.innerHTML += `<td>${points !== null && points !== undefined ? points : ''}</td>`;
                 }
                 tbody.appendChild(pointsRow);
                 
-                // Создаем строку с рейтинговыми баллами
+                // Строка с рейтинговыми баллами
                 const ratingRow = document.createElement('tr');
-                ratingRow.innerHTML = '<td>Р.Баллы</td>';
+                ratingRow.innerHTML = '<td style="font-weight:600;">Р.Баллы</td>';
                 for (let i = 1; i <= regularEndCol; i++) {
                     const ratingPoints = data.getValue(rowIndex, ratingStartCol + i - 1);
-                    if (data.getValue(rowIndex, i) !== null || ratingPoints !== null) {
-                        ratingRow.innerHTML += `<td>${ratingPoints !== null ? ratingPoints : '-'}</td>`;
-                    }
+                    ratingRow.innerHTML += `<td>${ratingPoints !== null && ratingPoints !== undefined ? ratingPoints : ''}</td>`;
                 }
                 tbody.appendChild(ratingRow);
                 
@@ -1055,4 +1046,4 @@
         </div>
     </div>
 </body>
-</html> 
+</html>  
