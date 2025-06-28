@@ -411,6 +411,19 @@
         #table_div td {
             font-weight: 700 !important;
         }
+        .place-cell {
+            transition: color 0.2s, font-size 0.2s;
+        }
+        .place-icon {
+            font-size: 2.6rem;
+            transition: font-size 0.2s;
+        }
+        .gchart-row-hover .place-cell {
+            color: #FFD600 !important;
+        }
+        .gchart-row-hover .place-icon {
+            font-size: 3.2rem !important;
+        }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -513,10 +526,10 @@
             // Формируем итоговую таблицу с местом
             teams.forEach((team, idx) => {
                 let placeIcon = '';
-                if (idx === 0) placeIcon = '🏆';
-                else if (idx === 1) placeIcon = '🥈';
-                else if (idx === 2) placeIcon = '🥉';
-                else placeIcon = `#${idx + 1}`;
+                if (idx === 0) placeIcon = '<span class="place-cell place-icon">🏆</span>';
+                else if (idx === 1) placeIcon = '<span class="place-cell place-icon">🥈</span>';
+                else if (idx === 2) placeIcon = '<span class="place-cell place-icon">🥉</span>';
+                else placeIcon = `<span class='place-cell'>#${idx + 1}</span>`;
                 result.push([
                     placeIcon,
                     team.name,
