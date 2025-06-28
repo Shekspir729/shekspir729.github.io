@@ -180,6 +180,35 @@
             100% { transform: rotate(360deg); }
         }
 
+        .error-message {
+            text-align: center;
+            padding: 40px;
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 8px;
+            margin: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #fff;
+            font-size: 1.8rem;
+        }
+        
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+
         .custom-table-container {
             background: #222222 !important;
             box-shadow: none !important;
@@ -487,6 +516,40 @@
         .mini-table tr:hover td:first-child {
             background: #e8e8e8 !important;
         }
+
+        /* Добавляем стили для сообщений об ошибках */
+        .error-message {
+            text-align: center;
+            padding: 40px;
+            color: #721c24;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 8px;
+            margin: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #fff;
+            font-size: 1.8rem;
+        }
+        
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -509,55 +572,83 @@
         let lastTableHTML = '';
 
         function createMiniTable(data, rowIndex) {
-            const container = document.createElement('div');
-            container.className = 'mini-table-container';
-            
-            const table = document.createElement('table');
-            table.className = 'mini-table';
-            
-            const tbody = document.createElement('tbody');
-            
-            // Определяем диапазон игр
-            const regularEndCol = (currentCity === 'Московский') ? 14 : 13;
-            const ratingStartCol = regularEndCol + 2;
-            
-            // Создаем заголовки с номерами игр
-            const headerRow = document.createElement('tr');
-            headerRow.innerHTML = '<th>Игры</th>';
-            for (let i = 1; i <= regularEndCol; i++) {
-                const points = data.getValue(rowIndex, i);
-                const ratingPoints = data.getValue(rowIndex, ratingStartCol + i - 1);
-                if (points !== null || ratingPoints !== null) {
-                    headerRow.innerHTML += `<th>Игра ${i}</th>`;
+            try {
+                const container = document.createElement('div');
+                container.className = 'mini-table-container';
+                
+                const table = document.createElement('table');
+                table.className = 'mini-table';
+                
+                const tbody = document.createElement('tbody');
+                
+                // Определяем диапазон игр
+                const regularEndCol = (currentCity === 'Московский') ? 14 : 13;
+                const ratingStartCol = regularEndCol + 2;
+                
+                // Проверяем валидность данных
+                if (!data || typeof data.getValue !== 'function' || rowIndex < 0) {
+                    console.error('Invalid data or rowIndex in createMiniTable');
+                    return container;
                 }
-            }
-            tbody.appendChild(headerRow);
-            
-            // Создаем строку с баллами
-            const pointsRow = document.createElement('tr');
-            pointsRow.innerHTML = '<td>Баллы</td>';
-            for (let i = 1; i <= regularEndCol; i++) {
-                const points = data.getValue(rowIndex, i);
-                if (points !== null || data.getValue(rowIndex, ratingStartCol + i - 1) !== null) {
-                    pointsRow.innerHTML += `<td>${points !== null ? points : '-'}</td>`;
+                
+                // Создаем заголовки с номерами игр
+                const headerRow = document.createElement('tr');
+                headerRow.innerHTML = '<th>Игры</th>';
+                let hasAnyData = false;
+                
+                for (let i = 1; i <= regularEndCol; i++) {
+                    const points = data.getValue(rowIndex, i);
+                    const ratingPoints = data.getValue(rowIndex, ratingStartCol + i - 1);
+                    if (points !== null || ratingPoints !== null) {
+                        headerRow.innerHTML += `<th>Игра ${i}</th>`;
+                        hasAnyData = true;
+                    }
                 }
-            }
-            tbody.appendChild(pointsRow);
-            
-            // Создаем строку с рейтинговыми баллами
-            const ratingRow = document.createElement('tr');
-            ratingRow.innerHTML = '<td>Р.Баллы</td>';
-            for (let i = 1; i <= regularEndCol; i++) {
-                const ratingPoints = data.getValue(rowIndex, ratingStartCol + i - 1);
-                if (data.getValue(rowIndex, i) !== null || ratingPoints !== null) {
-                    ratingRow.innerHTML += `<td>${ratingPoints !== null ? ratingPoints : '-'}</td>`;
+                
+                // Если нет данных, добавляем сообщение
+                if (!hasAnyData) {
+                    const messageRow = document.createElement('tr');
+                    messageRow.innerHTML = '<td colspan="2" style="text-align: center;">Нет данных для отображения</td>';
+                    tbody.appendChild(messageRow);
+                    table.appendChild(tbody);
+                    container.appendChild(table);
+                    return container;
                 }
+                
+                tbody.appendChild(headerRow);
+                
+                // Создаем строку с баллами
+                const pointsRow = document.createElement('tr');
+                pointsRow.innerHTML = '<td>Баллы</td>';
+                for (let i = 1; i <= regularEndCol; i++) {
+                    const points = data.getValue(rowIndex, i);
+                    if (points !== null || data.getValue(rowIndex, ratingStartCol + i - 1) !== null) {
+                        pointsRow.innerHTML += `<td>${points !== null ? points : '-'}</td>`;
+                    }
+                }
+                tbody.appendChild(pointsRow);
+                
+                // Создаем строку с рейтинговыми баллами
+                const ratingRow = document.createElement('tr');
+                ratingRow.innerHTML = '<td>Р.Баллы</td>';
+                for (let i = 1; i <= regularEndCol; i++) {
+                    const ratingPoints = data.getValue(rowIndex, ratingStartCol + i - 1);
+                    if (data.getValue(rowIndex, i) !== null || ratingPoints !== null) {
+                        ratingRow.innerHTML += `<td>${ratingPoints !== null ? ratingPoints : '-'}</td>`;
+                    }
+                }
+                tbody.appendChild(ratingRow);
+                
+                table.appendChild(tbody);
+                container.appendChild(table);
+                return container;
+            } catch (error) {
+                console.error('Error in createMiniTable:', error);
+                const container = document.createElement('div');
+                container.className = 'mini-table-container';
+                container.innerHTML = '<div style="text-align: center; padding: 20px;">Произошла ошибка при загрузке данных</div>';
+                return container;
             }
-            tbody.appendChild(ratingRow);
-            
-            table.appendChild(tbody);
-            container.appendChild(table);
-            return container;
         }
 
         function toggleMiniTable(tableRow, data, rowIndex) {
@@ -577,18 +668,17 @@
                 // Создаем новую мини-таблицу
                 const wrapper = document.createElement('tr');
                 const cell = document.createElement('td');
-                cell.colSpan = 7;
+                // Динамически определяем количество столбцов
+                const parentTable = tableRow.closest('table');
+                const columnCount = parentTable.querySelector('tr')?.children.length || 7;
+                cell.colSpan = columnCount;
                 
                 const miniTable = createMiniTable(data, rowIndex);
                 cell.appendChild(miniTable);
                 wrapper.appendChild(cell);
                 
                 // Вставляем сразу после текущей строки
-                if (tableRow.nextSibling) {
-                    tableRow.parentNode.insertBefore(wrapper, tableRow.nextSibling);
-                } else {
-                    tableRow.parentNode.appendChild(wrapper);
-                }
+                tableRow.parentNode.insertBefore(wrapper, tableRow.nextSibling);
                 
                 // Анимируем появление
                 requestAnimationFrame(() => {
@@ -598,152 +688,197 @@
         }
 
         function drawTable(city) {
-            currentCity = city;
-            // Показываем старый слой (если есть)
-            const newDiv = document.getElementById('table_fade_new');
-            newDiv.innerHTML = '<div id="table_div">Загрузка таблицы...</div>';
-            newDiv.style.zIndex = 2;
-            newDiv.style.opacity = 1;
-            newDiv.style.transform = 'translateX(100%)';
-            updateActiveButton(city);
-            const queryString = encodeURIComponent('SELECT *');
-            const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${city}&tq=${queryString}`;
-            const query = new google.visualization.Query(url);
-            query.send(handleQueryResponse);
+            try {
+                currentCity = city;
+                const newDiv = document.getElementById('table_fade_new');
+                if (!newDiv) {
+                    console.error('table_fade_new element not found');
+                    return;
+                }
+                
+                newDiv.innerHTML = '<div id="table_div"><div class="loading"><div class="spinner"></div>Загрузка таблицы...</div></div>';
+                newDiv.style.zIndex = 2;
+                newDiv.style.opacity = 1;
+                newDiv.style.transform = 'translateX(100%)';
+                
+                updateActiveButton(city);
+                const queryString = encodeURIComponent('SELECT *');
+                const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${city}&tq=${queryString}`;
+                const query = new google.visualization.Query(url);
+                
+                // Добавляем таймаут для загрузки
+                setTimeout(() => {
+                    if (newDiv.querySelector('.loading')) {
+                        newDiv.innerHTML = '<div id="table_div" class="error-message">Превышено время ожидания загрузки данных</div>';
+                        gsap.fromTo(newDiv, {x: '100%', autoAlpha: 1}, {duration: 1.2, x: 0, autoAlpha: 1, ease: "power4.out"});
+                    }
+                }, 30000);
+                
+                query.send(handleQueryResponse);
+            } catch (error) {
+                console.error('Error in drawTable:', error);
+                if (newDiv) {
+                    newDiv.innerHTML = '<div id="table_div" class="error-message">Произошла ошибка при загрузке данных</div>';
+                    gsap.fromTo(newDiv, {x: '100%', autoAlpha: 1}, {duration: 1.2, x: 0, autoAlpha: 1, ease: "power4.out"});
+                }
+            }
         }
 
         function handleQueryResponse(response) {
-            const newDiv = document.getElementById('table_fade_new');
-            if (response.isError()) {
-                newDiv.innerHTML = '<div id="table_div">Ошибка загрузки данных: ' + response.getMessage() + '</div>';
-                gsap.fromTo(newDiv, {x: '100%', autoAlpha: 1}, {duration: 1.2, x: 0, autoAlpha: 1, ease: "power4.out"});
-                return;
-            }
-            newDiv.innerHTML = '<div id="table_div"></div>';
-            const data = response.getDataTable();
-            const result = [['Место', 'Название команды', 'Сумма баллов', 'Сумма Р.Б.', 'Игр', 'Средний балл', 'Средний Р.Б.']];
-            let teams = [];
-            
-            for (let i = 0; i < data.getNumberOfRows(); i++) {
-                const name = data.getValue(i, 0);
-                if (name === 'название команды') continue; // Пропускаем строку-заголовок
+            try {
+                const newDiv = document.getElementById('table_fade_new');
+                if (!newDiv) {
+                    console.error('table_fade_new element not found');
+                    return;
+                }
                 
-                let sumRegular = 0; // Сумма обычных баллов
-                let sumRating = 0;  // Сумма рейтинговых баллов
-                let count = 0;
+                if (response.isError()) {
+                    console.error('Query error:', response.getMessage(), response.getDetailedMessage());
+                    newDiv.innerHTML = '<div id="table_div" class="error-message">Ошибка загрузки данных: ' + response.getMessage() + '</div>';
+                    gsap.fromTo(newDiv, {x: '100%', autoAlpha: 1}, {duration: 1.2, x: 0, autoAlpha: 1, ease: "power4.out"});
+                    return;
+                }
                 
-                // Определяем количество игр в зависимости от города
-                let lastGameCol = (currentCity === 'Московский') ? 14 : 13;
+                newDiv.innerHTML = '<div id="table_div"></div>';
+                const data = response.getDataTable();
                 
-                // Обрабатываем обычные баллы, исключаем столбцы сумм
-                // Для Московского: обычные баллы B-O (индексы 1-14), исключаем P (15) - сумма обычных баллов
-                // Для остальных: обычные баллы B-N (индексы 1-13), исключаем O (14) - сумма обычных баллов
-                let regularEndCol = (currentCity === 'Московский') ? 14 : 13; // До столбца с суммой обычных баллов
+                if (!data || data.getNumberOfRows() === 0) {
+                    newDiv.innerHTML = '<div id="table_div" class="error-message">Нет данных для отображения</div>';
+                    gsap.fromTo(newDiv, {x: '100%', autoAlpha: 1}, {duration: 1.2, x: 0, autoAlpha: 1, ease: "power4.out"});
+                    return;
+                }
                 
-                for (let j = 1; j <= regularEndCol; j++) {
-                    const val = data.getValue(i, j);
-                    if (typeof val === 'number') {
-                        sumRegular += val;
-                        count++;
+                const result = [['Место', 'Название команды', 'Сумма баллов', 'Сумма Р.Б.', 'Игр', 'Средний балл', 'Средний Р.Б.']];
+                let teams = [];
+                
+                for (let i = 0; i < data.getNumberOfRows(); i++) {
+                    const name = data.getValue(i, 0);
+                    if (name === 'название команды') continue; // Пропускаем строку-заголовок
+                    
+                    let sumRegular = 0; // Сумма обычных баллов
+                    let sumRating = 0;  // Сумма рейтинговых баллов
+                    let count = 0;
+                    
+                    // Определяем количество игр в зависимости от города
+                    let lastGameCol = (currentCity === 'Московский') ? 14 : 13;
+                    
+                    // Обрабатываем обычные баллы, исключаем столбцы сумм
+                    // Для Московского: обычные баллы B-O (индексы 1-14), исключаем P (15) - сумма обычных баллов
+                    // Для остальных: обычные баллы B-N (индексы 1-13), исключаем O (14) - сумма обычных баллов
+                    let regularEndCol = (currentCity === 'Московский') ? 14 : 13; // До столбца с суммой обычных баллов
+                    
+                    for (let j = 1; j <= regularEndCol; j++) {
+                        const val = data.getValue(i, j);
+                        if (typeof val === 'number') {
+                            sumRegular += val;
+                            count++;
+                        }
+                    }
+                    
+                    // Обрабатываем рейтинговые баллы (столбцы после обычных баллов)
+                    // Для Московского: рейтинговые баллы Q-AD (индексы 16-29), исключаем AE (30) - сумма Р.Б., AF (31) - средний Р.Б.
+                    // Для остальных: рейтинговые баллы P-AB (индексы 15-27), исключаем AC (28) - сумма Р.Б., AD (29) - средний Р.Б.
+                    let ratingStartCol = regularEndCol + 2; // Пропускаем столбец суммы обычных баллов
+                    let ratingEndCol = (currentCity === 'Московский') ? 29 : 27; // До столбца суммы Р.Б.
+                    
+                    for (let j = ratingStartCol; j <= ratingEndCol; j++) {
+                        const val = data.getValue(i, j);
+                        if (typeof val === 'number') {
+                            sumRating += val;
+                        }
+                    }
+                    
+                    if (name && count > 0) {
+                        teams.push({
+                            name: name,
+                            sumRegular: sumRegular,
+                            sumRating: sumRating,
+                            count: count,
+                            avgRegular: (sumRegular / count).toFixed(2),
+                            avgRating: (sumRating / count).toFixed(2)
+                        });
                     }
                 }
                 
-                // Обрабатываем рейтинговые баллы (столбцы после обычных баллов)
-                // Для Московского: рейтинговые баллы Q-AD (индексы 16-29), исключаем AE (30) - сумма Р.Б., AF (31) - средний Р.Б.
-                // Для остальных: рейтинговые баллы P-AB (индексы 15-27), исключаем AC (28) - сумма Р.Б., AD (29) - средний Р.Б.
-                let ratingStartCol = regularEndCol + 2; // Пропускаем столбец суммы обычных баллов
-                let ratingEndCol = (currentCity === 'Московский') ? 29 : 27; // До столбца суммы Р.Б.
+                // Сортируем по сумме обычных баллов по убыванию
+                teams.sort((a, b) => b.sumRegular - a.sumRegular);
                 
-                for (let j = ratingStartCol; j <= ratingEndCol; j++) {
-                    const val = data.getValue(i, j);
-                    if (typeof val === 'number') {
-                        sumRating += val;
-                    }
-                }
+                // Формируем итоговую таблицу с местом
+                teams.forEach((team, idx) => {
+                    let placeIcon = '';
+                    if (idx === 0) placeIcon = '<span class="place-cell place-icon">🏆</span>';
+                    else if (idx === 1) placeIcon = '<span class="place-cell place-icon">🥈</span>';
+                    else if (idx === 2) placeIcon = '<span class="place-cell place-icon">🥉</span>';
+                    else placeIcon = `<span class='place-cell'>#${idx + 1}</span>`;
+                    result.push([
+                        placeIcon, // 0: визуальное место
+                        idx + 1,   // 1: числовое место (для сортировки)
+                        team.name, // 2
+                        team.sumRegular, // 3
+                        team.sumRating,  // 4
+                        team.count,      // 5
+                        team.avgRegular, // 6
+                        team.avgRating   // 7
+                    ]);
+                });
                 
-                if (name && count > 0) {
-                    teams.push({
-                        name: name,
-                        sumRegular: sumRegular,
-                        sumRating: sumRating,
-                        count: count,
-                        avgRegular: (sumRegular / count).toFixed(2),
-                        avgRating: (sumRating / count).toFixed(2)
-                    });
-                }
-            }
-            
-            // Сортируем по сумме обычных баллов по убыванию
-            teams.sort((a, b) => b.sumRegular - a.sumRegular);
-            
-            // Формируем итоговую таблицу с местом
-            teams.forEach((team, idx) => {
-                let placeIcon = '';
-                if (idx === 0) placeIcon = '<span class="place-cell place-icon">🏆</span>';
-                else if (idx === 1) placeIcon = '<span class="place-cell place-icon">🥈</span>';
-                else if (idx === 2) placeIcon = '<span class="place-cell place-icon">🥉</span>';
-                else placeIcon = `<span class='place-cell'>#${idx + 1}</span>`;
-                result.push([
-                    placeIcon, // 0: визуальное место
-                    idx + 1,   // 1: числовое место (для сортировки)
-                    team.name, // 2
-                    team.sumRegular, // 3
-                    team.sumRating,  // 4
-                    team.count,      // 5
-                    team.avgRegular, // 6
-                    team.avgRating   // 7
+                // Рисуем новую таблицу
+                const dataTable = google.visualization.arrayToDataTable([
+                    ['Место', 'Место (число)', 'Название команды', 'Сумма баллов', 'Сумма Р.Б.', 'Игр', 'Средний балл', 'Средний Р.Б.'],
+                    ...result.slice(1)
                 ]);
-            });
-            
-            // Рисуем новую таблицу
-            const dataTable = google.visualization.arrayToDataTable([
-                ['Место', 'Место (число)', 'Название команды', 'Сумма баллов', 'Сумма Р.Б.', 'Игр', 'Средний балл', 'Средний Р.Б.'],
-                ...result.slice(1)
-            ]);
-            const view = new google.visualization.DataView(dataTable);
-            view.setColumns([0,2,3,4,5,6,7]); // показываем только нужные столбцы
-            const table = new google.visualization.Table(document.getElementById('table_div'));
-            
-            // Добавляем обработчик клика по строке
-            google.visualization.events.addListener(table, 'select', () => {
-                const selection = table.getSelection();
-                if (selection.length > 0) {
-                    const row = selection[0].row;
-                    if (row !== null) {
-                        const tableElement = document.querySelector('#table_div table');
-                        const tableRow = tableElement.querySelector(`tr:nth-child(${row + 2})`);
-                        toggleMiniTable(tableRow, data, row);
+                const view = new google.visualization.DataView(dataTable);
+                view.setColumns([0,2,3,4,5,6,7]); // показываем только нужные столбцы
+                const table = new google.visualization.Table(document.getElementById('table_div'));
+                
+                // Добавляем обработчик клика по строке
+                google.visualization.events.addListener(table, 'select', () => {
+                    const selection = table.getSelection();
+                    if (selection.length > 0) {
+                        const row = selection[0].row;
+                        if (row !== null) {
+                            const tableElement = document.querySelector('#table_div table');
+                            const tableRow = tableElement.querySelector(`tr:nth-child(${row + 2})`);
+                            toggleMiniTable(tableRow, data, row);
+                        }
                     }
+                });
+                
+                table.draw(view, {
+                    showRowNumber: false,
+                    width: '100%',
+                    height: '100%',
+                    allowHtml: true,
+                    theme: 'none',
+                    cssClassNames: {
+                        headerRow: 'gchart-header',
+                        tableRow: 'gchart-row',
+                        oddTableRow: 'gchart-row-odd',
+                        selectedTableRow: 'gchart-row-selected',
+                        hoverTableRow: 'gchart-row-hover',
+                        tableCell: 'gchart-cell',
+                        headerCell: 'gchart-header-cell'
+                    },
+                    sortColumn: 3, // Корректируем индекс для сортировки по 'Сумма баллов'
+                    sortAscending: false // по убыванию
+                });
+                lastTableHTML = newDiv.innerHTML;
+                // Анимация: новый въезжает справа
+                gsap.fromTo(newDiv, {x: '100%', autoAlpha: 1}, {duration: 1.2, x: 0, autoAlpha: 1, ease: "power4.out"});
+                // После анимации сбрасываем старый слой
+                setTimeout(() => {
+                    document.getElementById('table_fade_old').innerHTML = '';
+                    document.getElementById('table_fade_old').style.transform = 'translateX(0)';
+                    newDiv.style.transform = 'translateX(0)';
+                }, 1300);
+            } catch (error) {
+                console.error('Error in handleQueryResponse:', error);
+                const newDiv = document.getElementById('table_fade_new');
+                if (newDiv) {
+                    newDiv.innerHTML = '<div id="table_div" class="error-message">Произошла ошибка при обработке данных</div>';
+                    gsap.fromTo(newDiv, {x: '100%', autoAlpha: 1}, {duration: 1.2, x: 0, autoAlpha: 1, ease: "power4.out"});
                 }
-            });
-            
-            table.draw(view, {
-                showRowNumber: false,
-                width: '100%',
-                height: '100%',
-                allowHtml: true,
-                theme: 'none',
-                cssClassNames: {
-                    headerRow: 'gchart-header',
-                    tableRow: 'gchart-row',
-                    oddTableRow: 'gchart-row-odd',
-                    selectedTableRow: 'gchart-row-selected',
-                    hoverTableRow: 'gchart-row-hover',
-                    tableCell: 'gchart-cell',
-                    headerCell: 'gchart-header-cell'
-                },
-                sortColumn: 2, // сортировка по 'Сумма баллов'
-                sortAscending: false // по убыванию
-            });
-            lastTableHTML = newDiv.innerHTML;
-            // Анимация: новый въезжает справа
-            gsap.fromTo(newDiv, {x: '100%', autoAlpha: 1}, {duration: 1.2, x: 0, autoAlpha: 1, ease: "power4.out"});
-            // После анимации сбрасываем старый слой
-            setTimeout(() => {
-                document.getElementById('table_fade_old').innerHTML = '';
-                document.getElementById('table_fade_old').style.transform = 'translateX(0)';
-                newDiv.style.transform = 'translateX(0)';
-            }, 1300);
+            }
         }
 
         function updateActiveButton(city) {
