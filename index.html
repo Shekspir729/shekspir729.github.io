@@ -459,16 +459,33 @@
             text-align: center;
             font-size: 1.8rem !important;
             height: auto !important;
+            border: none !important;
         }
 
-        .mini-table th {
+        .mini-table tr:first-child td,
+        .mini-table tr:first-child th {
             background: #e8e8e8 !important;
             font-weight: bold;
             border-bottom: 2px solid #FFD600 !important;
         }
 
-        .mini-table tr:hover {
+        .mini-table tr:first-child th:first-child {
+            text-align: left !important;
+        }
+
+        .mini-table tr td:first-child {
+            text-align: left !important;
+            font-weight: bold !important;
+            background: #e8e8e8 !important;
+            border-right: 2px solid #FFD600 !important;
+        }
+
+        .mini-table tr:hover td {
             background: #ffe082 !important;
+        }
+
+        .mini-table tr:hover td:first-child {
+            background: #e8e8e8 !important;
         }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -498,31 +515,45 @@
             const table = document.createElement('table');
             table.className = 'mini-table';
             
-            const thead = document.createElement('thead');
-            const headerRow = document.createElement('tr');
-            headerRow.innerHTML = '<th>Игра</th><th>Баллы</th><th>Р.Б.</th>';
-            thead.appendChild(headerRow);
-            table.appendChild(thead);
-            
             const tbody = document.createElement('tbody');
             
+            // Определяем диапазон игр
             const regularEndCol = (currentCity === 'Московский') ? 14 : 13;
             const ratingStartCol = regularEndCol + 2;
             
+            // Создаем заголовки с номерами игр
+            const headerRow = document.createElement('tr');
+            headerRow.innerHTML = '<th>Игры</th>';
             for (let i = 1; i <= regularEndCol; i++) {
                 const points = data.getValue(rowIndex, i);
                 const ratingPoints = data.getValue(rowIndex, ratingStartCol + i - 1);
-                
                 if (points !== null || ratingPoints !== null) {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>Игра ${i}</td>
-                        <td>${points !== null ? points : '-'}</td>
-                        <td>${ratingPoints !== null ? ratingPoints : '-'}</td>
-                    `;
-                    tbody.appendChild(row);
+                    headerRow.innerHTML += `<th>Игра ${i}</th>`;
                 }
             }
+            tbody.appendChild(headerRow);
+            
+            // Создаем строку с баллами
+            const pointsRow = document.createElement('tr');
+            pointsRow.innerHTML = '<td>Баллы</td>';
+            for (let i = 1; i <= regularEndCol; i++) {
+                const points = data.getValue(rowIndex, i);
+                if (points !== null || data.getValue(rowIndex, ratingStartCol + i - 1) !== null) {
+                    pointsRow.innerHTML += `<td>${points !== null ? points : '-'}</td>`;
+                }
+            }
+            tbody.appendChild(pointsRow);
+            
+            // Создаем строку с рейтинговыми баллами
+            const ratingRow = document.createElement('tr');
+            ratingRow.innerHTML = '<td>Р.Баллы</td>';
+            for (let i = 1; i <= regularEndCol; i++) {
+                const ratingPoints = data.getValue(rowIndex, ratingStartCol + i - 1);
+                if (data.getValue(rowIndex, i) !== null || ratingPoints !== null) {
+                    ratingRow.innerHTML += `<td>${ratingPoints !== null ? ratingPoints : '-'}</td>`;
+                }
+            }
+            tbody.appendChild(ratingRow);
             
             table.appendChild(tbody);
             container.appendChild(table);
@@ -530,30 +561,34 @@
         }
 
         function toggleMiniTable(tableRow, data, rowIndex) {
-            const existingContainer = tableRow.nextElementSibling?.querySelector('.mini-table-container');
+            // Находим следующую строку после текущей
+            const nextRow = tableRow.nextElementSibling;
             
-            const openContainers = document.querySelectorAll('.mini-table-container.expanded');
-            openContainers.forEach(container => {
-                if (container !== existingContainer) {
-                    container.classList.remove('expanded');
-                    setTimeout(() => container.parentElement?.remove(), 300);
-                }
-            });
-            
+            // Проверяем, есть ли уже открытая мини-таблица
+            const existingContainer = document.querySelector('.mini-table-container.expanded');
             if (existingContainer) {
                 existingContainer.classList.remove('expanded');
-                setTimeout(() => existingContainer.parentElement.remove(), 300);
+                setTimeout(() => existingContainer.parentElement.parentElement.remove(), 300);
+            }
+            
+            // Если мини-таблица уже открыта под текущей строкой, закрываем её
+            if (nextRow?.querySelector('.mini-table-container')) {
+                nextRow.querySelector('.mini-table-container').classList.remove('expanded');
+                setTimeout(() => nextRow.remove(), 300);
             } else {
+                // Создаем новую мини-таблицу
                 const wrapper = document.createElement('tr');
                 const cell = document.createElement('td');
-                cell.colSpan = 7;
+                cell.colSpan = 7; // Количество колонок в основной таблице
                 
                 const miniTable = createMiniTable(data, rowIndex);
                 cell.appendChild(miniTable);
                 wrapper.appendChild(cell);
                 
+                // Вставляем после текущей строки
                 tableRow.parentNode.insertBefore(wrapper, tableRow.nextSibling);
                 
+                // Анимируем появление
                 setTimeout(() => miniTable.classList.add('expanded'), 50);
             }
         }
