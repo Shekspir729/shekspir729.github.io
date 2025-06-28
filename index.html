@@ -853,13 +853,19 @@
 
                 // === Новый обработчик клика по строке ===
                 google.visualization.events.addListener(table, 'ready', () => {
-                    const tableElement = document.querySelector('#table_div table');
+                    // Берём только видимую таблицу (которая не display: none)
+                    const tables = document.querySelectorAll('#table_div table');
+                    let tableElement = null;
+                    tables.forEach(tbl => {
+                        if (getComputedStyle(tbl).display !== 'none') tableElement = tbl;
+                    });
                     if (tableElement) {
                         const rows = tableElement.querySelectorAll('tbody tr');
                         rows.forEach((tr, idx) => {
                             tr.onclick = function() {
                                 toggleMiniTable(this, data, idx);
                             };
+                            tr.style.cursor = 'pointer'; // визуально показываем, что строка кликабельна
                         });
                     }
                 });
