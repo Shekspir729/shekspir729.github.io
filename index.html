@@ -189,6 +189,104 @@
             padding: 32px 24px;
             overflow-x: auto;
         }
+        
+        /* Стили для детальной таблицы */
+        .team-details {
+            display: none;
+            background: #f8f9fa;
+            border-radius: 16px;
+            margin: 0;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+            max-height: 0;
+        }
+
+        .team-details.active {
+            display: block;
+            max-height: 500px;
+            margin: 16px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .details-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-family: 'Arial', sans-serif;
+            font-size: 1.8rem;
+        }
+
+        .details-table th {
+            background: #e0e0e0;
+            color: #111;
+            padding: 12px 8px;
+            font-weight: 700;
+            text-align: center;
+            border-bottom: 2px solid #FFD600;
+        }
+
+        .details-table td {
+            padding: 12px 8px;
+            text-align: center;
+            background: #fff;
+            color: #111;
+            font-weight: 500;
+        }
+
+        .details-table tr:first-child td {
+            background: #f5f5f5;
+        }
+
+        .details-table tr:last-child td {
+            color: #FFC107;
+            font-weight: 700;
+        }
+
+        /* Анимация для строк таблицы */
+        .gchart-row {
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .gchart-row.active {
+            background: #ffe082 !important;
+            box-shadow: 0 4px 12px rgba(255,214,0,0.2);
+        }
+
+        /* Оптимизация для мобильных устройств */
+        @media (max-width: 768px) {
+            .details-table {
+                font-size: 1.4rem;
+            }
+            
+            .details-table th,
+            .details-table td {
+                padding: 8px 4px;
+            }
+            
+            .team-details.active {
+                margin: 8px 0;
+            }
+        }
+
+        /* Стили для плавной анимации */
+        .details-fade-enter-active,
+        .details-fade-leave-active {
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .details-fade-enter,
+        .details-fade-leave-to {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        /* Оптимизация производительности */
+        .team-details {
+            will-change: transform, opacity, max-height;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
         .city-switcher {
             display: flex;
             justify-content: center;
@@ -429,6 +527,104 @@
             pointer-events: none;
             opacity: 0.8;
         }
+
+        /* Стили для детальной таблицы */
+        .team-details {
+            display: none;
+            background: #f8f9fa;
+            border-radius: 16px;
+            margin: 0;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+            max-height: 0;
+        }
+
+        .team-details.active {
+            display: block;
+            max-height: 500px; /* Достаточно для отображения содержимого */
+            margin: 16px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .details-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-family: 'Arial', sans-serif;
+            font-size: 1.8rem;
+        }
+
+        .details-table th {
+            background: #e0e0e0;
+            color: #111;
+            padding: 12px 8px;
+            font-weight: 700;
+            text-align: center;
+            border-bottom: 2px solid #FFD600;
+        }
+
+        .details-table td {
+            padding: 12px 8px;
+            text-align: center;
+            background: #fff;
+            color: #111;
+            font-weight: 500;
+        }
+
+        .details-table tr:first-child td {
+            background: #f5f5f5;
+        }
+
+        .details-table tr:last-child td {
+            color: #FFC107;
+            font-weight: 700;
+        }
+
+        /* Анимация для строк таблицы */
+        .gchart-row {
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .gchart-row.active {
+            background: #ffe082 !important;
+            box-shadow: 0 4px 12px rgba(255,214,0,0.2);
+        }
+
+        /* Оптимизация для мобильных устройств */
+        @media (max-width: 768px) {
+            .details-table {
+                font-size: 1.4rem;
+            }
+            
+            .details-table th,
+            .details-table td {
+                padding: 8px 4px;
+            }
+            
+            .team-details.active {
+                margin: 8px 0;
+            }
+        }
+
+        /* Стили для плавной анимации */
+        .details-fade-enter-active,
+        .details-fade-leave-active {
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        .details-fade-enter,
+        .details-fade-leave-to {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        /* Оптимизация производительности */
+        .team-details {
+            will-change: transform, opacity, max-height;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+        }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -443,15 +639,136 @@
             { name: 'Отрадное', label: 'Отрадное' }
         ];
         let currentCity = cities[0].name;
+        let activeTeamRow = null;
+        let cachedTeamDetails = new Map();
 
         google.charts.load('current', {'packages':['table']});
         google.charts.setOnLoadCallback(() => drawTable(currentCity));
 
         let lastTableHTML = '';
 
+        function getTeamDetails(data, teamName, rowIndex) {
+            // Проверяем кэш
+            const cacheKey = `${currentCity}-${teamName}`;
+            if (cachedTeamDetails.has(cacheKey)) {
+                return cachedTeamDetails.get(cacheKey);
+            }
+
+            const details = {
+                games: [],
+                scores: [],
+                ratingPoints: []
+            };
+
+            // Определяем диапазон столбцов в зависимости от города
+            const regularEndCol = (currentCity === 'Московский') ? 14 : 13;
+            const ratingStartCol = regularEndCol + 2;
+            const ratingEndCol = (currentCity === 'Московский') ? 29 : 27;
+
+            // Собираем данные об играх
+            for (let i = 1; i <= regularEndCol; i++) {
+                const gameNumber = 120 + i;
+                const score = data.getValue(rowIndex, i);
+                const ratingPoints = data.getValue(rowIndex, ratingStartCol + i - 1);
+
+                if (typeof score === 'number' || typeof ratingPoints === 'number') {
+                    details.games.push(gameNumber);
+                    details.scores.push(score || '-');
+                    details.ratingPoints.push(ratingPoints || '-');
+                }
+            }
+
+            // Сохраняем в кэш
+            cachedTeamDetails.set(cacheKey, details);
+            return details;
+        }
+
+        function createDetailsTable(details) {
+            const table = document.createElement('div');
+            table.className = 'team-details';
+            
+            let html = '<table class="details-table">';
+            
+            // Заголовки с номерами игр
+            html += '<tr><th>Показатель</th>';
+            details.games.forEach(game => {
+                html += `<th>Игра №${game}</th>`;
+            });
+            html += '</tr>';
+            
+            // Баллы
+            html += '<tr><td><strong>Баллы</strong></td>';
+            details.scores.forEach(score => {
+                html += `<td>${score}</td>`;
+            });
+            html += '</tr>';
+            
+            // Рейтинговые баллы
+            html += '<tr><td><strong>Р.Б.</strong></td>';
+            details.ratingPoints.forEach(points => {
+                html += `<td>${points}</td>`;
+            });
+            html += '</tr>';
+            
+            html += '</table>';
+            table.innerHTML = html;
+            return table;
+        }
+
+        function handleRowClick(e) {
+            const row = e.target.closest('tr');
+            if (!row || row.classList.contains('gchart-header')) return;
+
+            const teamNameCell = row.cells[1]; // Ячейка с названием команды
+            if (!teamNameCell) return;
+
+            const teamName = teamNameCell.textContent;
+            const tableDiv = document.getElementById('table_div');
+            
+            // Находим существующую детальную таблицу
+            const existingDetails = tableDiv.querySelector('.team-details.active');
+            
+            // Если кликнули по той же строке - просто скрываем детали
+            if (activeTeamRow === row) {
+                if (existingDetails) {
+                    existingDetails.classList.remove('active');
+                    setTimeout(() => existingDetails.remove(), 300);
+                }
+                row.classList.remove('active');
+                activeTeamRow = null;
+                return;
+            }
+
+            // Удаляем предыдущую активную строку и детали
+            if (activeTeamRow) {
+                activeTeamRow.classList.remove('active');
+                if (existingDetails) {
+                    existingDetails.classList.remove('active');
+                    setTimeout(() => existingDetails.remove(), 300);
+                }
+            }
+
+            // Активируем новую строку
+            row.classList.add('active');
+            activeTeamRow = row;
+
+            // Получаем данные команды
+            const dataTable = table.getDataTable();
+            const rowIndex = row.rowIndex - 1; // -1 because of header row
+            const details = getTeamDetails(dataTable, teamName, rowIndex);
+
+            // Создаем и вставляем новую детальную таблицу
+            const detailsTable = createDetailsTable(details);
+            row.parentNode.insertBefore(detailsTable, row.nextSibling);
+            
+            // Активируем с небольшой задержкой для анимации
+            requestAnimationFrame(() => {
+                detailsTable.classList.add('active');
+            });
+        }
+
         function drawTable(city) {
             currentCity = city;
-            // Показываем старый слой (если есть)
             const newDiv = document.getElementById('table_fade_new');
             newDiv.innerHTML = '<div id="table_div">Загрузка таблицы...</div>';
             newDiv.style.zIndex = 2;
@@ -573,10 +890,14 @@
                 sortColumn: 2, // сортировка по 'Сумма баллов'
                 sortAscending: false // по убыванию
             });
+
+            // Добавляем обработчик клика на строки таблицы
+            const tableDiv = document.getElementById('table_div');
+            tableDiv.addEventListener('click', handleRowClick);
+
             lastTableHTML = newDiv.innerHTML;
-            // Анимация: новый въезжает справа
             gsap.fromTo(newDiv, {x: '100%', autoAlpha: 1}, {duration: 1.2, x: 0, autoAlpha: 1, ease: "power4.out"});
-            // После анимации сбрасываем старый слой
+            
             setTimeout(() => {
                 document.getElementById('table_fade_old').innerHTML = '';
                 document.getElementById('table_fade_old').style.transform = 'translateX(0)';
