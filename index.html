@@ -715,72 +715,6 @@
             return table;
         }
 
-        function handleRowClick(e) {
-            const row = e.target.closest('tr');
-            if (!row || row.classList.contains('gchart-header')) return;
-
-            const teamNameCell = row.cells[1]; // Ячейка с названием команды
-            if (!teamNameCell) return;
-
-            const teamName = teamNameCell.textContent;
-            const tableDiv = document.getElementById('table_div');
-            
-            // Находим существующую детальную таблицу
-            const existingDetails = tableDiv.querySelector('.team-details.active');
-            
-            // Если кликнули по той же строке - просто скрываем детали
-            if (activeTeamRow === row) {
-                if (existingDetails) {
-                    existingDetails.classList.remove('active');
-                    setTimeout(() => existingDetails.remove(), 300);
-                }
-                row.classList.remove('active');
-                activeTeamRow = null;
-                return;
-            }
-
-            // Удаляем предыдущую активную строку и детали
-            if (activeTeamRow) {
-                activeTeamRow.classList.remove('active');
-                if (existingDetails) {
-                    existingDetails.classList.remove('active');
-                    setTimeout(() => existingDetails.remove(), 300);
-                }
-            }
-
-            // Активируем новую строку
-            row.classList.add('active');
-            activeTeamRow = row;
-
-            // Получаем данные команды
-            const dataTable = table.getDataTable();
-            const rowIndex = row.rowIndex - 1; // -1 because of header row
-            const details = getTeamDetails(dataTable, teamName, rowIndex);
-
-            // Создаем и вставляем новую детальную таблицу
-            const detailsTable = createDetailsTable(details);
-            row.parentNode.insertBefore(detailsTable, row.nextSibling);
-            
-            // Активируем с небольшой задержкой для анимации
-            requestAnimationFrame(() => {
-                detailsTable.classList.add('active');
-            });
-        }
-
-        function drawTable(city) {
-            currentCity = city;
-            const newDiv = document.getElementById('table_fade_new');
-            newDiv.innerHTML = '<div id="table_div">Загрузка таблицы...</div>';
-            newDiv.style.zIndex = 2;
-            newDiv.style.opacity = 1;
-            newDiv.style.transform = 'translateX(100%)';
-            updateActiveButton(city);
-            const queryString = encodeURIComponent('SELECT *');
-            const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${city}&tq=${queryString}`;
-            const query = new google.visualization.Query(url);
-            query.send(handleQueryResponse);
-        }
-
         function handleQueryResponse(response) {
             const newDiv = document.getElementById('table_fade_new');
             if (response.isError()) {
@@ -790,7 +724,7 @@
             }
             newDiv.innerHTML = '<div id="table_div"></div>';
             const data = response.getDataTable();
-            const result = [['Место', 'Название команды', 'Сумма баллов', 'Сумма Р.Б.', 'Игр', 'Средний балл', 'Средний Р.Б.']];
+            const result = [['Место', 'Место (число)', 'Название команды', 'Сумма баллов', 'Сумма Р.Б.', 'Игр', 'Средний балл', 'Средний Р.Б.']];
             let teams = [];
             
             for (let i = 0; i < data.getNumberOfRows(); i++) {
@@ -872,6 +806,24 @@
             const view = new google.visualization.DataView(dataTable);
             view.setColumns([0,2,3,4,5,6,7]); // показываем только нужные столбцы
             const table = new google.visualization.Table(document.getElementById('table_div'));
+
+            // Добавляем обработчик на события таблицы
+            google.visualization.events.addListener(table, 'ready', function() {
+                console.log('Table ready, adding click handlers...');
+                const tableElement = document.querySelector('#table_div table');
+                if (tableElement) {
+                    const rows = tableElement.getElementsByTagName('tr');
+                    Array.from(rows).forEach((row, index) => {
+                        if (index === 0) return; // Пропускаем заголовок
+                        row.style.cursor = 'pointer';
+                        row.addEventListener('click', function(e) {
+                            console.log('Row clicked:', index);
+                            handleRowClick(e);
+                        });
+                    });
+                }
+            });
+
             table.draw(view, {
                 showRowNumber: false,
                 width: '100%',
@@ -887,13 +839,9 @@
                     tableCell: 'gchart-cell',
                     headerCell: 'gchart-header-cell'
                 },
-                sortColumn: 2, // сортировка по 'Сумма баллов'
-                sortAscending: false // по убыванию
+                sortColumn: 2,
+                sortAscending: false
             });
-
-            // Добавляем обработчик клика на строки таблицы
-            const tableDiv = document.getElementById('table_div');
-            tableDiv.addEventListener('click', handleRowClick);
 
             lastTableHTML = newDiv.innerHTML;
             gsap.fromTo(newDiv, {x: '100%', autoAlpha: 1}, {duration: 1.2, x: 0, autoAlpha: 1, ease: "power4.out"});
@@ -903,6 +851,72 @@
                 document.getElementById('table_fade_old').style.transform = 'translateX(0)';
                 newDiv.style.transform = 'translateX(0)';
             }, 1300);
+        }
+
+        function handleRowClick(e) {
+            console.log('handleRowClick called');
+            const row = e.target.closest('tr');
+            if (!row || row.classList.contains('gchart-header')) {
+                console.log('Invalid row or header clicked');
+                return;
+            }
+
+            const teamNameCell = row.cells[1]; // Ячейка с названием команды
+            if (!teamNameCell) {
+                console.log('Team name cell not found');
+                return;
+            }
+
+            console.log('Processing click for team:', teamNameCell.textContent);
+            const teamName = teamNameCell.textContent;
+            const tableDiv = document.getElementById('table_div');
+            
+            // Находим существующую детальную таблицу
+            const existingDetails = tableDiv.querySelector('.team-details.active');
+            
+            // Если кликнули по той же строке - просто скрываем детали
+            if (activeTeamRow === row) {
+                console.log('Closing details for current team');
+                if (existingDetails) {
+                    existingDetails.classList.remove('active');
+                    setTimeout(() => existingDetails.remove(), 300);
+                }
+                row.classList.remove('active');
+                activeTeamRow = null;
+                return;
+            }
+
+            // Удаляем предыдущую активную строку и детали
+            if (activeTeamRow) {
+                console.log('Removing previous team details');
+                activeTeamRow.classList.remove('active');
+                if (existingDetails) {
+                    existingDetails.classList.remove('active');
+                    setTimeout(() => existingDetails.remove(), 300);
+                }
+            }
+
+            // Активируем новую строку
+            console.log('Activating new row');
+            row.classList.add('active');
+            activeTeamRow = row;
+
+            // Получаем данные команды
+            const dataTable = table.getDataTable();
+            const rowIndex = row.rowIndex - 1; // -1 because of header row
+            console.log('Getting details for row index:', rowIndex);
+            const details = getTeamDetails(dataTable, teamName, rowIndex);
+
+            // Создаем и вставляем новую детальную таблицу
+            console.log('Creating details table');
+            const detailsTable = createDetailsTable(details);
+            row.parentNode.insertBefore(detailsTable, row.nextSibling);
+            
+            // Активируем с небольшой задержкой для анимации
+            requestAnimationFrame(() => {
+                console.log('Activating details table');
+                detailsTable.classList.add('active');
+            });
         }
 
         function updateActiveButton(city) {
