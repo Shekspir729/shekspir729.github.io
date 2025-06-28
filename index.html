@@ -190,103 +190,7 @@
             overflow-x: auto;
         }
         
-        /* Стили для детальной таблицы */
-        .team-details {
-            display: none;
-            background: #f8f9fa;
-            border-radius: 16px;
-            margin: 0;
-            overflow: hidden;
-            transition: all 0.3s ease-in-out;
-            max-height: 0;
-        }
 
-        .team-details.active {
-            display: block;
-            max-height: 500px;
-            margin: 16px 0;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .details-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            font-family: 'Arial', sans-serif;
-            font-size: 1.8rem;
-        }
-
-        .details-table th {
-            background: #e0e0e0;
-            color: #111;
-            padding: 12px 8px;
-            font-weight: 700;
-            text-align: center;
-            border-bottom: 2px solid #FFD600;
-        }
-
-        .details-table td {
-            padding: 12px 8px;
-            text-align: center;
-            background: #fff;
-            color: #111;
-            font-weight: 500;
-        }
-
-        .details-table tr:first-child td {
-            background: #f5f5f5;
-        }
-
-        .details-table tr:last-child td {
-            color: #FFC107;
-            font-weight: 700;
-        }
-
-        /* Анимация для строк таблицы */
-        .gchart-row {
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-        }
-
-        .gchart-row.active {
-            background: #ffe082 !important;
-            box-shadow: 0 4px 12px rgba(255,214,0,0.2);
-        }
-
-        /* Оптимизация для мобильных устройств */
-        @media (max-width: 768px) {
-            .details-table {
-                font-size: 1.4rem;
-            }
-            
-            .details-table th,
-            .details-table td {
-                padding: 8px 4px;
-            }
-            
-            .team-details.active {
-                margin: 8px 0;
-            }
-        }
-
-        /* Стили для плавной анимации */
-        .details-fade-enter-active,
-        .details-fade-leave-active {
-            transition: opacity 0.3s, transform 0.3s;
-        }
-
-        .details-fade-enter,
-        .details-fade-leave-to {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-
-        /* Оптимизация производительности */
-        .team-details {
-            will-change: transform, opacity, max-height;
-            transform: translateZ(0);
-            backface-visibility: hidden;
-        }
         .city-switcher {
             display: flex;
             justify-content: center;
@@ -724,24 +628,19 @@
             }
             newDiv.innerHTML = '<div id="table_div"></div>';
             const data = response.getDataTable();
-            const result = [['Место', 'Место (число)', 'Название команды', 'Сумма баллов', 'Сумма Р.Б.', 'Игр', 'Средний балл', 'Средний Р.Б.']];
+            const result = [['Место', 'Название команды', 'Сумма баллов', 'Сумма Р.Б.', 'Игр', 'Средний балл', 'Средний Р.Б.']];
             let teams = [];
             
             for (let i = 0; i < data.getNumberOfRows(); i++) {
                 const name = data.getValue(i, 0);
-                if (name === 'название команды') continue; // Пропускаем строку-заголовок
+                if (name === 'название команды') continue;
                 
-                let sumRegular = 0; // Сумма обычных баллов
-                let sumRating = 0;  // Сумма рейтинговых баллов
+                let sumRegular = 0;
+                let sumRating = 0;
                 let count = 0;
                 
-                // Определяем количество игр в зависимости от города
                 let lastGameCol = (currentCity === 'Московский') ? 14 : 13;
-                
-                // Обрабатываем обычные баллы, исключаем столбцы сумм
-                // Для Московского: обычные баллы B-O (индексы 1-14), исключаем P (15) - сумма обычных баллов
-                // Для остальных: обычные баллы B-N (индексы 1-13), исключаем O (14) - сумма обычных баллов
-                let regularEndCol = (currentCity === 'Московский') ? 14 : 13; // До столбца с суммой обычных баллов
+                let regularEndCol = (currentCity === 'Московский') ? 14 : 13;
                 
                 for (let j = 1; j <= regularEndCol; j++) {
                     const val = data.getValue(i, j);
@@ -751,11 +650,8 @@
                     }
                 }
                 
-                // Обрабатываем рейтинговые баллы (столбцы после обычных баллов)
-                // Для Московского: рейтинговые баллы Q-AD (индексы 16-29), исключаем AE (30) - сумма Р.Б., AF (31) - средний Р.Б.
-                // Для остальных: рейтинговые баллы P-AB (индексы 15-27), исключаем AC (28) - сумма Р.Б., AD (29) - средний Р.Б.
-                let ratingStartCol = regularEndCol + 2; // Пропускаем столбец суммы обычных баллов
-                let ratingEndCol = (currentCity === 'Московский') ? 29 : 27; // До столбца суммы Р.Б.
+                let ratingStartCol = regularEndCol + 2;
+                let ratingEndCol = (currentCity === 'Московский') ? 29 : 27;
                 
                 for (let j = ratingStartCol; j <= ratingEndCol; j++) {
                     const val = data.getValue(i, j);
@@ -776,55 +672,29 @@
                 }
             }
             
-            // Сортируем по сумме обычных баллов по убыванию
             teams.sort((a, b) => b.sumRegular - a.sumRegular);
             
-            // Формируем итоговую таблицу с местом
             teams.forEach((team, idx) => {
                 let placeIcon = '';
                 if (idx === 0) placeIcon = '<span class="place-cell place-icon">🏆</span>';
                 else if (idx === 1) placeIcon = '<span class="place-cell place-icon">🥈</span>';
                 else if (idx === 2) placeIcon = '<span class="place-cell place-icon">🥉</span>';
                 else placeIcon = `<span class='place-cell'>#${idx + 1}</span>`;
+                
                 result.push([
-                    placeIcon, // 0: визуальное место
-                    idx + 1,   // 1: числовое место (для сортировки)
-                    team.name, // 2
-                    team.sumRegular, // 3
-                    team.sumRating,  // 4
-                    team.count,      // 5
-                    team.avgRegular, // 6
-                    team.avgRating   // 7
+                    placeIcon,
+                    team.name,
+                    team.sumRegular,
+                    team.sumRating,
+                    team.count,
+                    team.avgRegular,
+                    team.avgRating
                 ]);
             });
             
-            // Рисуем новую таблицу
-            const dataTable = google.visualization.arrayToDataTable([
-                ['Место', 'Место (число)', 'Название команды', 'Сумма баллов', 'Сумма Р.Б.', 'Игр', 'Средний балл', 'Средний Р.Б.'],
-                ...result.slice(1)
-            ]);
-            const view = new google.visualization.DataView(dataTable);
-            view.setColumns([0,2,3,4,5,6,7]); // показываем только нужные столбцы
+            const dataTable = google.visualization.arrayToDataTable(result);
             const table = new google.visualization.Table(document.getElementById('table_div'));
-
-            // Добавляем обработчик на события таблицы
-            google.visualization.events.addListener(table, 'ready', function() {
-                console.log('Table ready, adding click handlers...');
-                const tableElement = document.querySelector('#table_div table');
-                if (tableElement) {
-                    const rows = tableElement.getElementsByTagName('tr');
-                    Array.from(rows).forEach((row, index) => {
-                        if (index === 0) return; // Пропускаем заголовок
-                        row.style.cursor = 'pointer';
-                        row.addEventListener('click', function(e) {
-                            console.log('Row clicked:', index);
-                            handleRowClick(e);
-                        });
-                    });
-                }
-            });
-
-            table.draw(view, {
+            table.draw(dataTable, {
                 showRowNumber: false,
                 width: '100%',
                 height: '100%',
