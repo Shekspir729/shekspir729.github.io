@@ -831,19 +831,6 @@
                 view.setColumns([0,2,3,4,5,6,7]); // показываем только нужные столбцы
                 const table = new google.visualization.Table(document.getElementById('table_div'));
                 
-                // Добавляем обработчик клика по строке
-                google.visualization.events.addListener(table, 'select', () => {
-                    const selection = table.getSelection();
-                    if (selection.length > 0) {
-                        const row = selection[0].row;
-                        if (row !== null) {
-                            const tableElement = document.querySelector('#table_div table');
-                            const tableRow = tableElement.querySelector(`tr:nth-child(${row + 2})`);
-                            toggleMiniTable(tableRow, data, row);
-                        }
-                    }
-                });
-                
                 table.draw(view, {
                     showRowNumber: false,
                     width: '100%',
@@ -871,6 +858,20 @@
                     document.getElementById('table_fade_old').style.transform = 'translateX(0)';
                     newDiv.style.transform = 'translateX(0)';
                 }, 1300);
+
+                // === Новый обработчик клика по строке ===
+                setTimeout(() => {
+                    const tableElement = document.querySelector('#table_div table');
+                    if (tableElement) {
+                        const rows = tableElement.querySelectorAll('tbody tr');
+                        rows.forEach((tr, idx) => {
+                            tr.onclick = function() {
+                                toggleMiniTable(this, data, idx);
+                            };
+                        });
+                    }
+                }, 0);
+                // === Конец нового обработчика ===
             } catch (error) {
                 console.error('Error in handleQueryResponse:', error);
                 const newDiv = document.getElementById('table_fade_new');
