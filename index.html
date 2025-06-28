@@ -561,17 +561,15 @@
         }
 
         function toggleMiniTable(tableRow, data, rowIndex) {
-            // Находим следующую строку после текущей
+            // Находим все существующие мини-таблицы
+            const existingContainers = document.querySelectorAll('.mini-table-container');
+            existingContainers.forEach(container => {
+                container.classList.remove('expanded');
+                setTimeout(() => container.parentElement.parentElement.remove(), 300);
+            });
+
+            // Проверяем, есть ли уже мини-таблица под этой строкой
             const nextRow = tableRow.nextElementSibling;
-            
-            // Проверяем, есть ли уже открытая мини-таблица
-            const existingContainer = document.querySelector('.mini-table-container.expanded');
-            if (existingContainer) {
-                existingContainer.classList.remove('expanded');
-                setTimeout(() => existingContainer.parentElement.parentElement.remove(), 300);
-            }
-            
-            // Если мини-таблица уже открыта под текущей строкой, закрываем её
             if (nextRow?.querySelector('.mini-table-container')) {
                 nextRow.querySelector('.mini-table-container').classList.remove('expanded');
                 setTimeout(() => nextRow.remove(), 300);
@@ -579,17 +577,23 @@
                 // Создаем новую мини-таблицу
                 const wrapper = document.createElement('tr');
                 const cell = document.createElement('td');
-                cell.colSpan = 7; // Количество колонок в основной таблице
+                cell.colSpan = 7;
                 
                 const miniTable = createMiniTable(data, rowIndex);
                 cell.appendChild(miniTable);
                 wrapper.appendChild(cell);
                 
-                // Вставляем после текущей строки
-                tableRow.parentNode.insertBefore(wrapper, tableRow.nextSibling);
+                // Вставляем сразу после текущей строки
+                if (tableRow.nextSibling) {
+                    tableRow.parentNode.insertBefore(wrapper, tableRow.nextSibling);
+                } else {
+                    tableRow.parentNode.appendChild(wrapper);
+                }
                 
                 // Анимируем появление
-                setTimeout(() => miniTable.classList.add('expanded'), 50);
+                requestAnimationFrame(() => {
+                    miniTable.classList.add('expanded');
+                });
             }
         }
 
@@ -708,7 +712,7 @@
                     if (row !== null) {
                         const tableElement = document.querySelector('#table_div table');
                         const tableRow = tableElement.querySelector(`tr:nth-child(${row + 2})`);
-                        toggleMiniTable(tableRow, data, row + 1);
+                        toggleMiniTable(tableRow, data, row);
                     }
                 }
             });
