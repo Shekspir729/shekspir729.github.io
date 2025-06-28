@@ -461,94 +461,55 @@
 
         /* Стили для мини-таблицы */
         .mini-table-container {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            background: #f8f8f8;
-            margin: 0;
-            width: 100%;
+            background: #f9f9fb !important;
+            border-radius: 14px !important;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.07) !important;
+            border-top: 3px solid #FFD600 !important;
+            border-bottom: 3px solid #FFD600 !important;
+            margin: 10px 0 !important;
+            padding: 0 !important;
+            overflow-x: auto !important;
         }
-
-        .mini-table-container.expanded {
-            max-height: 300px;
-            margin: 16px 0;
-            border-top: 2px solid #FFD600;
-            border-bottom: 2px solid #FFD600;
-        }
-
         .mini-table {
-            font-size: 0.85rem !important;
-            font-weight: 300 !important;
-            min-width: 500px !important;
-            white-space: nowrap !important;
-            line-height: 1.1 !important;
+            width: 100% !important;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            font-family: Arial, sans-serif !important;
+            font-size: 0.92rem !important;
+            background: transparent !important;
         }
-
         .mini-table th, .mini-table td {
-            padding: 4px 6px !important;
-            font-size: 0.9em !important;
-            font-weight: 300 !important;
-            height: 1.1em !important;
+            padding: 6px 10px !important;
+            border: 1px solid #e0e0e0 !important;
+            font-size: 0.92rem !important;
+            font-weight: 400 !important;
+            text-align: center !important;
+            background: #fff !important;
+            transition: background 0.2s;
         }
-
-        .mini-table tr:first-child td,
-        .mini-table tr:first-child th {
-            background: #e8e8e8 !important;
-            font-weight: bold;
-            border-bottom: 2px solid #FFD600 !important;
+        .mini-table th {
+            background: #ececf6 !important;
+            font-weight: 700 !important;
+            color: #222 !important;
         }
-
-        .mini-table tr:first-child th:first-child {
+        .mini-table tr:nth-child(2) td,
+        .mini-table tr:nth-child(2) th {
+            background: #f6f6fa !important;
+        }
+        .mini-table tr:nth-child(3) td,
+        .mini-table tr:nth-child(3) th {
+            background: #f9f9fb !important;
+        }
+        .mini-table tr td:first-child,
+        .mini-table tr th:first-child {
             text-align: left !important;
-        }
-
-        .mini-table tr td:first-child {
-            text-align: left !important;
-            font-weight: bold !important;
-            background: #e8e8e8 !important;
+            font-weight: 600 !important;
+            background: #ececf6 !important;
+            color: #222 !important;
             border-right: 2px solid #FFD600 !important;
         }
-
         .mini-table tr:hover td {
-            background: #ffe082 !important;
-        }
-
-        .mini-table tr:hover td:first-child {
-            background: #e8e8e8 !important;
-        }
-
-        /* Добавляем стили для сообщений об ошибках */
-        .error-message {
-            text-align: center;
-            padding: 40px;
-            color: #721c24;
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            border-radius: 8px;
-            margin: 20px;
-            font-size: 1.8rem;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #fff;
-            font-size: 1.8rem;
-        }
-        
-        .spinner {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-            margin-bottom: 20px;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+            background: #fffbe6 !important;
         }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
