@@ -470,31 +470,31 @@
         }
 
         .mini-table-container.expanded {
-            max-height: 300px;
-            margin: 16px 0;
+            max-height: 200px;
+            margin: 12px 0;
             border-top: 2px solid #FFD600;
             border-bottom: 2px solid #FFD600;
         }
 
         .mini-table {
-            font-size: 0.85rem !important;
+            font-size: 0.7rem !important;
             font-weight: 300 !important;
             min-width: 500px !important;
             white-space: nowrap !important;
-            line-height: 1.1 !important;
+            line-height: 1.0 !important;
         }
 
         .mini-table th, .mini-table td {
-            padding: 4px 6px !important;
-            font-size: 0.9em !important;
+            padding: 2px 4px !important;
+            font-size: 0.7rem !important; /* Одинаковый размер для всех */
             font-weight: 300 !important;
-            height: 1.1em !important;
+            height: 1.0em !important;
         }
 
         .mini-table tr:first-child td,
         .mini-table tr:first-child th {
             background: #e8e8e8 !important;
-            font-weight: bold;
+            font-weight: 300 !important; /* Убираем акцент на заголовках */
             border-bottom: 2px solid #FFD600 !important;
         }
 
@@ -504,7 +504,7 @@
 
         .mini-table tr td:first-child {
             text-align: left !important;
-            font-weight: bold !important;
+            font-weight: 300 !important; /* Убираем акцент на первой колонке */
             background: #e8e8e8 !important;
             border-right: 2px solid #FFD600 !important;
         }
@@ -550,6 +550,59 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        /* Альтернативные стили для сверхкомпактной версии */
+        .mini-table.ultra-compact {
+            font-size: 0.6rem !important;
+            line-height: 0.9 !important;
+        }
+
+        .mini-table.ultra-compact th, 
+        .mini-table.ultra-compact td {
+            padding: 1px 3px !important;
+            font-size: 0.65em !important;
+            height: 0.9em !important;
+        }
+
+        .mini-table.ultra-compact-container.expanded {
+            max-height: 150px;
+            margin: 8px 0;
+        }
+
+        /* Адаптивные стили для мини-таблицы */
+        @media (max-width: 768px) {
+            .mini-table {
+                font-size: 0.65rem !important;
+                min-width: 400px !important;
+            }
+            
+            .mini-table th, .mini-table td {
+                padding: 1px 3px !important;
+                font-size: 0.7em !important;
+            }
+            
+            .mini-table-container.expanded {
+                max-height: 180px;
+                margin: 8px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mini-table {
+                font-size: 0.6rem !important;
+                min-width: 350px !important;
+            }
+            
+            .mini-table th, .mini-table td {
+                padding: 1px 2px !important;
+                font-size: 0.65em !important;
+            }
+            
+            .mini-table-container.expanded {
+                max-height: 160px;
+                margin: 6px 0;
+            }
+        }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -582,11 +635,11 @@
                 
                 const table = document.createElement('table');
                 table.className = 'mini-table';
-                table.style.fontSize = '0.85rem';
+                table.style.fontSize = '0.7rem';
                 table.style.fontWeight = '300';
                 table.style.minWidth = '500px';
                 table.style.whiteSpace = 'nowrap';
-                table.style.lineHeight = '1.1';
+                table.style.lineHeight = '1.0';
                 
                 const tbody = document.createElement('tbody');
                 
@@ -607,27 +660,27 @@
                 
                 // Создаём строку заголовков игр
                 const headerRow = document.createElement('tr');
-                headerRow.innerHTML = '<th style="font-weight:500; padding:4px 6px; font-size:0.9em;">Игры</th>';
+                headerRow.innerHTML = '<th style="font-weight:300; padding:2px 4px; font-size:0.7rem;">Игры</th>'; /* Единый размер и вес */
                 for (let i = 0; i < gameHeaders.length; i++) {
-                    headerRow.innerHTML += `<th style='font-weight:300; padding:4px 6px; font-size:0.9em;'>${gameHeaders[i]}</th>`;
+                    headerRow.innerHTML += `<th style='font-weight:300; padding:2px 4px; font-size:0.7rem;'>${gameHeaders[i]}</th>`; /* Единый размер и вес */
                 }
                 tbody.appendChild(headerRow);
                 
                 // Строка с баллами
                 const pointsRow = document.createElement('tr');
-                pointsRow.innerHTML = '<td style="font-weight:500; padding:4px 6px; font-size:0.9em;">Баллы</td>';
+                pointsRow.innerHTML = '<td style="font-weight:300; padding:2px 4px; font-size:0.7rem;">Баллы</td>'; /* Единый размер и вес */
                 for (let i = 1; i <= regularEndCol; i++) {
                     const points = data.getValue(rowIndex, i);
-                    pointsRow.innerHTML += `<td style='padding:4px 6px;'>${points !== null && points !== undefined ? points : ''}</td>`;
+                    pointsRow.innerHTML += `<td style='padding:2px 4px; font-size:0.7rem;'>${points !== null && points !== undefined ? points : ''}</td>`; /* Единый размер */
                 }
                 tbody.appendChild(pointsRow);
                 
                 // Строка с рейтинговыми баллами
                 const ratingRow = document.createElement('tr');
-                ratingRow.innerHTML = '<td style="font-weight:500; padding:4px 6px; font-size:0.9em;">Р.Баллы</td>';
+                ratingRow.innerHTML = '<td style="font-weight:300; padding:2px 4px; font-size:0.7rem;">Р.Баллы</td>'; /* Единый размер и вес */
                 for (let i = 1; i <= regularEndCol; i++) {
                     const ratingPoints = data.getValue(rowIndex, ratingStartCol + i - 1);
-                    ratingRow.innerHTML += `<td style='padding:4px 6px;'>${ratingPoints !== null && ratingPoints !== undefined ? ratingPoints : ''}</td>`;
+                    ratingRow.innerHTML += `<td style='padding:2px 4px; font-size:0.7rem;'>${ratingPoints !== null && ratingPoints !== undefined ? ratingPoints : ''}</td>`; /* Единый размер */
                 }
                 tbody.appendChild(ratingRow);
                 
