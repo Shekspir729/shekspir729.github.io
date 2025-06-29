@@ -1,4 +1,4 @@
-ё<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -713,6 +713,7 @@
         window.addEventListener('resize', removeMiniTable);
 
         function showMiniTableForRow(rowElement, data, rowIndex) {
+            console.log('=== Вход в showMiniTableForRow ===', {rowElement, rowIndex, data});
             // Проверяем, что строка действительно содержит данные команды
             let name = null;
             try {
@@ -740,11 +741,17 @@
             miniTable.style.borderRadius = '12px';
             miniTable.style.padding = '8px 12px';
             miniTable.style.minWidth = '300px';
-            document.body.appendChild(miniTable);
-            console.log('Мини-таблица добавлена в DOM:', miniTable);
+            // Проверяем, что miniTable — это элемент, а не текст
+            if (miniTable instanceof HTMLElement) {
+                document.body.appendChild(miniTable);
+                console.log('Мини-таблица добавлена в DOM:', miniTable);
+            } else {
+                console.log('ОШИБКА: miniTable не является HTMLElement!', miniTable);
+            }
             setTimeout(() => {
                 document.addEventListener('mousedown', hideMiniTableOnClick, { once: true });
             }, 0);
+            console.log('=== Выход из showMiniTableForRow ===');
         }
 
         function hideMiniTableOnClick(e) {
