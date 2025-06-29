@@ -704,18 +704,31 @@
             }
         }
 
-        function showMiniTableForRow(rowElement, data, rowIndex) {
-            console.log('showMiniTableForRow called', rowElement, data, rowIndex); // Для отладки
-            // Удаляем старую мини-таблицу
+        // Удаляем мини-таблицу при смене города/перерисовке таблицы
+        function removeMiniTable() {
             document.querySelectorAll('.mini-table-container').forEach(el => el.remove());
+        }
+        // Скрываем мини-таблицу при scroll/resize
+        window.addEventListener('scroll', removeMiniTable);
+        window.addEventListener('resize', removeMiniTable);
 
-            // Получаем координаты строки
+        function showMiniTableForRow(rowElement, data, rowIndex) {
+            // Проверяем, что строка действительно содержит данные команды
+            try {
+                const name = data.getValue(rowIndex, 0);
+                if (!name || name === 'название команды') {
+                    console.log('Мини-таблица не показывается для строки-заголовка или пустой строки');
+                    return;
+                }
+            } catch (e) {
+                console.log('Ошибка при проверке строки для мини-таблицы', e);
+                return;
+            }
+            console.log('showMiniTableForRow called', rowElement, data, rowIndex); // Для отладки
+            removeMiniTable();
             const rect = rowElement.getBoundingClientRect();
-
-            // Создаём мини-таблицу
             const miniTable = createMiniTable(data, rowIndex);
             miniTable.classList.add('mini-table-container');
-            // Стили для абсолютного позиционирования
             miniTable.style.position = 'absolute';
             miniTable.style.left = `${rect.left + window.scrollX}px`;
             miniTable.style.top = `${rect.bottom + window.scrollY}px`;
@@ -725,10 +738,7 @@
             miniTable.style.borderRadius = '12px';
             miniTable.style.padding = '8px 12px';
             miniTable.style.minWidth = '300px';
-
             document.body.appendChild(miniTable);
-
-            // При клике вне мини-таблицы — скрываем её
             setTimeout(() => {
                 document.addEventListener('mousedown', hideMiniTableOnClick, { once: true });
             }, 0);
@@ -743,6 +753,7 @@
 
         function drawTable(city) {
             try {
+                removeMiniTable();
                 currentCity = city;
                 const newDiv = document.getElementById('table_fade_new');
                 if (!newDiv) {
