@@ -914,8 +914,19 @@
                 }, 1300);
 
                 // === Обновляем обработчик клика по строке ===
-                // (Этот блок должен быть только внутри handleQueryResponse после создания table)
-                // Удаляю все дубли вне handleQueryResponse
+                google.visualization.events.addListener(table, 'ready', () => {
+                    // Используем классы строк Google Charts
+                    const tableDiv = document.getElementById('table_div');
+                    const rows = tableDiv.querySelectorAll('.google-visualization-table-tr-even, .google-visualization-table-tr-odd');
+                    rows.forEach((row, idx) => {
+                        row.onclick = function() {
+                            console.log('Клик по строке', this, idx);
+                            showMiniTableForRow(this, data, idx);
+                        };
+                        row.style.cursor = 'pointer';
+                    });
+                });
+                // === Конец нового обработчика ===
             } catch (error) {
                 console.error('Error in handleQueryResponse:', error);
                 const newDiv = document.getElementById('table_fade_new');
