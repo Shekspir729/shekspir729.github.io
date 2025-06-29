@@ -915,15 +915,22 @@
 
                 // === Обновляем обработчик клика по строке ===
                 google.visualization.events.addListener(table, 'ready', () => {
-                    // Используем классы строк Google Charts
                     const tableDiv = document.getElementById('table_div');
-                    const rows = tableDiv.querySelectorAll('.google-visualization-table-tr-even, .google-visualization-table-tr-odd');
-                    rows.forEach((row, idx) => {
-                        row.onclick = function() {
-                            console.log('Клик по строке', this, idx);
-                            showMiniTableForRow(this, data, idx);
+                    // Находим все ячейки
+                    const cells = tableDiv.querySelectorAll('td.gchart-cell');
+                    cells.forEach(cell => {
+                        cell.onclick = function(e) {
+                            // Получаем строку (tr), в которой находится ячейка
+                            const tr = cell.closest('tr');
+                            if (!tr) return;
+                            // Определяем индекс строки среди всех строк tbody
+                            const allRows = Array.from(tr.parentNode.children);
+                            const idx = allRows.indexOf(tr);
+                            console.log('Клик по строке (через td)', tr, idx);
+                            showMiniTableForRow(tr, data, idx);
+                            e.stopPropagation();
                         };
-                        row.style.cursor = 'pointer';
+                        cell.style.cursor = 'pointer';
                     });
                 });
                 // === Конец нового обработчика ===
