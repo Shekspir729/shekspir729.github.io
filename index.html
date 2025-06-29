@@ -934,17 +934,15 @@
                     newDiv.style.transform = 'translateX(0)';
                 }, 1300);
 
-                // === Обновляем обработчик клика по строке через делегирование (с доступом к data) ===
+                // === Обновляем обработчик клика по строке через делегирование (универсальный селектор) ===
                 google.visualization.events.addListener(table, 'ready', () => {
                     const tableDiv = document.getElementById('table_div');
-                    // Снимаем старый обработчик, если он был
                     if (tableDiv._miniTableDelegation) {
                         tableDiv.removeEventListener('click', tableDiv._miniTableDelegation);
                     }
-                    // Новый обработчик с замыканием на data
                     tableDiv._miniTableDelegation = function(e) {
-                        const cell = e.target.closest('td.gchart-cell');
-                        if (!cell) return;
+                        const cell = e.target.closest('td');
+                        if (!cell || !cell.className.includes('gchart-cell')) return;
                         const tr = cell.closest('tr');
                         if (!tr) return;
                         const allRows = Array.from(tr.parentNode.children);
