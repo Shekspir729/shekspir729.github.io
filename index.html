@@ -476,8 +476,7 @@
             border-bottom: 2px solid #FFD600;
         }
 
-        /* Более специфичные селекторы для мини-таблицы */
-        .mini-table-container .mini-table {
+        .mini-table {
             font-size: 0.55rem !important;
             font-weight: 300 !important;
             min-width: 500px !important;
@@ -485,68 +484,37 @@
             line-height: 0.9 !important;
         }
 
-        .mini-table-container .mini-table th, 
-        .mini-table-container .mini-table td {
+        .mini-table th, .mini-table td {
             padding: 1px 3px !important;
             font-size: 0.55rem !important;
             font-weight: 300 !important;
             height: 0.9em !important;
-            background: #f8f8f8 !important;
-            color: #111 !important;
-            border: none !important;
-            text-align: center !important;
-            vertical-align: middle !important;
         }
 
-        .mini-table-container .mini-table tr:first-child td,
-        .mini-table-container .mini-table tr:first-child th {
+        .mini-table tr:first-child td,
+        .mini-table tr:first-child th {
             background: #e8e8e8 !important;
             font-weight: 300 !important;
             border-bottom: 2px solid #FFD600 !important;
         }
 
-        .mini-table-container .mini-table tr:first-child th:first-child {
+        .mini-table tr:first-child th:first-child {
             text-align: left !important;
         }
 
-        .mini-table-container .mini-table tr td:first-child {
+        .mini-table tr td:first-child {
             text-align: left !important;
             font-weight: 300 !important;
             background: #e8e8e8 !important;
             border-right: 2px solid #FFD600 !important;
         }
 
-        .mini-table-container .mini-table tr:hover td {
+        .mini-table tr:hover td {
             background: #ffe082 !important;
         }
 
-        .mini-table-container .mini-table tr:hover td:first-child {
+        .mini-table tr:hover td:first-child {
             background: #e8e8e8 !important;
-        }
-
-        /* Дополнительная изоляция от стилей основной таблицы */
-        .mini-table-container table {
-            font-size: 0.55rem !important;
-            font-weight: 300 !important;
-            background: #f8f8f8 !important;
-        }
-
-        .mini-table-container table th,
-        .mini-table-container table td {
-            font-size: 0.55rem !important;
-            font-weight: 300 !important;
-            padding: 1px 3px !important;
-            height: 0.9em !important;
-            background: #f8f8f8 !important;
-            color: #111 !important;
-            border: none !important;
-            text-align: center !important;
-            vertical-align: middle !important;
-        }
-
-        /* Переопределяем все возможные стили основной таблицы */
-        .mini-table-container * {
-            font-family: 'Arial', sans-serif !important;
         }
 
         /* Добавляем стили для сообщений об ошибках */
@@ -603,13 +571,12 @@
 
         /* Адаптивные стили для мини-таблицы */
         @media (max-width: 768px) {
-            .mini-table-container .mini-table {
+            .mini-table {
                 font-size: 0.5rem !important;
                 min-width: 400px !important;
             }
             
-            .mini-table-container .mini-table th, 
-            .mini-table-container .mini-table td {
+            .mini-table th, .mini-table td {
                 padding: 1px 2px !important;
                 font-size: 0.5rem !important;
             }
@@ -621,13 +588,12 @@
         }
 
         @media (max-width: 480px) {
-            .mini-table-container .mini-table {
+            .mini-table {
                 font-size: 0.45rem !important;
                 min-width: 350px !important;
             }
             
-            .mini-table-container .mini-table th, 
-            .mini-table-container .mini-table td {
+            .mini-table th, .mini-table td {
                 padding: 1px 2px !important;
                 font-size: 0.45rem !important;
             }
