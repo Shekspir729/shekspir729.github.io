@@ -470,25 +470,25 @@
         }
 
         .mini-table-container.expanded {
-            max-height: 250px;
+            max-height: 200px;
             margin: 12px 0;
             border-top: 2px solid #FFD600;
             border-bottom: 2px solid #FFD600;
         }
 
         .mini-table {
-            font-size: 0.55rem !important;
+            font-size: 0.45rem !important;
             font-weight: 300 !important;
             min-width: 500px !important;
             white-space: nowrap !important;
-            line-height: 0.9 !important;
+            line-height: 0.8 !important;
         }
 
         .mini-table th, .mini-table td {
-            padding: 1px 3px !important;
-            font-size: 0.55rem !important;
+            padding: 1px 2px !important;
+            font-size: 0.45rem !important;
             font-weight: 300 !important;
-            height: 0.9em !important;
+            height: 0.8em !important;
         }
 
         .mini-table tr:first-child td,
@@ -635,11 +635,12 @@
                 
                 const table = document.createElement('table');
                 table.className = 'mini-table';
-                table.style.fontSize = '0.55rem';
+                // Устанавливаем размер шрифта прямо в инлайн-стилях
+                table.style.fontSize = '0.45rem'; /* Делаем еще меньше */
                 table.style.fontWeight = '300';
                 table.style.minWidth = '500px';
                 table.style.whiteSpace = 'nowrap';
-                table.style.lineHeight = '0.9';
+                table.style.lineHeight = '0.8'; /* Делаем еще компактнее */
                 
                 const tbody = document.createElement('tbody');
                 
@@ -658,29 +659,29 @@
                     for (let i = 1; i <= regularEndCol; i++) gameHeaders.push('');
                 }
                 
-                // Создаём строку заголовков игр
+                // Создаём строку заголовков игр с инлайн-стилями
                 const headerRow = document.createElement('tr');
-                headerRow.innerHTML = '<th style="font-weight:300; padding:1px 3px; font-size:0.55rem;">Игры</th>';
+                headerRow.innerHTML = '<th style="font-weight:300; padding:1px 2px; font-size:0.45rem; height:0.8em;">Игры</th>';
                 for (let i = 0; i < gameHeaders.length; i++) {
-                    headerRow.innerHTML += `<th style='font-weight:300; padding:1px 3px; font-size:0.55rem;'>${gameHeaders[i]}</th>`;
+                    headerRow.innerHTML += `<th style='font-weight:300; padding:1px 2px; font-size:0.45rem; height:0.8em;'>${gameHeaders[i]}</th>`;
                 }
                 tbody.appendChild(headerRow);
                 
-                // Строка с баллами
+                // Строка с баллами с инлайн-стилями
                 const pointsRow = document.createElement('tr');
-                pointsRow.innerHTML = '<td style="font-weight:300; padding:1px 3px; font-size:0.55rem;">Баллы</td>';
+                pointsRow.innerHTML = '<td style="font-weight:300; padding:1px 2px; font-size:0.45rem; height:0.8em;">Баллы</td>';
                 for (let i = 1; i <= regularEndCol; i++) {
                     const points = data.getValue(rowIndex, i);
-                    pointsRow.innerHTML += `<td style='padding:1px 3px; font-size:0.55rem;'>${points !== null && points !== undefined ? points : ''}</td>`;
+                    pointsRow.innerHTML += `<td style='padding:1px 2px; font-size:0.45rem; height:0.8em;'>${points !== null && points !== undefined ? points : ''}</td>`;
                 }
                 tbody.appendChild(pointsRow);
                 
-                // Строка с рейтинговыми баллами
+                // Строка с рейтинговыми баллами с инлайн-стилями
                 const ratingRow = document.createElement('tr');
-                ratingRow.innerHTML = '<td style="font-weight:300; padding:1px 3px; font-size:0.55rem;">Р.Баллы</td>';
+                ratingRow.innerHTML = '<td style="font-weight:300; padding:1px 2px; font-size:0.45rem; height:0.8em;">Р.Баллы</td>';
                 for (let i = 1; i <= regularEndCol; i++) {
                     const ratingPoints = data.getValue(rowIndex, ratingStartCol + i - 1);
-                    ratingRow.innerHTML += `<td style='padding:1px 3px; font-size:0.55rem;'>${ratingPoints !== null && ratingPoints !== undefined ? ratingPoints : ''}</td>`;
+                    ratingRow.innerHTML += `<td style='padding:1px 2px; font-size:0.45rem; height:0.8em;'>${ratingPoints !== null && ratingPoints !== undefined ? ratingPoints : ''}</td>`;
                 }
                 tbody.appendChild(ratingRow);
                 
