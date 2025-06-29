@@ -459,56 +459,36 @@
             opacity: 0.8;
         }
 
-        /* Стили для мини-таблицы */
-        .mini-table-container {
-            background: #f9f9fb !important;
-            border-radius: 8px !important;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-            border-top: 2px solid #FFD600 !important;
-            border-bottom: 2px solid #FFD600 !important;
-            margin: 5px 0 !important;
-            padding: 0 !important;
-            overflow: hidden !important;
-        }
-        .mini-table {
-            width: 100% !important;
-            border-collapse: separate !important;
-            border-spacing: 0 !important;
+        /* Стили для мини-таблицы с повышенной специфичностью */
+        .mini-table-container .mini-table,
+        .mini-table-container .mini-table th,
+        .mini-table-container .mini-table td {
+            font-size: 0.5rem !important;
+            line-height: 1.1 !important;
             font-family: Arial, sans-serif !important;
-            font-size: 0.5rem !important;
-            background: transparent !important;
-            table-layout: fixed !important;
-        }
-        .mini-table th, .mini-table td {
-            font-size: 0.5rem !important;
             padding: 1px 2px !important;
-            border: 1px solid #e0e0e0 !important;
-            font-weight: 400 !important;
-            text-align: center !important;
             background: #fff !important;
-            transition: background 0.2s;
-            line-height: 1.0 !important;
-            height: 16px !important;
+            color: #222 !important;
+            border: 1px solid #e0e0e0 !important;
+            box-sizing: border-box !important;
             white-space: nowrap !important;
             overflow: hidden !important;
             text-overflow: ellipsis !important;
         }
-        .mini-table th {
+        .mini-table-container .mini-table th {
             background: #ececf6 !important;
             font-weight: 600 !important;
-            color: #222 !important;
-            padding: 1px 2px !important;
         }
-        .mini-table tr:nth-child(2) td,
-        .mini-table tr:nth-child(2) th {
+        .mini-table-container .mini-table tr:nth-child(2) td,
+        .mini-table-container .mini-table tr:nth-child(2) th {
             background: #f6f6fa !important;
         }
-        .mini-table tr:nth-child(3) td,
-        .mini-table tr:nth-child(3) th {
+        .mini-table-container .mini-table tr:nth-child(3) td,
+        .mini-table-container .mini-table tr:nth-child(3) th {
             background: #f9f9fb !important;
         }
-        .mini-table tr td:first-child,
-        .mini-table tr th:first-child {
+        .mini-table-container .mini-table tr td:first-child,
+        .mini-table-container .mini-table tr th:first-child {
             text-align: left !important;
             font-weight: 600 !important;
             background: #ececf6 !important;
@@ -517,7 +497,7 @@
             width: 50px !important;
             min-width: 50px !important;
         }
-        .mini-table tr:hover td {
+        .mini-table-container .mini-table tr:hover td {
             background: #fffbe6 !important;
         }
     </style>
