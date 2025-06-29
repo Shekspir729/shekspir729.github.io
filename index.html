@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ё<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -927,22 +927,22 @@
                     newDiv.style.transform = 'translateX(0)';
                 }, 1300);
 
-                // === Обновляем обработчик клика по строке ===
+                // === Обновляем обработчик клика по строке через делегирование ===
                 google.visualization.events.addListener(table, 'ready', () => {
                     const tableDiv = document.getElementById('table_div');
-                    const cells = tableDiv.querySelectorAll('td.gchart-cell');
-                    cells.forEach(cell => {
-                        cell.addEventListener('click', function(e) {
+                    if (!tableDiv._miniTableDelegation) {
+                        tableDiv.addEventListener('click', function(e) {
+                            const cell = e.target.closest('td.gchart-cell');
+                            if (!cell) return;
                             const tr = cell.closest('tr');
                             if (!tr) return;
                             const allRows = Array.from(tr.parentNode.children);
                             const idx = allRows.indexOf(tr);
-                            console.log('Перед вызовом showMiniTableForRow', tr, idx);
+                            console.log('Делегирование: перед вызовом showMiniTableForRow', tr, idx);
                             showMiniTableForRow(tr, data, idx);
-                            e.stopPropagation();
                         });
-                        cell.style.cursor = 'pointer';
-                    });
+                        tableDiv._miniTableDelegation = true; // чтобы не навешивать повторно
+                    }
                 });
                 // === Конец нового обработчика ===
 
