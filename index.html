@@ -714,17 +714,19 @@
 
         function showMiniTableForRow(rowElement, data, rowIndex) {
             // Проверяем, что строка действительно содержит данные команды
+            let name = null;
             try {
-                const name = data.getValue(rowIndex, 0);
+                name = data.getValue(rowIndex, 0);
+                console.log('showMiniTableForRow', {rowElement, rowIndex, name});
                 if (!name || name === 'название команды') {
-                    console.log('Мини-таблица не показывается для строки-заголовка или пустой строки');
+                    console.log('Мини-таблица не показывается для строки-заголовка или пустой строки', {rowElement, rowIndex, name});
                     return;
                 }
             } catch (e) {
-                console.log('Ошибка при проверке строки для мини-таблицы', e);
+                console.log('Ошибка при проверке строки для мини-таблицы', e, {rowElement, rowIndex});
                 return;
             }
-            console.log('showMiniTableForRow called', rowElement, data, rowIndex); // Для отладки
+            console.log('Мини-таблица будет показана для:', name, rowIndex);
             removeMiniTable();
             const rect = rowElement.getBoundingClientRect();
             const miniTable = createMiniTable(data, rowIndex);
@@ -739,6 +741,7 @@
             miniTable.style.padding = '8px 12px';
             miniTable.style.minWidth = '300px';
             document.body.appendChild(miniTable);
+            console.log('Мини-таблица добавлена в DOM:', miniTable);
             setTimeout(() => {
                 document.addEventListener('mousedown', hideMiniTableOnClick, { once: true });
             }, 0);
