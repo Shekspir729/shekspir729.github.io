@@ -475,20 +475,20 @@
             border-collapse: separate !important;
             border-spacing: 0 !important;
             font-family: Arial, sans-serif !important;
-            font-size: 0.6rem !important;
+            font-size: 0.5rem !important;
             background: transparent !important;
             table-layout: fixed !important;
         }
         .mini-table th, .mini-table td {
-            font-size: 0.6rem !important;
-            padding: 2px 3px !important;
+            font-size: 0.5rem !important;
+            padding: 1px 2px !important;
             border: 1px solid #e0e0e0 !important;
             font-weight: 400 !important;
             text-align: center !important;
             background: #fff !important;
             transition: background 0.2s;
             line-height: 1.0 !important;
-            height: 20px !important;
+            height: 16px !important;
             white-space: nowrap !important;
             overflow: hidden !important;
             text-overflow: ellipsis !important;
@@ -497,7 +497,7 @@
             background: #ececf6 !important;
             font-weight: 600 !important;
             color: #222 !important;
-            padding: 2px 3px !important;
+            padding: 1px 2px !important;
         }
         .mini-table tr:nth-child(2) td,
         .mini-table tr:nth-child(2) th {
@@ -514,8 +514,8 @@
             background: #ececf6 !important;
             color: #222 !important;
             border-right: 2px solid #FFD600 !important;
-            width: 60px !important;
-            min-width: 60px !important;
+            width: 50px !important;
+            min-width: 50px !important;
         }
         .mini-table tr:hover td {
             background: #fffbe6 !important;
@@ -552,7 +552,7 @@
                 
                 const table = document.createElement('table');
                 table.className = 'mini-table';
-                table.style.fontSize = '0.6rem';
+                table.style.fontSize = '0.5rem';
                 table.style.fontWeight = '300';
                 table.style.minWidth = '400px';
                 table.style.whiteSpace = 'nowrap';
@@ -578,27 +578,27 @@
                 
                 // Создаём строку заголовков игр
                 const headerRow = document.createElement('tr');
-                headerRow.innerHTML = '<th style="font-weight:600; padding:2px 3px; font-size:0.6rem; width:60px; min-width:60px;">Игры</th>';
+                headerRow.innerHTML = '<th style="font-weight:600; padding:1px 2px; font-size:0.5rem; width:50px; min-width:50px;">Игры</th>';
                 for (let i = 0; i < gameHeaders.length; i++) {
-                    headerRow.innerHTML += `<th style='font-weight:600; padding:2px 3px; font-size:0.6rem;'>${gameHeaders[i]}</th>`;
+                    headerRow.innerHTML += `<th style='font-weight:600; padding:1px 2px; font-size:0.5rem;'>${gameHeaders[i]}</th>`;
                 }
                 tbody.appendChild(headerRow);
                 
                 // Строка с баллами
                 const pointsRow = document.createElement('tr');
-                pointsRow.innerHTML = '<td style="font-weight:600; padding:2px 3px; font-size:0.6rem;">Баллы</td>';
+                pointsRow.innerHTML = '<td style="font-weight:600; padding:1px 2px; font-size:0.5rem;">Баллы</td>';
                 for (let i = 1; i <= regularEndCol; i++) {
                     const points = data.getValue(rowIndex, i);
-                    pointsRow.innerHTML += `<td style='padding:2px 3px; font-size:0.6rem;'>${points !== null && points !== undefined ? points : ''}</td>`;
+                    pointsRow.innerHTML += `<td style='padding:1px 2px; font-size:0.5rem;'>${points !== null && points !== undefined ? points : ''}</td>`;
                 }
                 tbody.appendChild(pointsRow);
                 
                 // Строка с рейтинговыми баллами
                 const ratingRow = document.createElement('tr');
-                ratingRow.innerHTML = '<td style="font-weight:600; padding:2px 3px; font-size:0.6rem;">Р.Баллы</td>';
+                ratingRow.innerHTML = '<td style="font-weight:600; padding:1px 2px; font-size:0.5rem;">Р.Баллы</td>';
                 for (let i = 1; i <= regularEndCol; i++) {
                     const ratingPoints = data.getValue(rowIndex, ratingStartCol + i - 1);
-                    ratingRow.innerHTML += `<td style='padding:2px 3px; font-size:0.6rem;'>${ratingPoints !== null && ratingPoints !== undefined ? ratingPoints : ''}</td>`;
+                    ratingRow.innerHTML += `<td style='padding:1px 2px; font-size:0.5rem;'>${ratingPoints !== null && ratingPoints !== undefined ? ratingPoints : ''}</td>`;
                 }
                 tbody.appendChild(ratingRow);
                 
@@ -609,7 +609,7 @@
                 console.error('Error in createMiniTable:', error);
                 const container = document.createElement('div');
                 container.className = 'mini-table-container';
-                container.innerHTML = '<div style="text-align: center; padding: 10px; font-size: 0.6rem;">Произошла ошибка при загрузке данных</div>';
+                container.innerHTML = '<div style="text-align: center; padding: 10px; font-size: 0.5rem;">Произошла ошибка при загрузке данных</div>';
                 return container;
             }
         }
