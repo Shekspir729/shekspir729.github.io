@@ -704,38 +704,61 @@
             }
         }
 
-        function toggleMiniTable(tableRow, data, rowIndex) {
-            // Находим все существующие мини-таблицы
-            const existingContainers = document.querySelectorAll('.mini-table-container');
-            existingContainers.forEach(container => {
-                container.classList.remove('expanded');
-                setTimeout(() => container.parentElement.remove(), 300);
-            });
+        function showMiniTableForRow(rowElement, data, rowIndex) {
+            console.log('showMiniTableForRow called', rowElement, data, rowIndex); // Для отладки
+            // Удаляем старую мини-таблицу
+            document.querySelectorAll('.mini-table-container').forEach(el => el.remove());
 
-            // Проверяем, есть ли уже мини-таблица под этой строкой
-            const nextRow = tableRow.nextElementSibling;
-            if (nextRow?.querySelector('.mini-table-container')) {
-                nextRow.querySelector('.mini-table-container').classList.remove('expanded');
-                setTimeout(() => nextRow.remove(), 300);
-            } else {
-                // Создаем новый div-контейнер вместо строки таблицы
-                const wrapper = document.createElement('div');
-                wrapper.style.width = '100%';
-                wrapper.style.margin = '0';
-                wrapper.style.padding = '0';
-                
-                const miniTable = createMiniTable(data, rowIndex);
-                wrapper.appendChild(miniTable);
-                
-                // Вставляем после строки, но не как часть таблицы
-                tableRow.parentNode.parentNode.insertBefore(wrapper, tableRow.parentNode.nextSibling);
-                
-                // Анимируем появление
-                requestAnimationFrame(() => {
-                    miniTable.classList.add('expanded');
-                });
+            // Получаем координаты строки
+            const rect = rowElement.getBoundingClientRect();
+
+            // Создаём мини-таблицу
+            const miniTable = createMiniTable(data, rowIndex);
+            miniTable.classList.add('mini-table-container');
+            // Стили для абсолютного позиционирования
+            miniTable.style.position = 'absolute';
+            miniTable.style.left = `${rect.left + window.scrollX}px`;
+            miniTable.style.top = `${rect.bottom + window.scrollY}px`;
+            miniTable.style.zIndex = 1000;
+            miniTable.style.background = '#fff';
+            miniTable.style.boxShadow = '0 4px 16px rgba(0,0,0,0.15)';
+            miniTable.style.borderRadius = '12px';
+            miniTable.style.padding = '8px 12px';
+            miniTable.style.minWidth = '300px';
+
+            document.body.appendChild(miniTable);
+
+            // При клике вне мини-таблицы — скрываем её
+            setTimeout(() => {
+                document.addEventListener('mousedown', hideMiniTableOnClick, { once: true });
+            }, 0);
+        }
+
+        function hideMiniTableOnClick(e) {
+            const mini = document.querySelector('.mini-table-container');
+            if (mini && !mini.contains(e.target)) {
+                mini.remove();
             }
         }
+
+        // === Обновляем обработчик клика по строке ===
+        google.visualization.events.addListener(table, 'ready', () => {
+            // Навешиваем обработчики на все таблицы в #table_div
+            const tables = document.querySelectorAll('#table_div table');
+            tables.forEach(tableElement => {
+                const rows = tableElement.querySelectorAll('tbody tr');
+                rows.forEach((tr, idx) => {
+                    tr.onclick = function() {
+                        // Проверяем, что строка содержит реальные данные (например, не пустая)
+                        if (tr.children.length > 1) {
+                            showMiniTableForRow(this, data, idx);
+                        }
+                    };
+                    tr.style.cursor = 'pointer';
+                });
+            });
+        });
+        // === Конец нового обработчика ===
 
         function drawTable(city) {
             try {
@@ -908,62 +931,6 @@
                     document.getElementById('table_fade_old').style.transform = 'translateX(0)';
                     newDiv.style.transform = 'translateX(0)';
                 }, 1300);
-
-                // === Новый способ показа мини-таблицы ===
-                function showMiniTableForRow(rowElement, data, rowIndex) {
-                    // Удаляем старую мини-таблицу
-                    document.querySelectorAll('.mini-table-container').forEach(el => el.remove());
-
-                    // Получаем координаты строки
-                    const rect = rowElement.getBoundingClientRect();
-
-                    // Создаём мини-таблицу
-                    const miniTable = createMiniTable(data, rowIndex);
-                    miniTable.classList.add('mini-table-container');
-                    // Стили для абсолютного позиционирования
-                    miniTable.style.position = 'absolute';
-                    miniTable.style.left = `${rect.left + window.scrollX}px`;
-                    miniTable.style.top = `${rect.bottom + window.scrollY}px`;
-                    miniTable.style.zIndex = 1000;
-                    miniTable.style.background = '#fff';
-                    miniTable.style.boxShadow = '0 4px 16px rgba(0,0,0,0.15)';
-                    miniTable.style.borderRadius = '12px';
-                    miniTable.style.padding = '8px 12px';
-                    miniTable.style.minWidth = '300px';
-
-                    document.body.appendChild(miniTable);
-
-                    // При клике вне мини-таблицы — скрываем её
-                    setTimeout(() => {
-                        document.addEventListener('mousedown', hideMiniTableOnClick, { once: true });
-                    }, 0);
-                }
-
-                function hideMiniTableOnClick(e) {
-                    const mini = document.querySelector('.mini-table-container');
-                    if (mini && !mini.contains(e.target)) {
-                        mini.remove();
-                    }
-                }
-
-                // === Обновляем обработчик клика по строке ===
-                google.visualization.events.addListener(table, 'ready', () => {
-                    // Навешиваем обработчики на все таблицы в #table_div
-                    const tables = document.querySelectorAll('#table_div table');
-                    tables.forEach(tableElement => {
-                        const rows = tableElement.querySelectorAll('tbody tr');
-                        rows.forEach((tr, idx) => {
-                            tr.onclick = function() {
-                                // Проверяем, что строка содержит реальные данные (например, не пустая)
-                                if (tr.children.length > 1) {
-                                    showMiniTableForRow(this, data, idx);
-                                }
-                            };
-                            tr.style.cursor = 'pointer';
-                        });
-                    });
-                });
-                // === Конец нового обработчика ===
             } catch (error) {
                 console.error('Error in handleQueryResponse:', error);
                 const newDiv = document.getElementById('table_fade_new');
