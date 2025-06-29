@@ -552,7 +552,7 @@
                 
                 const table = document.createElement('table');
                 table.className = 'mini-table';
-                table.style.fontSize = '0.75rem';
+                table.style.fontSize = '0.6rem';
                 table.style.fontWeight = '300';
                 table.style.minWidth = '400px';
                 table.style.whiteSpace = 'nowrap';
@@ -586,19 +586,19 @@
                 
                 // Строка с баллами
                 const pointsRow = document.createElement('tr');
-                pointsRow.innerHTML = '<td style="font-weight:600; padding:3px 4px; font-size:0.75rem;">Баллы</td>';
+                pointsRow.innerHTML = '<td style="font-weight:600; padding:2px 3px; font-size:0.6rem;">Баллы</td>';
                 for (let i = 1; i <= regularEndCol; i++) {
                     const points = data.getValue(rowIndex, i);
-                    pointsRow.innerHTML += `<td style='padding:3px 4px; font-size:0.75rem;'>${points !== null && points !== undefined ? points : ''}</td>`;
+                    pointsRow.innerHTML += `<td style='padding:2px 3px; font-size:0.6rem;'>${points !== null && points !== undefined ? points : ''}</td>`;
                 }
                 tbody.appendChild(pointsRow);
                 
                 // Строка с рейтинговыми баллами
                 const ratingRow = document.createElement('tr');
-                ratingRow.innerHTML = '<td style="font-weight:600; padding:3px 4px; font-size:0.75rem;">Р.Баллы</td>';
+                ratingRow.innerHTML = '<td style="font-weight:600; padding:2px 3px; font-size:0.6rem;">Р.Баллы</td>';
                 for (let i = 1; i <= regularEndCol; i++) {
                     const ratingPoints = data.getValue(rowIndex, ratingStartCol + i - 1);
-                    ratingRow.innerHTML += `<td style='padding:3px 4px; font-size:0.75rem;'>${ratingPoints !== null && ratingPoints !== undefined ? ratingPoints : ''}</td>`;
+                    ratingRow.innerHTML += `<td style='padding:2px 3px; font-size:0.6rem;'>${ratingPoints !== null && ratingPoints !== undefined ? ratingPoints : ''}</td>`;
                 }
                 tbody.appendChild(ratingRow);
                 
@@ -609,7 +609,7 @@
                 console.error('Error in createMiniTable:', error);
                 const container = document.createElement('div');
                 container.className = 'mini-table-container';
-                container.innerHTML = '<div style="text-align: center; padding: 10px; font-size: 0.75rem;">Произошла ошибка при загрузке данных</div>';
+                container.innerHTML = '<div style="text-align: center; padding: 10px; font-size: 0.6rem;">Произошла ошибка при загрузке данных</div>';
                 return container;
             }
         }
