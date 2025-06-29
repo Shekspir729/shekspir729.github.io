@@ -741,25 +741,6 @@
             }
         }
 
-        // === Обновляем обработчик клика по строке ===
-        google.visualization.events.addListener(table, 'ready', () => {
-            // Навешиваем обработчики на все таблицы в #table_div
-            const tables = document.querySelectorAll('#table_div table');
-            tables.forEach(tableElement => {
-                const rows = tableElement.querySelectorAll('tbody tr');
-                rows.forEach((tr, idx) => {
-                    tr.onclick = function() {
-                        // Проверяем, что строка содержит реальные данные (например, не пустая)
-                        if (tr.children.length > 1) {
-                            showMiniTableForRow(this, data, idx);
-                        }
-                    };
-                    tr.style.cursor = 'pointer';
-                });
-            });
-        });
-        // === Конец нового обработчика ===
-
         function drawTable(city) {
             try {
                 currentCity = city;
@@ -931,6 +912,10 @@
                     document.getElementById('table_fade_old').style.transform = 'translateX(0)';
                     newDiv.style.transform = 'translateX(0)';
                 }, 1300);
+
+                // === Обновляем обработчик клика по строке ===
+                // (Этот блок должен быть только внутри handleQueryResponse после создания table)
+                // Удаляю все дубли вне handleQueryResponse
             } catch (error) {
                 console.error('Error in handleQueryResponse:', error);
                 const newDiv = document.getElementById('table_fade_new');
