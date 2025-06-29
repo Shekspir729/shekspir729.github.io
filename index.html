@@ -834,13 +834,6 @@
                     // Создаём pop-up
                     const popup = document.createElement('div');
                     popup.className = 'mini-table-popup';
-                    popup.style.position = 'absolute';
-                    popup.style.zIndex = 10000;
-                    popup.style.left = '0';
-                    popup.style.top = '0';
-                    popup.style.pointerEvents = 'auto';
-                    popup.style.transition = 'opacity 0.2s';
-                    popup.style.opacity = '0';
 
                     // Вставляем мини-таблицу внутрь pop-up
                     popup.appendChild(createMiniTable(data, rowIndex));
@@ -852,16 +845,12 @@
                     // Определяем позицию строки относительно контейнера
                     const rowRect = tableRow.getBoundingClientRect();
                     const contRect = container.getBoundingClientRect();
+                    popup.style.position = 'absolute';
                     popup.style.left = (rowRect.left - contRect.left) + 'px';
                     popup.style.top = (rowRect.bottom - contRect.top) + 'px';
                     popup.style.minWidth = rowRect.width + 'px';
                     popup.style.maxWidth = '90vw';
-                    popup.style.boxShadow = '0 8px 32px rgba(0,0,0,0.18)';
-                    popup.style.borderRadius = '12px';
-                    popup.style.background = '#fff';
-                    popup.style.padding = '8px 0 8px 0';
-                    popup.style.pointerEvents = 'auto';
-                    popup.style.opacity = '1';
+                    popup.style.zIndex = 10000;
 
                     // Клик вне pop-up — закрыть
                     setTimeout(() => {
@@ -877,21 +866,6 @@
                 // === Конец pop-up ===
 
                 // === Заменяю обработчик клика по строке ===
-                // google.visualization.events.addListener(table, 'ready', () => {
-                //     const tables = document.querySelectorAll('#table_div table');
-                //     tables.forEach(tableElement => {
-                //         const rows = tableElement.querySelectorAll('tbody tr');
-                //         rows.forEach((tr, idx) => {
-                //             tr.onclick = function() {
-                //                 if (tr.children.length > 1) {
-                //                     toggleMiniTable(this, data, idx);
-                //                 }
-                //             };
-                //             tr.style.cursor = 'pointer';
-                //         });
-                //     });
-                // });
-                // Новый обработчик:
                 google.visualization.events.addListener(table, 'ready', () => {
                     const tables = document.querySelectorAll('#table_div table');
                     tables.forEach(tableElement => {
