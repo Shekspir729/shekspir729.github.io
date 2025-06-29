@@ -500,6 +500,19 @@
         .mini-table-container .mini-table tr:hover td {
             background: #fffbe6 !important;
         }
+
+        /* Стили для pop-up мини-таблицы */
+        .mini-table-popup {
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            border-radius: 12px;
+            background: #fff;
+            padding: 8px 0 8px 0;
+            min-width: 200px;
+            max-width: 90vw;
+            position: absolute;
+            z-index: 10000;
+            pointer-events: auto;
+        }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -802,17 +815,91 @@
                     newDiv.style.transform = 'translateX(0)';
                 }, 1300);
 
-                // === Новый обработчик клика по строке ===
+                // === Новый pop-up для мини-таблицы ===
+                function showMiniTablePopup(tableRow, data, rowIndex) {
+                    // Удаляем предыдущий pop-up, если есть
+                    const oldPopup = document.querySelector('.mini-table-popup');
+                    if (oldPopup) oldPopup.remove();
+
+                    // Если уже был выбран этот же ряд — просто закрываем pop-up
+                    if (tableRow.classList.contains('mini-table-open')) {
+                        tableRow.classList.remove('mini-table-open');
+                        return;
+                    }
+
+                    // Снимаем выделение с других строк
+                    document.querySelectorAll('.mini-table-open').forEach(tr => tr.classList.remove('mini-table-open'));
+                    tableRow.classList.add('mini-table-open');
+
+                    // Создаём pop-up
+                    const popup = document.createElement('div');
+                    popup.className = 'mini-table-popup';
+                    popup.style.position = 'absolute';
+                    popup.style.zIndex = 10000;
+                    popup.style.left = '0';
+                    popup.style.top = '0';
+                    popup.style.pointerEvents = 'auto';
+                    popup.style.transition = 'opacity 0.2s';
+                    popup.style.opacity = '0';
+
+                    // Вставляем мини-таблицу внутрь pop-up
+                    popup.appendChild(createMiniTable(data, rowIndex));
+
+                    // Добавляем pop-up в custom-table-container
+                    const container = document.querySelector('.custom-table-container');
+                    container.appendChild(popup);
+
+                    // Определяем позицию строки относительно контейнера
+                    const rowRect = tableRow.getBoundingClientRect();
+                    const contRect = container.getBoundingClientRect();
+                    popup.style.left = (rowRect.left - contRect.left) + 'px';
+                    popup.style.top = (rowRect.bottom - contRect.top) + 'px';
+                    popup.style.minWidth = rowRect.width + 'px';
+                    popup.style.maxWidth = '90vw';
+                    popup.style.boxShadow = '0 8px 32px rgba(0,0,0,0.18)';
+                    popup.style.borderRadius = '12px';
+                    popup.style.background = '#fff';
+                    popup.style.padding = '8px 0 8px 0';
+                    popup.style.pointerEvents = 'auto';
+                    popup.style.opacity = '1';
+
+                    // Клик вне pop-up — закрыть
+                    setTimeout(() => {
+                        document.addEventListener('mousedown', closeMiniTablePopup, { once: true });
+                    }, 0);
+                    function closeMiniTablePopup(e) {
+                        if (!popup.contains(e.target)) {
+                            popup.remove();
+                            tableRow.classList.remove('mini-table-open');
+                        }
+                    }
+                }
+                // === Конец pop-up ===
+
+                // === Заменяю обработчик клика по строке ===
+                // google.visualization.events.addListener(table, 'ready', () => {
+                //     const tables = document.querySelectorAll('#table_div table');
+                //     tables.forEach(tableElement => {
+                //         const rows = tableElement.querySelectorAll('tbody tr');
+                //         rows.forEach((tr, idx) => {
+                //             tr.onclick = function() {
+                //                 if (tr.children.length > 1) {
+                //                     toggleMiniTable(this, data, idx);
+                //                 }
+                //             };
+                //             tr.style.cursor = 'pointer';
+                //         });
+                //     });
+                // });
+                // Новый обработчик:
                 google.visualization.events.addListener(table, 'ready', () => {
-                    // Навешиваем обработчики на все таблицы в #table_div
                     const tables = document.querySelectorAll('#table_div table');
                     tables.forEach(tableElement => {
                         const rows = tableElement.querySelectorAll('tbody tr');
                         rows.forEach((tr, idx) => {
                             tr.onclick = function() {
-                                // Проверяем, что строка содержит реальные данные (например, не пустая)
                                 if (tr.children.length > 1) {
-                                    toggleMiniTable(this, data, idx);
+                                    showMiniTablePopup(this, data, idx);
                                 }
                             };
                             tr.style.cursor = 'pointer';
@@ -820,23 +907,6 @@
                     });
                 });
                 // === Конец нового обработчика ===
-
-                // === Делегирование клика для мини-таблицы ===
-                const tableDiv = document.getElementById('table_div');
-                if (tableDiv && !tableDiv._miniTableClickHandler) {
-                    tableDiv._miniTableClickHandler = function(e) {
-                        let tr = e.target.closest('tr');
-                        if (tr && tr.parentNode && tr.parentNode.tagName === 'TBODY') {
-                            // вычисляем индекс строки
-                            const rows = Array.from(tr.parentNode.children);
-                            const idx = rows.indexOf(tr);
-                            if (idx >= 0) {
-                                toggleMiniTable(tr, data, idx);
-                            }
-                        }
-                    };
-                    tableDiv.addEventListener('click', tableDiv._miniTableClickHandler);
-                }
             } catch (error) {
                 console.error('Error in handleQueryResponse:', error);
                 const newDiv = document.getElementById('table_fade_new');
