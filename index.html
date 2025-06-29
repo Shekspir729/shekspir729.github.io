@@ -927,6 +927,15 @@
                     });
                 });
                 // === Конец нового обработчика ===
+
+                // === ВРЕМЕННЫЙ ОТЛАДОЧНЫЙ ОБРАБОТЧИК ===
+                const tableDiv = document.getElementById('table_div');
+                if (tableDiv) {
+                    tableDiv.addEventListener('click', (e) => {
+                        console.log('Клик по элементу:', e.target, 'Классы:', e.target.className, 'Тег:', e.target.tagName);
+                    });
+                }
+                // === КОНЕЦ ОТЛАДКИ ===
             } catch (error) {
                 console.error('Error in handleQueryResponse:', error);
                 const newDiv = document.getElementById('table_fade_new');
