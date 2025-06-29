@@ -930,20 +930,17 @@
                 // === Обновляем обработчик клика по строке ===
                 google.visualization.events.addListener(table, 'ready', () => {
                     const tableDiv = document.getElementById('table_div');
-                    // Находим все ячейки
                     const cells = tableDiv.querySelectorAll('td.gchart-cell');
                     cells.forEach(cell => {
-                        cell.onclick = function(e) {
-                            // Получаем строку (tr), в которой находится ячейка
+                        cell.addEventListener('click', function(e) {
                             const tr = cell.closest('tr');
                             if (!tr) return;
-                            // Определяем индекс строки среди всех строк tbody
                             const allRows = Array.from(tr.parentNode.children);
                             const idx = allRows.indexOf(tr);
-                            console.log('Клик по строке (через td)', tr, idx);
+                            console.log('Перед вызовом showMiniTableForRow', tr, idx);
                             showMiniTableForRow(tr, data, idx);
                             e.stopPropagation();
-                        };
+                        });
                         cell.style.cursor = 'pointer';
                     });
                 });
