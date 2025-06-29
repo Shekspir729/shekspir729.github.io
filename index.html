@@ -517,6 +517,40 @@
             background: #e8e8e8 !important;
         }
 
+        /* Дополнительная изоляция мини-таблицы от основной таблицы */
+        .mini-table-container {
+            /* Полная изоляция от стилей основной таблицы */
+            font-size: 0.45rem !important;
+            font-weight: 300 !important;
+            font-family: 'Arial', sans-serif !important;
+        }
+
+        .mini-table-container table {
+            /* Принудительно переопределяем все стили таблицы */
+            font-size: 0.45rem !important;
+            font-weight: 300 !important;
+            font-family: 'Arial', sans-serif !important;
+            background: #f8f8f8 !important;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+        }
+
+        .mini-table-container table th,
+        .mini-table-container table td {
+            /* Принудительно переопределяем все стили ячеек */
+            font-size: 0.45rem !important;
+            font-weight: 300 !important;
+            font-family: 'Arial', sans-serif !important;
+            padding: 1px 2px !important;
+            height: 0.8em !important;
+            background: #f8f8f8 !important;
+            color: #111 !important;
+            border: none !important;
+            text-align: center !important;
+            vertical-align: middle !important;
+            line-height: 0.8 !important;
+        }
+
         /* Добавляем стили для сообщений об ошибках */
         .error-message {
             text-align: center;
@@ -702,7 +736,7 @@
             const existingContainers = document.querySelectorAll('.mini-table-container');
             existingContainers.forEach(container => {
                 container.classList.remove('expanded');
-                setTimeout(() => container.parentElement.parentElement.remove(), 300);
+                setTimeout(() => container.parentElement.remove(), 300);
             });
 
             // Проверяем, есть ли уже мини-таблица под этой строкой
@@ -711,20 +745,17 @@
                 nextRow.querySelector('.mini-table-container').classList.remove('expanded');
                 setTimeout(() => nextRow.remove(), 300);
             } else {
-                // Создаем новую мини-таблицу
-                const wrapper = document.createElement('tr');
-                const cell = document.createElement('td');
-                // Динамически определяем количество столбцов
-                const parentTable = tableRow.closest('table');
-                const columnCount = parentTable.querySelector('tr')?.children.length || 7;
-                cell.colSpan = columnCount;
+                // Создаем новый div-контейнер вместо строки таблицы
+                const wrapper = document.createElement('div');
+                wrapper.style.width = '100%';
+                wrapper.style.margin = '0';
+                wrapper.style.padding = '0';
                 
                 const miniTable = createMiniTable(data, rowIndex);
-                cell.appendChild(miniTable);
-                wrapper.appendChild(cell);
+                wrapper.appendChild(miniTable);
                 
-                // Вставляем сразу после текущей строки
-                tableRow.parentNode.insertBefore(wrapper, tableRow.nextSibling);
+                // Вставляем после строки, но не как часть таблицы
+                tableRow.parentNode.parentNode.insertBefore(wrapper, tableRow.parentNode.nextSibling);
                 
                 // Анимируем появление
                 requestAnimationFrame(() => {
