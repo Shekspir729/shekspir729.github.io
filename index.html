@@ -461,71 +461,60 @@
 
         /* Стили для мини-таблицы */
         .mini-table-container {
-            font-size: 0.7rem !important;
-            font-family: 'Arial', sans-serif !important;
-            background: #fff !important;
-            color: #111 !important;
-            border-radius: 12px !important;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.15) !important;
-            z-index: 1000 !important;
-            padding: 8px 12px !important;
-            min-width: 300px !important;
-            max-width: 90vw !important;
-            position: absolute !important;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: #f8f8f8;
+            margin: 0;
+            width: 100%;
         }
-        .mini-table-container table,
-        .mini-table-container th,
-        .mini-table-container td {
-            font-size: 0.7rem !important;
-            font-family: 'Arial', sans-serif !important;
-            color: #111 !important;
-            background: #fff !important;
+
+        .mini-table-container.expanded {
+            max-height: 300px;
+            margin: 16px 0;
+            border-top: 2px solid #FFD600;
+            border-bottom: 2px solid #FFD600;
+        }
+
+        .mini-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 1.8rem !important;
+        }
+
+        .mini-table th, .mini-table td {
+            padding: 12px 16px !important;
+            text-align: center;
+            font-size: 1.8rem !important;
+            height: auto !important;
             border: none !important;
-            padding: 2px 6px !important;
-            text-align: center !important;
         }
-        .mini-table-container th {
-            font-weight: 600 !important;
+
+        .mini-table tr:first-child td,
+        .mini-table tr:first-child th {
+            background: #e8e8e8 !important;
+            font-weight: bold;
+            border-bottom: 2px solid #FFD600 !important;
         }
-        .mini-table-container td {
-            font-weight: 400 !important;
+
+        .mini-table tr:first-child th:first-child {
+            text-align: left !important;
         }
-        .mini-table-container tr:hover td {
+
+        .mini-table tr td:first-child {
+            text-align: left !important;
+            font-weight: bold !important;
+            background: #e8e8e8 !important;
+            border-right: 2px solid #FFD600 !important;
+        }
+
+        .mini-table tr:hover td {
             background: #ffe082 !important;
         }
 
-        /* Дополнительная изоляция мини-таблицы от основной таблицы */
-        .mini-table-container {
-            /* Полная изоляция от стилей основной таблицы */
-            font-size: 0.45rem !important;
-            font-weight: 300 !important;
-            font-family: 'Arial', sans-serif !important;
-        }
-
-        .mini-table-container table {
-            /* Принудительно переопределяем все стили таблицы */
-            font-size: 0.45rem !important;
-            font-weight: 300 !important;
-            font-family: 'Arial', sans-serif !important;
-            background: #f8f8f8 !important;
-            border-collapse: separate !important;
-            border-spacing: 0 !important;
-        }
-
-        .mini-table-container table th,
-        .mini-table-container table td {
-            /* Принудительно переопределяем все стили ячеек */
-            font-size: 0.45rem !important;
-            font-weight: 300 !important;
-            font-family: 'Arial', sans-serif !important;
-            padding: 1px 2px !important;
-            height: 0.8em !important;
-            background: #f8f8f8 !important;
-            color: #111 !important;
-            border: none !important;
-            text-align: center !important;
-            vertical-align: middle !important;
-            line-height: 0.8 !important;
+        .mini-table tr:hover td:first-child {
+            background: #e8e8e8 !important;
         }
 
         /* Добавляем стили для сообщений об ошибках */
@@ -561,59 +550,6 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-
-        /* Альтернативные стили для сверхкомпактной версии */
-        .mini-table.ultra-compact {
-            font-size: 0.6rem !important;
-            line-height: 0.9 !important;
-        }
-
-        .mini-table.ultra-compact th, 
-        .mini-table.ultra-compact td {
-            padding: 1px 3px !important;
-            font-size: 0.65em !important;
-            height: 0.9em !important;
-        }
-
-        .mini-table.ultra-compact-container.expanded {
-            max-height: 150px;
-            margin: 8px 0;
-        }
-
-        /* Адаптивные стили для мини-таблицы */
-        @media (max-width: 768px) {
-            .mini-table {
-                font-size: 0.5rem !important;
-                min-width: 400px !important;
-            }
-            
-            .mini-table th, .mini-table td {
-                padding: 1px 2px !important;
-                font-size: 0.5rem !important;
-            }
-            
-            .mini-table-container.expanded {
-                max-height: 220px;
-                margin: 8px 0;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .mini-table {
-                font-size: 0.45rem !important;
-                min-width: 350px !important;
-            }
-            
-            .mini-table th, .mini-table td {
-                padding: 1px 2px !important;
-                font-size: 0.45rem !important;
-            }
-            
-            .mini-table-container.expanded {
-                max-height: 200px;
-                margin: 6px 0;
-            }
-        }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -638,16 +574,18 @@
         function createMiniTable(data, rowIndex) {
             try {
                 const container = document.createElement('div');
-                // Не добавляем класс mini-table-container, он будет добавлен при позиционировании
+                container.className = 'mini-table-container';
+                
+                // Стили для компактности и скролла
                 container.style.overflowX = 'auto';
                 container.style.padding = '0';
                 
                 const table = document.createElement('table');
                 table.className = 'mini-table';
-                table.style.width = '100%';
-                table.style.borderCollapse = 'collapse';
-                table.style.background = '#fff';
-                table.style.margin = '0';
+                table.style.fontSize = '1.1rem';
+                table.style.fontWeight = '400';
+                table.style.minWidth = '600px';
+                table.style.whiteSpace = 'nowrap';
                 
                 const tbody = document.createElement('tbody');
                 
@@ -668,15 +606,15 @@
                 
                 // Создаём строку заголовков игр
                 const headerRow = document.createElement('tr');
-                headerRow.innerHTML = '<th>Игры</th>';
+                headerRow.innerHTML = '<th style="font-weight:600;">Игры</th>';
                 for (let i = 0; i < gameHeaders.length; i++) {
-                    headerRow.innerHTML += `<th>${gameHeaders[i]}</th>`;
+                    headerRow.innerHTML += `<th style='font-weight:400;'>${gameHeaders[i]}</th>`;
                 }
                 tbody.appendChild(headerRow);
                 
                 // Строка с баллами
                 const pointsRow = document.createElement('tr');
-                pointsRow.innerHTML = '<td>Баллы</td>';
+                pointsRow.innerHTML = '<td style="font-weight:600;">Баллы</td>';
                 for (let i = 1; i <= regularEndCol; i++) {
                     const points = data.getValue(rowIndex, i);
                     pointsRow.innerHTML += `<td>${points !== null && points !== undefined ? points : ''}</td>`;
@@ -685,7 +623,7 @@
                 
                 // Строка с рейтинговыми баллами
                 const ratingRow = document.createElement('tr');
-                ratingRow.innerHTML = '<td>Р.Баллы</td>';
+                ratingRow.innerHTML = '<td style="font-weight:600;">Р.Баллы</td>';
                 for (let i = 1; i <= regularEndCol; i++) {
                     const ratingPoints = data.getValue(rowIndex, ratingStartCol + i - 1);
                     ratingRow.innerHTML += `<td>${ratingPoints !== null && ratingPoints !== undefined ? ratingPoints : ''}</td>`;
@@ -704,66 +642,44 @@
             }
         }
 
-        // Удаляем мини-таблицу при смене города/перерисовке таблицы
-        function removeMiniTable() {
-            document.querySelectorAll('.mini-table-container').forEach(el => el.remove());
-        }
-        // Скрываем мини-таблицу при scroll/resize
-        window.addEventListener('scroll', removeMiniTable);
-        window.addEventListener('resize', removeMiniTable);
+        function toggleMiniTable(tableRow, data, rowIndex) {
+            // Находим все существующие мини-таблицы
+            const existingContainers = document.querySelectorAll('.mini-table-container');
+            existingContainers.forEach(container => {
+                container.classList.remove('expanded');
+                setTimeout(() => container.parentElement.parentElement.remove(), 300);
+            });
 
-        function showMiniTableForRow(rowElement, data, rowIndex) {
-            console.log('=== Вход в showMiniTableForRow ===', {rowElement, rowIndex, data});
-            // Проверяем, что строка действительно содержит данные команды
-            let name = null;
-            try {
-                name = data.getValue(rowIndex, 0);
-                console.log('showMiniTableForRow', {rowElement, rowIndex, name});
-                if (!name || name === 'название команды') {
-                    console.log('Мини-таблица не показывается для строки-заголовка или пустой строки', {rowElement, rowIndex, name});
-                    return;
-                }
-            } catch (e) {
-                console.log('Ошибка при проверке строки для мини-таблицы', e, {rowElement, rowIndex});
-                return;
-            }
-            console.log('Мини-таблица будет показана для:', name, rowIndex);
-            removeMiniTable();
-            const rect = rowElement.getBoundingClientRect();
-            const miniTable = createMiniTable(data, rowIndex);
-            miniTable.classList.add('mini-table-container');
-            miniTable.style.position = 'absolute';
-            miniTable.style.left = `${rect.left + window.scrollX}px`;
-            miniTable.style.top = `${rect.bottom + window.scrollY}px`;
-            miniTable.style.zIndex = 1000;
-            miniTable.style.background = '#fff';
-            miniTable.style.boxShadow = '0 4px 16px rgba(0,0,0,0.15)';
-            miniTable.style.borderRadius = '12px';
-            miniTable.style.padding = '8px 12px';
-            miniTable.style.minWidth = '300px';
-            // Проверяем, что miniTable — это элемент, а не текст
-            if (miniTable instanceof HTMLElement) {
-                document.body.appendChild(miniTable);
-                console.log('Мини-таблица добавлена в DOM:', miniTable);
+            // Проверяем, есть ли уже мини-таблица под этой строкой
+            const nextRow = tableRow.nextElementSibling;
+            if (nextRow?.querySelector('.mini-table-container')) {
+                nextRow.querySelector('.mini-table-container').classList.remove('expanded');
+                setTimeout(() => nextRow.remove(), 300);
             } else {
-                console.log('ОШИБКА: miniTable не является HTMLElement!', miniTable);
-            }
-            setTimeout(() => {
-                document.addEventListener('mousedown', hideMiniTableOnClick, { once: true });
-            }, 0);
-            console.log('=== Выход из showMiniTableForRow ===');
-        }
-
-        function hideMiniTableOnClick(e) {
-            const mini = document.querySelector('.mini-table-container');
-            if (mini && !mini.contains(e.target)) {
-                mini.remove();
+                // Создаем новую мини-таблицу
+                const wrapper = document.createElement('tr');
+                const cell = document.createElement('td');
+                // Динамически определяем количество столбцов
+                const parentTable = tableRow.closest('table');
+                const columnCount = parentTable.querySelector('tr')?.children.length || 7;
+                cell.colSpan = columnCount;
+                
+                const miniTable = createMiniTable(data, rowIndex);
+                cell.appendChild(miniTable);
+                wrapper.appendChild(cell);
+                
+                // Вставляем сразу после текущей строки
+                tableRow.parentNode.insertBefore(wrapper, tableRow.nextSibling);
+                
+                // Анимируем появление
+                requestAnimationFrame(() => {
+                    miniTable.classList.add('expanded');
+                });
             }
         }
 
         function drawTable(city) {
             try {
-                removeMiniTable();
                 currentCity = city;
                 const newDiv = document.getElementById('table_fade_new');
                 if (!newDiv) {
@@ -921,7 +837,7 @@
                         tableCell: 'gchart-cell',
                         headerCell: 'gchart-header-cell'
                     },
-                    sortColumn: 2, // сортировка по 'Сумма баллов' (а не по 'Сумма Р.Б.')
+                    sortColumn: 3, // Корректируем индекс для сортировки по 'Сумма баллов'
                     sortAscending: false // по убыванию
                 });
                 lastTableHTML = newDiv.innerHTML;
@@ -934,34 +850,19 @@
                     newDiv.style.transform = 'translateX(0)';
                 }, 1300);
 
-                // === Обновляем обработчик клика по строке через делегирование (универсальный селектор) ===
-                google.visualization.events.addListener(table, 'ready', () => {
-                    const tableDiv = document.getElementById('table_div');
-                    if (tableDiv._miniTableDelegation) {
-                        tableDiv.removeEventListener('click', tableDiv._miniTableDelegation);
+                // === Новый обработчик клика по строке ===
+                setTimeout(() => {
+                    const tableElement = document.querySelector('#table_div table');
+                    if (tableElement) {
+                        const rows = tableElement.querySelectorAll('tbody tr');
+                        rows.forEach((tr, idx) => {
+                            tr.onclick = function() {
+                                toggleMiniTable(this, data, idx);
+                            };
+                        });
                     }
-                    tableDiv._miniTableDelegation = function(e) {
-                        const cell = e.target.closest('td');
-                        if (!cell || !cell.className.includes('gchart-cell')) return;
-                        const tr = cell.closest('tr');
-                        if (!tr) return;
-                        const allRows = Array.from(tr.parentNode.children);
-                        const idx = allRows.indexOf(tr);
-                        console.log('Делегирование: перед вызовом showMiniTableForRow', tr, idx);
-                        showMiniTableForRow(tr, data, idx);
-                    };
-                    tableDiv.addEventListener('click', tableDiv._miniTableDelegation);
-                });
+                }, 0);
                 // === Конец нового обработчика ===
-
-                // === ВРЕМЕННЫЙ ОТЛАДОЧНЫЙ ОБРАБОТЧИК ===
-                const tableDiv = document.getElementById('table_div');
-                if (tableDiv) {
-                    tableDiv.addEventListener('click', (e) => {
-                        console.log('Клик по элементу:', e.target, 'Классы:', e.target.className, 'Тег:', e.target.tagName);
-                    });
-                }
-                // === КОНЕЦ ОТЛАДКИ ===
             } catch (error) {
                 console.error('Error in handleQueryResponse:', error);
                 const newDiv = document.getElementById('table_fade_new');
