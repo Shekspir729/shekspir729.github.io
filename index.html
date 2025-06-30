@@ -613,49 +613,50 @@
 
         function createMiniTable(data, clickedRow) {
             try {
-                const container = document.createElement('div');
-                container.className = 'mini-table-container';
-                
-                // Получаем название команды из строки, по которой кликнули
-                const teamNameFromTable = clickedRow.children[1]?.textContent.trim();
-                if (!teamNameFromTable) {
-                    container.innerHTML = '<div style="text-align: center; padding: 20px; color: #721c24;">Ошибка: не удалось определить команду</div>';
-                    return container;
-                }
-                
-                // Найдем эту команду в исходных данных Google Sheets
-                let actualRowIndex = -1;
-                for (let i = 0; i < data.getNumberOfRows(); i++) {
-                    // Пропускаем строку заголовков (только если она есть)
-                    if (headerRowIndex !== -1 && i === headerRowIndex) continue;
-                    const teamNameInSheet = data.getValue(i, 0);
-                    if (teamNameInSheet && teamNameInSheet.toString().trim() === teamNameFromTable) {
-                        actualRowIndex = i;
+                const totalCols = data.getNumberOfColumns();
+                const regularStartCol = 1;
+                let regularEndCol = regularStartCol - 1; // Инициализируем как "не найдено"
+                let ratingStartCol = -1;
+                let ratingEndCol = -1;
+                // Найдем строку с заголовками
+                let headerRowIndex = -1;
+                for (let row = 0; row < Math.min(data.getNumberOfRows(), 3); row++) {
+                    const firstCell = data.getValue(row, 0);
+                    const secondCell = data.getValue(row, 1);
+                    const thirdCell = data.getValue(row, 2);
+                    if (firstCell && firstCell.toString().toLowerCase().includes('название')) {
+                        headerRowIndex = row;
+                        break;
+                    } else if (secondCell && secondCell.toString().toLowerCase().includes('игра')) {
+                        headerRowIndex = row;
+                        break;
+                    } else if (secondCell && thirdCell && 
+                               !isNaN(parseInt(secondCell.toString())) && 
+                               !isNaN(parseInt(thirdCell.toString())) &&
+                               parseInt(secondCell.toString()) > 50 && 
+                               parseInt(thirdCell.toString()) > 50) {
+                        headerRowIndex = row;
                         break;
                     }
                 }
-                if (actualRowIndex === -1) {
-                    container.innerHTML = '<div style="text-align: center; padding: 20px; color: #721c24;">Команда не найдена в исходных данных</div>';
-                    return container;
+                if (headerRowIndex === -1) {
+                    const firstCell = data.getValue(0, 0);
+                    const secondCell = data.getValue(0, 1);
+                    if (firstCell && typeof secondCell === 'number' && secondCell > 0 && secondCell < 100) {
+                        headerRowIndex = -1;
+                    } else {
+                        headerRowIndex = 0;
+                    }
                 }
                 
                 // Детальное логирование заголовков для отладки
-                console.log(`createMiniTable: using header row ${headerRowIndex}, analyzing ${totalCols} columns`);
-                console.log('Checking first few rows to understand structure:');
-                for (let row = 0; row < Math.min(data.getNumberOfRows(), 3); row++) {
-                    const first = data.getValue(row, 0);
-                    const second = data.getValue(row, 1);
-                    const third = data.getValue(row, 2);
-                    console.log(`  Row ${row}: "${first}" | "${second}" | "${third}"`);
-                }
-                
+                console.log(`createMiniTable: using header row ${headerRowIndex} for ${currentCity} - ${totalCols} columns`);
                 if (headerRowIndex === -1) {
-                    console.log('No header row - data starts directly with teams, will create virtual headers');
+                    console.log('Main table: No header row - data starts directly with teams, will create virtual headers');
                 } else {
-                    console.log(`Headers from row ${headerRowIndex}:`);
                     for (let i = 0; i < Math.min(totalCols, 20); i++) {
                         const header = data.getValue(headerRowIndex, i);
-                        console.log(`  Column ${i}: "${header}" (type: ${typeof header})`);
+                        console.log(`Column ${i}: "${header}" (type: ${typeof header})`);
                     }
                 }
                 
