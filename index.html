@@ -613,12 +613,12 @@
 
         function createMiniTable(data, clickedRow) {
             try {
+                // --- структура таблицы ---
                 const totalCols = data.getNumberOfColumns();
                 const regularStartCol = 1;
-                let regularEndCol = regularStartCol - 1; // Инициализируем как "не найдено"
+                let regularEndCol = regularStartCol - 1;
                 let ratingStartCol = -1;
                 let ratingEndCol = -1;
-                // Найдем строку с заголовками
                 let headerRowIndex = -1;
                 for (let row = 0; row < Math.min(data.getNumberOfRows(), 3); row++) {
                     const firstCell = data.getValue(row, 0);
@@ -648,6 +648,18 @@
                         headerRowIndex = 0;
                     }
                 }
+                // --- создание DOM-элементов таблицы ---
+                const container = document.createElement('div');
+                container.className = 'mini-table-container';
+                const table = document.createElement('table');
+                table.className = 'mini-table';
+                table.style.fontSize = '1.4rem';
+                table.style.fontWeight = '400';
+                table.style.minWidth = '800px';
+                table.style.whiteSpace = 'nowrap';
+                table.style.borderCollapse = 'collapse';
+                table.style.width = '100%';
+                const tbody = document.createElement('tbody');
                 
                 // Детальное логирование заголовков для отладки
                 console.log(`createMiniTable: using header row ${headerRowIndex} for ${currentCity} - ${totalCols} columns`);
