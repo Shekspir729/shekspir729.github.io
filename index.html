@@ -611,46 +611,21 @@
 
         let lastTableHTML = '';
 
-        function createMiniTable(data, clickedRow) {
+        function createMiniTable(data, rowIndex) {
             try {
-                // --- структура таблицы ---
-                const totalCols = data.getNumberOfColumns();
-                const regularStartCol = 1;
-                let regularEndCol = regularStartCol - 1;
-                let ratingStartCol = -1;
-                let ratingEndCol = -1;
-                let headerRowIndex = -1;
-                for (let row = 0; row < Math.min(data.getNumberOfRows(), 3); row++) {
-                    const firstCell = data.getValue(row, 0);
-                    const secondCell = data.getValue(row, 1);
-                    const thirdCell = data.getValue(row, 2);
-                    if (firstCell && firstCell.toString().toLowerCase().includes('название')) {
-                        headerRowIndex = row;
-                        break;
-                    } else if (secondCell && secondCell.toString().toLowerCase().includes('игра')) {
-                        headerRowIndex = row;
-                        break;
-                    } else if (secondCell && thirdCell && 
-                               !isNaN(parseInt(secondCell.toString())) && 
-                               !isNaN(parseInt(thirdCell.toString())) &&
-                               parseInt(secondCell.toString()) > 50 && 
-                               parseInt(thirdCell.toString()) > 50) {
-                        headerRowIndex = row;
-                        break;
-                    }
-                }
-                if (headerRowIndex === -1) {
-                    const firstCell = data.getValue(0, 0);
-                    const secondCell = data.getValue(0, 1);
-                    if (firstCell && typeof secondCell === 'number' && secondCell > 0 && secondCell < 100) {
-                        headerRowIndex = -1;
-                    } else {
-                        headerRowIndex = 0;
-                    }
-                }
-                // --- создание DOM-элементов таблицы ---
                 const container = document.createElement('div');
                 container.className = 'mini-table-container';
+                
+                // Отладочная информация (минимальная)
+                console.log('createMiniTable: rowIndex =', rowIndex, 'data columns:', data.getNumberOfColumns());
+                
+                // Стили для компактности и скролла
+                container.style.overflowX = 'auto';
+                container.style.padding = '10px';
+                container.style.backgroundColor = '#fff';
+                container.style.borderRadius = '8px';
+                container.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+                
                 const table = document.createElement('table');
                 table.className = 'mini-table';
                 table.style.fontSize = '1.4rem';
@@ -659,16 +634,82 @@
                 table.style.whiteSpace = 'nowrap';
                 table.style.borderCollapse = 'collapse';
                 table.style.width = '100%';
+                
                 const tbody = document.createElement('tbody');
                 
-                // Детальное логирование заголовков для отладки
-                console.log(`createMiniTable: using header row ${headerRowIndex} for ${currentCity} - ${totalCols} columns`);
+                // Динамически определяем структуру столбцов для данного города
+                const totalCols = data.getNumberOfColumns();
+                const regularStartCol = 1;
+                let regularEndCol = regularStartCol - 1; // Инициализируем как "не найдено"
+                let ratingStartCol = -1;
+                let ratingEndCol = -1;
+                
+                // Найдем строку с заголовками
+                let headerRowIndex = -1;
+                for (let row = 0; row < Math.min(data.getNumberOfRows(), 3); row++) {
+                    const firstCell = data.getValue(row, 0);
+                    const secondCell = data.getValue(row, 1);
+                    const thirdCell = data.getValue(row, 2);
+                    
+                    console.log(`Row ${row}: "${firstCell}" | "${secondCell}" | "${thirdCell}"`);
+                    
+                    // Ищем строку с заголовками игр
+                    if (firstCell && firstCell.toString().toLowerCase().includes('название')) {
+                        headerRowIndex = row;
+                        console.log(`Found header row by "название" at row ${row}`);
+                        break;
+                    } else if (secondCell && secondCell.toString().toLowerCase().includes('игра')) {
+                        // Если во втором столбце есть слово "игра", это точно заголовки
+                        headerRowIndex = row;
+                        console.log(`Found header row by "игра" at row ${row}`);
+                        break;
+                    } else if (secondCell && thirdCell && 
+                               !isNaN(parseInt(secondCell.toString())) && 
+                               !isNaN(parseInt(thirdCell.toString())) &&
+                               parseInt(secondCell.toString()) > 50 && 
+                               parseInt(thirdCell.toString()) > 50) {
+                        // Если второй и третий столбцы содержат большие числа (>50), это может быть номера игр
+                        headerRowIndex = row;
+                        console.log(`Found header row by game numbers at row ${row}`);
+                        break;
+                    }
+                }
+                
+                // Если не нашли явную строку заголовков, проверим структуру данных
                 if (headerRowIndex === -1) {
-                    console.log('Main table: No header row - data starts directly with teams, will create virtual headers');
+                    console.log('No header row found, checking if data starts directly with teams');
+                    
+                    // Проверим, начинаются ли данные сразу с команд (без заголовков)
+                    const firstCell = data.getValue(0, 0);
+                    const secondCell = data.getValue(0, 1);
+                    
+                    if (firstCell && typeof secondCell === 'number' && secondCell > 0 && secondCell < 100) {
+                        // Похоже, что данные начинаются сразу с команд, заголовков нет
+                        console.log('Data appears to start directly with team data, no header row present');
+                        headerRowIndex = -1; // Указываем, что заголовков нет
+                    } else {
+                        console.log('Using row 0 as headers');
+                        headerRowIndex = 0;
+                    }
+                }
+                
+                // Детальное логирование заголовков для отладки
+                console.log(`createMiniTable: using header row ${headerRowIndex}, analyzing ${totalCols} columns`);
+                console.log('Checking first few rows to understand structure:');
+                for (let row = 0; row < Math.min(data.getNumberOfRows(), 3); row++) {
+                    const first = data.getValue(row, 0);
+                    const second = data.getValue(row, 1);
+                    const third = data.getValue(row, 2);
+                    console.log(`  Row ${row}: "${first}" | "${second}" | "${third}"`);
+                }
+                
+                if (headerRowIndex === -1) {
+                    console.log('No header row - data starts directly with teams, will create virtual headers');
                 } else {
+                    console.log(`Headers from row ${headerRowIndex}:`);
                     for (let i = 0; i < Math.min(totalCols, 20); i++) {
                         const header = data.getValue(headerRowIndex, i);
-                        console.log(`Column ${i}: "${header}" (type: ${typeof header})`);
+                        console.log(`  Column ${i}: "${header}" (type: ${typeof header})`);
                     }
                 }
                 
@@ -822,6 +863,38 @@
                 }
                 tbody.appendChild(headerRow);
                 
+                // Найдем команду в исходных данных по имени
+                // rowIndex - это позиция в отсортированной таблице, нужно найти исходную строку
+                
+                // Сначала получим имя команды из отсортированной таблицы
+                const tableElement = document.querySelector('#table_div table');
+                const tableRows = tableElement.querySelectorAll('tbody tr');
+                const clickedRow = tableRows[rowIndex];
+                const teamNameFromTable = clickedRow.children[1].textContent.trim(); // Название команды
+                
+                console.log(`Looking for team: "${teamNameFromTable}" in Google Sheets data`);
+                
+                // Найдем эту команду в исходных данных Google Sheets
+                let actualRowIndex = -1;
+                for (let i = 0; i < data.getNumberOfRows(); i++) {
+                    // Пропускаем строку заголовков (только если она есть)
+                    if (headerRowIndex !== -1 && i === headerRowIndex) continue;
+                    
+                    const teamNameInSheet = data.getValue(i, 0);
+                    if (teamNameInSheet && teamNameInSheet.toString().trim() === teamNameFromTable) {
+                        actualRowIndex = i;
+                        break;
+                    }
+                }
+                
+                if (actualRowIndex === -1) {
+                    console.error(`Team "${teamNameFromTable}" not found in Google Sheets data`);
+                    container.innerHTML = '<div style="text-align: center; padding: 20px; color: #721c24;">Команда не найдена в исходных данных</div>';
+                    return container;
+                }
+                
+                console.log(`Found team "${teamNameFromTable}" at row ${actualRowIndex} in Google Sheets`);
+                
                 // Строка с обычными баллами
                 const pointsRow = document.createElement('tr');
                 pointsRow.innerHTML = '<td style="font-weight:600; padding: 8px; background: #f5f5f5; border: 1px solid #ccc; text-align: center;">Баллы</td>';
@@ -912,20 +985,29 @@
 
             // Если мы не закрываем ту же строку, создаем новую мини-таблицу
             if (!isClosingSameRow) {
+                // Добавляем класс активной строки
                 tableRow.classList.add('table-row-clicked');
+                
+                // Создаем новую мини-таблицу
                 const wrapper = document.createElement('tr');
                 wrapper.style.backgroundColor = '#f8f9fa';
+                
                 const cell = document.createElement('td');
+                // Динамически определяем количество столбцов
                 const parentTable = tableRow.closest('table');
                 const columnCount = parentTable.querySelector('tr')?.children.length || 7;
                 cell.colSpan = columnCount;
                 cell.style.padding = '0';
                 cell.style.border = 'none';
-                // Передаём саму строку, а не индекс
-                const miniTable = createMiniTable(data, tableRow);
+                
+                const miniTable = createMiniTable(data, rowIndex);
                 cell.appendChild(miniTable);
                 wrapper.appendChild(cell);
+                
+                // Вставляем сразу после текущей строки
                 tableRow.parentNode.insertBefore(wrapper, tableRow.nextSibling);
+                
+                // Анимируем появление
                 setTimeout(() => {
                     miniTable.classList.add('expanded');
                 }, 10);
