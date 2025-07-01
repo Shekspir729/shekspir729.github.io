@@ -971,6 +971,16 @@
             font-weight: 600 !important;
             color: #888 !important;
         }
+
+        .mini-table .mini-row-label {
+            font-size: 0.65em !important;
+            font-weight: 600 !important;
+            color: #888 !important;
+            letter-spacing: 0.02em;
+            padding-left: 2px !important;
+            padding-right: 4px !important;
+            text-align: left !important;
+        }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -1363,11 +1373,15 @@
                 
                 // Создаём строку заголовков игр
                 const headerRow = document.createElement('tr');
-                headerRow.innerHTML = '<th>Игры</th>';
+                const headerCell = document.createElement('th');
+                headerCell.textContent = 'Игры';
+                headerCell.className = 'mini-row-label';
+                headerRow.appendChild(headerCell);
                 for (let i = 0; i < gameHeaders.length; i++) {
-                    // Упрощаем заголовки - только номер игры
+                    const th = document.createElement('th');
                     const gameNumber = gameHeaders[i].toString().replace(/[^\d]/g, '') || (195 + i);
-                    headerRow.innerHTML += `<th>${gameNumber}</th>`;
+                    th.textContent = gameNumber;
+                    headerRow.appendChild(th);
                 }
                 tbody.appendChild(headerRow);
                 
@@ -1406,20 +1420,27 @@
                 
                 // Строка с обычными баллами
                 const pointsRow = document.createElement('tr');
-                pointsRow.innerHTML = '<td>Баллы</td>';
+                const pointsCell = document.createElement('td');
+                pointsCell.textContent = 'Баллы';
+                pointsCell.className = 'mini-row-label';
+                pointsRow.appendChild(pointsCell);
                 for (let i = regularStartCol; i <= regularEndCol; i++) {
                     const points = data.getValue(actualRowIndex, i);
                     const displayValue = (points !== null && points !== undefined && points !== '') ? points : '—';
-                    pointsRow.innerHTML += `<td>${displayValue}</td>`;
+                    const td = document.createElement('td');
+                    td.textContent = displayValue;
+                    pointsRow.appendChild(td);
                 }
                 tbody.appendChild(pointsRow);
                 
                 // Строка с рейтинговыми баллами (только если есть рейтинговые данные)
                 if (ratingStartCol !== -1 && ratingEndCol !== -1) {
                     const ratingRow = document.createElement('tr');
-                    ratingRow.innerHTML = '<td>Р.Б.</td>';
                     ratingRow.className = 'rating-row';
-                    
+                    const ratingCell = document.createElement('td');
+                    ratingCell.textContent = 'Р.Б.';
+                    ratingCell.className = 'mini-row-label';
+                    ratingRow.appendChild(ratingCell);
                     // Получаем заголовки рейтинговых баллов из строки заголовков
                     let ratingHeaders = [];
                     for (let i = ratingStartCol; i <= ratingEndCol; i++) {
@@ -1429,12 +1450,9 @@
                         }
                         ratingHeaders.push(header ? header.toString() : '—');
                     }
-                    
                     // Создаем ячейки для каждой игры
                     for (let i = 0; i < (regularEndCol - regularStartCol + 1); i++) {
                         let displayValue = '—';
-                        
-                        // Проверяем, есть ли соответствующий рейтинговый балл
                         if (i < ratingHeaders.length) {
                             const ratingColIndex = ratingStartCol + i;
                             if (ratingColIndex <= ratingEndCol) {
@@ -1442,8 +1460,10 @@
                                 displayValue = (ratingPoints !== null && ratingPoints !== undefined && ratingPoints !== '') ? ratingPoints : '—';
                             }
                         }
-                        
-                        ratingRow.innerHTML += `<td class="rating-cell">${displayValue}</td>`;
+                        const td = document.createElement('td');
+                        td.textContent = displayValue;
+                        td.className = 'rating-cell';
+                        ratingRow.appendChild(td);
                     }
                     tbody.appendChild(ratingRow);
                 }
