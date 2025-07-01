@@ -944,6 +944,26 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+
+        .mini-table-wrapper,
+        .mini-table-row-wrapper,
+        .mini-table-container {
+            max-height: none !important;
+            height: auto !important;
+            overflow: visible !important;
+        }
+
+        .mini-table {
+            height: auto !important;
+        }
+
+        .mini-table-wrapper.expanded {
+            max-height: none !important;
+            height: auto !important;
+            margin: 8px 0 !important;
+            opacity: 1 !important;
+            display: block !important;
+        }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
