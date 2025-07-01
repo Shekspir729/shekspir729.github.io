@@ -686,8 +686,8 @@
         }
 
         .mini-table-wrapper.expanded {
-            max-height: clamp(120px, 15vh, 200px) !important;
-            margin: clamp(2px, 0.3vw, 4px) 0 !important;
+            max-height: none !important;
+            margin: 4px 0 !important;
             opacity: 1 !important;
             display: block !important;
         }
@@ -717,17 +717,13 @@
         }
 
         .mini-table th, .mini-table td {
-            padding: clamp(2px, 0.4vw, 4px) clamp(3px, 0.6vw, 6px) !important;
-            text-align: center;
+            padding: 2px 4px !important;
             font-size: 0.75rem !important;
-            height: auto !important;
-            border: none !important;
-            white-space: nowrap;
-            min-width: clamp(25px, 3.5vw, 45px);
-            max-width: clamp(40px, 5.5vw, 70px);
+            min-width: 22px !important;
+            max-width: 32px !important;
             overflow: hidden;
             text-overflow: ellipsis;
-            vertical-align: middle;
+            white-space: nowrap;
         }
 
         .mini-table tr:first-child td,
@@ -940,10 +936,10 @@
         }
 
         .mini-table th, .mini-table td {
-            padding: 1px 2px !important;
-            font-size: 0.7rem !important;
-            min-width: 18px !important;
-            max-width: 22px !important;
+            padding: 2px 4px !important;
+            font-size: 0.75rem !important;
+            min-width: 22px !important;
+            max-width: 32px !important;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
