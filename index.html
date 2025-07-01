@@ -212,86 +212,216 @@
         .custom-table-container {
             background: #222222 !important;
             box-shadow: none !important;
-            max-width: 1800px;
-            margin: 40px auto;
-            border-radius: 32px;
-            padding: 32px 24px;
+            max-width: min(95vw, 1800px);
+            margin: 2vh auto;
+            border-radius: clamp(12px, 2vw, 32px);
+            padding: clamp(16px, 2vw, 32px) clamp(8px, 1.5vw, 24px);
             overflow-x: auto;
+            position: relative;
         }
+        
         .city-switcher {
             display: flex;
             justify-content: center;
-            gap: 24px;
-            margin-bottom: 32px;
-            flex-wrap: nowrap;
+            gap: clamp(8px, 1.5vw, 24px);
+            margin-bottom: clamp(16px, 2vw, 32px);
+            flex-wrap: wrap;
         }
+        
         .city-btn {
             background: #FFD600 !important;
             color: #222 !important;
             border: none !important;
-            border-radius: 12px;
-            padding: 18px 36px;
-            font-size: 2.2rem;
+            border-radius: clamp(6px, 0.8vw, 12px);
+            padding: clamp(8px, 1vw, 18px) clamp(16px, 2vw, 36px);
+            font-size: clamp(1rem, 1.2vw, 1.4rem);
             font-family: 'Arial', sans-serif;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+            transition: all 0.2s ease;
             box-shadow: 0 2px 8px rgba(255,214,0,0.08);
+            white-space: nowrap;
         }
+        
         .city-btn.active, .city-btn:hover {
             background: #FFC107 !important;
             color: #000 !important;
             box-shadow: 0 4px 16px rgba(255,214,0,0.18);
+            transform: translateY(-1px);
         }
-        table.custom-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            font-family: 'Arial', sans-serif;
-            font-size: 4.2rem;
-            background: #ededed !important;
-            border-radius: 32px;
-            overflow: hidden;
-            box-shadow: 0 6px 24px rgba(0,0,0,0.08);
-            color: #111 !important;
+        /* Устаревшие стили для custom-table удалены - используем только Google Charts стили */
+        /* Стили для скролла основной таблицы */
+        #table_div::-webkit-scrollbar {
+            height: clamp(6px, 0.8vw, 12px);
         }
-        table.custom-table th, table.custom-table td {
-            padding: 24px 12px;
-            text-align: center;
-            border-bottom: 3px solid #ccc !important;
-            line-height: 1.4;
-            height: 80px;
-            background: #ededed !important;
-            color: #111 !important;
+        
+        #table_div::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: clamp(3px, 0.5vw, 6px);
         }
-        table.custom-table th {
-            background: #e0e0e0 !important;
-            font-weight: bold;
-            color: #111 !important;
-            font-size: 4.5rem;
+        
+        #table_div::-webkit-scrollbar-thumb {
+            background: #FFD600;
+            border-radius: clamp(3px, 0.5vw, 6px);
         }
-        table.custom-table tr:nth-child(even) {
-            background: #f5f5f5 !important;
+        
+        #table_div::-webkit-scrollbar-thumb:hover {
+            background: #FFC107;
         }
-        table.custom-table tr:hover {
-            background: #ffe082 !important;
-            color: #111 !important;
+
+        /* Адаптивные медиа-запросы */
+        @media (max-width: 1200px) {
+            .custom-table-container {
+                max-width: 98vw;
+                margin: 1vh auto;
+            }
+            
+            h1 {
+                font-size: clamp(2rem, 5vw, 4rem) !important;
+            }
         }
-        table.custom-table tr:last-child td {
-            border-bottom: none;
+        
+        @media (max-width: 900px) {
+            .city-switcher {
+                gap: clamp(6px, 1vw, 16px);
+            }
+            
+            .city-btn {
+                font-size: clamp(0.8rem, 1vw, 1.2rem);
+                padding: clamp(6px, 0.8vw, 12px) clamp(12px, 1.5vw, 24px);
+            }
+            
+            #table_div table {
+                min-width: 600px;
+                font-size: clamp(0.7rem, 1vw, 1.2rem) !important;
+            }
+            
+            #table_div th, #table_div td {
+                padding: clamp(6px, 1vw, 16px) clamp(4px, 0.8vw, 12px) !important;
+                font-size: clamp(0.7rem, 1vw, 1.2rem) !important;
+                min-height: clamp(36px, 3.5vw, 48px) !important;
+            }
+            
+            #table_div th {
+                font-size: clamp(0.8rem, 1.1vw, 1.3rem) !important;
+            }
+            
+            #table_div td:first-child {
+                font-size: clamp(0.9rem, 1.2vw, 1.4rem) !important;
+                min-width: clamp(40px, 4vw, 60px) !important;
+            }
+            
+            #table_div td:nth-child(2) {
+                min-width: clamp(100px, 12vw, 160px) !important;
+                left: clamp(40px, 4vw, 60px);
+            }
         }
+        
         @media (max-width: 600px) {
             .custom-table-container {
-                padding: 12px 2px;
+                padding: clamp(8px, 1.5vw, 16px) clamp(4px, 1vw, 8px);
+                margin: 0.5vh auto;
+                border-radius: clamp(8px, 1.5vw, 16px);
             }
+            
+            .city-switcher {
+                gap: clamp(4px, 0.8vw, 12px);
+                margin-bottom: clamp(12px, 1.5vw, 20px);
+            }
+            
             .city-btn {
-                font-size: 1.2rem;
-                padding: 10px 16px;
+                font-size: clamp(0.7rem, 0.9vw, 1rem);
+                padding: clamp(4px, 0.6vw, 8px) clamp(8px, 1.2vw, 16px);
+                border-radius: clamp(4px, 0.6vw, 8px);
             }
-            table.custom-table th, table.custom-table td {
-                padding: 12px 2px;
-                font-size: 2.2rem;
-                height: 48px;
+            
+            h1 {
+                font-size: clamp(1.5rem, 4vw, 2.5rem) !important;
+                margin-bottom: clamp(4px, 0.5vw, 8px) !important;
+            }
+            
+            p {
+                font-size: clamp(0.8rem, 1vw, 1.2rem) !important;
+                margin-bottom: clamp(8px, 1vw, 16px) !important;
+            }
+            
+            #table_div table {
+                min-width: 500px;
+                font-size: clamp(0.6rem, 0.8vw, 1rem) !important;
+            }
+            
+            #table_div th, #table_div td {
+                padding: clamp(4px, 0.8vw, 8px) clamp(3px, 0.6vw, 6px) !important;
+                font-size: clamp(0.6rem, 0.8vw, 1rem) !important;
+                min-height: clamp(28px, 3vw, 36px) !important;
+            }
+            
+            #table_div th {
+                font-size: clamp(0.65rem, 0.85vw, 1.1rem) !important;
+            }
+            
+            #table_div td:first-child {
+                font-size: clamp(0.7rem, 0.9vw, 1.2rem) !important;
+                min-width: clamp(30px, 3.5vw, 45px) !important;
+            }
+            
+            #table_div td:nth-child(2) {
+                min-width: clamp(80px, 10vw, 120px) !important;
+                left: clamp(30px, 3.5vw, 45px);
+            }
+            
+            #table_div td {
+                min-width: clamp(45px, 6vw, 80px) !important;
+            }
+            
+            .mini-table-container.expanded {
+                max-height: clamp(200px, 25vh, 300px);
+            }
+            
+            .mini-table th, .mini-table td {
+                padding: clamp(4px, 0.8vw, 8px) clamp(6px, 1vw, 10px) !important;
+                font-size: clamp(0.6rem, 0.8vw, 1rem) !important;
+                min-width: clamp(30px, 5vw, 60px);
+            }
+            
+            .mini-table tr:first-child td,
+            .mini-table tr:first-child th {
+                font-size: clamp(0.65rem, 0.85vw, 1.1rem) !important;
+            }
+        }
+        
+        @media (max-width: 400px) {
+            .custom-table-container {
+                padding: 6px 2px;
+                border-radius: 8px;
+            }
+            
+            h1 {
+                font-size: clamp(1.2rem, 3.5vw, 2rem) !important;
+            }
+            
+            .city-btn {
+                font-size: 0.7rem;
+                padding: 4px 8px;
+            }
+            
+            #table_div table {
+                min-width: 400px;
+            }
+            
+            #table_div th, #table_div td {
+                padding: 3px 2px !important;
+                font-size: 0.6rem !important;
+                min-height: 24px !important;
+            }
+            
+            #table_div td:first-child {
+                min-width: 25px !important;
+            }
+            
+            #table_div td:nth-child(2) {
+                min-width: 70px !important;
+                left: 25px;
             }
         }
         h1, p {
@@ -390,55 +520,99 @@
             color: #111 !important;
         }
 
+        /* Основная таблица - адаптивная система */
+        #table_div {
+            overflow-x: auto;
+            overflow-y: visible;
+            width: 100%;
+            border-radius: clamp(12px, 1.5vw, 24px);
+            background: #ededed;
+        }
+        
         #table_div table {
             border-collapse: separate !important;
             border-spacing: 0 !important;
             width: 100% !important;
+            min-width: 800px; /* Минимальная ширина для горизонтального скролла */
             background: #ededed !important;
-            font-size: 2.2rem !important;
+            font-size: clamp(0.8rem, 1.2vw, 1.6rem) !important;
             font-family: 'Arial', sans-serif !important;
-            border-radius: 24px !important;
+            border-radius: clamp(12px, 1.5vw, 24px) !important;
             overflow: hidden !important;
         }
+        
         #table_div th, #table_div td {
             text-align: left !important;
-            padding: 24px 24px !important;
-            font-size: 2.2rem !important;
+            padding: clamp(8px, 1.5vw, 24px) clamp(6px, 1.2vw, 20px) !important;
+            font-size: clamp(0.8rem, 1.2vw, 1.6rem) !important;
             font-weight: 700 !important;
             border: none !important;
             background: #ededed !important;
             color: #111 !important;
             vertical-align: middle !important;
-            height: 64px !important;
+            height: auto !important;
+            min-height: clamp(40px, 4vw, 64px) !important;
+            white-space: nowrap;
+            position: relative;
         }
+        
         #table_div th {
             background: #e0e0e0 !important;
             color: #111 !important;
-            font-size: 2.4rem !important;
+            font-size: clamp(0.9rem, 1.3vw, 1.7rem) !important;
             font-weight: 900 !important;
-            border-bottom: 3px solid #FFD600 !important;
-            letter-spacing: 0.04em;
+            border-bottom: clamp(2px, 0.3vw, 3px) solid #FFD600 !important;
+            letter-spacing: 0.02em;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
+        
         #table_div tr {
             background: #ededed !important;
-            border-bottom: 2px solid #fff !important;
-            transition: background 0.2s;
+            border-bottom: clamp(1px, 0.2vw, 2px) solid #fff !important;
+            transition: all 0.2s ease;
         }
+        
         #table_div tr:hover td {
             background: #ffe082 !important;
             color: #111 !important;
+            transform: scale(1.005);
         }
+        
         #table_div tr:last-child td {
             border-bottom: none !important;
         }
+        
         #table_div td:first-child {
-            font-size: 2.6rem !important;
-            width: 80px !important;
+            font-size: clamp(1rem, 1.4vw, 1.8rem) !important;
+            min-width: clamp(50px, 5vw, 80px) !important;
             text-align: center !important;
             font-weight: 900 !important;
+            background: #f0f0f0 !important;
+            position: sticky;
+            left: 0;
+            z-index: 5;
+            border-right: clamp(1px, 0.2vw, 2px) solid #FFD600 !important;
         }
+        
+        #table_div td:nth-child(2) {
+            min-width: clamp(120px, 15vw, 200px) !important;
+            font-weight: 800 !important;
+            position: sticky;
+            left: clamp(50px, 5vw, 80px);
+            z-index: 5;
+            background: #ededed !important;
+        }
+        
+        #table_div tr:hover td:first-child,
+        #table_div tr:hover td:nth-child(2) {
+            background: #ffe082 !important;
+        }
+        
         #table_div td {
             font-weight: 700 !important;
+            min-width: clamp(60px, 8vw, 120px) !important;
         }
         .place-cell {
             transition: color 0.2s, font-size 0.2s;
@@ -499,62 +673,230 @@
             opacity: 0.8;
         }
 
-        /* Стили для мини-таблицы */
-        .mini-table-container {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            background: #f8f8f8;
-            margin: 0;
-            width: 100%;
+        /* Полностью адаптивная система субтаблиц */
+        .mini-table-wrapper {
+            max-height: 0 !important;
+            overflow: hidden !important;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out !important;
+            margin: 0 !important;
+            width: 100% !important;
+            opacity: 0 !important;
+            position: relative !important;
+            display: block !important;
         }
 
-        .mini-table-container.expanded {
-            max-height: 300px;
-            margin: 16px 0;
-            border-top: 2px solid #FFD600;
-            border-bottom: 2px solid #FFD600;
+        .mini-table-wrapper.expanded {
+            max-height: clamp(200px, 25vh, 350px) !important;
+            margin: clamp(4px, 0.5vw, 8px) 0 !important;
+            opacity: 1 !important;
+            display: block !important;
+        }
+
+        .mini-table-container {
+            background: #f8f8f8 !important;
+            border-radius: clamp(4px, 0.6vw, 8px) !important;
+            border: clamp(1px, 0.2vw, 2px) solid #FFD600 !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+            overflow-x: auto !important;
+            overflow-y: hidden !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            position: relative !important;
+            display: block !important;
         }
 
         .mini-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            font-size: 1.8rem !important;
+            width: auto !important;
+            min-width: 100% !important;
+            border-collapse: separate !important;
+            border-spacing: 0 !important;
+            font-size: clamp(0.6rem, 0.8vw, 1rem) !important;
+            background: #fff !important;
+            margin: 0 !important;
+            display: table !important;
         }
 
         .mini-table th, .mini-table td {
-            padding: 12px 16px !important;
+            padding: clamp(3px, 0.6vw, 8px) clamp(4px, 0.8vw, 12px) !important;
             text-align: center;
-            font-size: 1.8rem !important;
+            font-size: clamp(0.6rem, 0.8vw, 1rem) !important;
             height: auto !important;
             border: none !important;
+            white-space: nowrap;
+            min-width: clamp(35px, 4.5vw, 65px);
+            max-width: clamp(60px, 8vw, 100px);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            vertical-align: middle;
         }
 
         .mini-table tr:first-child td,
         .mini-table tr:first-child th {
             background: #e8e8e8 !important;
             font-weight: bold;
-            border-bottom: 2px solid #FFD600 !important;
+            border-bottom: clamp(1px, 0.2vw, 2px) solid #FFD600 !important;
+            font-size: clamp(0.65rem, 0.85vw, 1.1rem) !important;
+            position: sticky;
+            top: 0;
+            z-index: 4;
         }
 
         .mini-table tr:first-child th:first-child {
             text-align: left !important;
+            position: sticky;
+            left: 0;
+            z-index: 5;
+            min-width: clamp(50px, 8vw, 100px) !important;
+            max-width: clamp(80px, 12vw, 150px) !important;
         }
 
         .mini-table tr td:first-child {
             text-align: left !important;
             font-weight: bold !important;
-            background: #e8e8e8 !important;
-            border-right: 2px solid #FFD600 !important;
+            background: #f0f0f0 !important;
+            border-right: clamp(1px, 0.2vw, 2px) solid #FFD600 !important;
+            position: sticky;
+            left: 0;
+            z-index: 3;
+            min-width: clamp(50px, 8vw, 100px) !important;
+            max-width: clamp(80px, 12vw, 150px) !important;
         }
 
         .mini-table tr:hover td {
             background: #ffe082 !important;
+            transition: background 0.2s ease;
         }
 
         .mini-table tr:hover td:first-child {
-            background: #e8e8e8 !important;
+            background: #f0f0f0 !important;
+        }
+        
+        /* Стили для рейтинговой строки */
+        .mini-table .rating-row .rating-cell {
+            background: #fffacd !important;
+        }
+        
+        .mini-table tr:hover .rating-cell {
+            background: #fff3cd !important;
+        }
+        
+        /* Горизонтальные заголовки для игр */
+        .mini-table th:not(:first-child) {
+            writing-mode: horizontal-tb !important;
+            text-orientation: unset !important;
+            min-width: clamp(35px, 4.5vw, 60px) !important;
+            max-width: clamp(50px, 6vw, 80px) !important;
+            height: auto !important;
+            padding: clamp(4px, 0.8vw, 8px) clamp(3px, 0.6vw, 6px) !important;
+            font-size: clamp(0.6rem, 0.8vw, 1rem) !important;
+        }
+        
+        /* Стили для скролла субтаблиц */
+        .mini-table-container::-webkit-scrollbar {
+            height: clamp(4px, 0.6vw, 8px);
+        }
+        
+        .mini-table-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: clamp(2px, 0.3vw, 4px);
+        }
+        
+        .mini-table-container::-webkit-scrollbar-thumb {
+            background: #FFD600;
+            border-radius: clamp(2px, 0.3vw, 4px);
+        }
+        
+        .mini-table-container::-webkit-scrollbar-thumb:hover {
+            background: #FFC107;
+        }
+        
+        /* Стили для родительских элементов субтаблицы */
+        .mini-table-row-wrapper {
+            background-color: #f8f9fa !important;
+        }
+        
+        .mini-table-row-wrapper td {
+            padding: 0 !important;
+            border: none !important;
+            vertical-align: top !important;
+        }
+        
+        /* КРИТИЧНЫЕ стили для работы субтаблицы */
+        .mini-table-wrapper.expanded {
+            display: block !important;
+            visibility: visible !important;
+            max-height: 400px !important;
+            opacity: 1 !important;
+            overflow: visible !important;
+        }
+        
+        .mini-table-container {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            height: auto !important;
+            min-height: 100px !important;
+        }
+        
+        .mini-table {
+            display: table !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            width: 100% !important;
+            height: auto !important;
+        }
+        
+        .mini-table th, .mini-table td {
+            display: table-cell !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            padding: 8px !important;
+            border: 1px solid #ddd !important;
+        }
+        
+        /* Адаптивность для мобильных */
+        @media (max-width: 900px) {
+            .mini-table th:not(:first-child) {
+                writing-mode: horizontal-tb !important;
+                text-orientation: unset !important;
+                min-width: clamp(28px, 3.8vw, 45px) !important;
+                max-width: clamp(40px, 5.2vw, 60px) !important;
+                height: auto !important;
+                padding: clamp(3px, 0.6vw, 6px) clamp(2px, 0.4vw, 4px) !important;
+                font-size: clamp(0.55rem, 0.75vw, 0.9rem) !important;
+            }
+            
+            .mini-table th, .mini-table td {
+                font-size: clamp(0.55rem, 0.7vw, 0.9rem) !important;
+                min-width: clamp(28px, 4vw, 50px);
+                max-width: clamp(40px, 6vw, 70px);
+            }
+            
+            .mini-table tr:first-child th:first-child,
+            .mini-table tr td:first-child {
+                min-width: clamp(60px, 10vw, 120px) !important;
+                max-width: clamp(80px, 15vw, 150px) !important;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .mini-table-wrapper.expanded {
+                max-height: clamp(150px, 20vh, 250px);
+            }
+            
+            .mini-table th, .mini-table td {
+                font-size: clamp(0.5rem, 0.65vw, 0.8rem) !important;
+                padding: clamp(2px, 0.4vw, 4px) clamp(1px, 0.3vw, 3px) !important;
+                min-width: clamp(25px, 3.5vw, 40px);
+                max-width: clamp(35px, 5vw, 55px);
+            }
+            
+            .mini-table tr:first-child th:first-child,
+            .mini-table tr td:first-child {
+                min-width: clamp(50px, 8vw, 90px) !important;
+                max-width: clamp(70px, 12vw, 120px) !important;
+                font-size: clamp(0.55rem, 0.7vw, 0.85rem) !important;
+            }
         }
 
         /* Добавляем стили для сообщений об ошибках */
@@ -605,6 +947,136 @@
         ];
         let currentCity = cities[0].name;
         let selectedTeamData = null;
+        
+        // Сохраняем состояние раскрытых субтаблиц
+        let expandedTeams = new Set();
+
+        // Функция для восстановления развернутых субтаблиц после сортировки
+        function restoreExpandedTables(data) {
+            if (expandedTeams.size === 0) {
+                console.log('restoreExpandedTables: No expanded teams to restore');
+                return;
+            }
+            
+            console.log('restoreExpandedTables: Restoring', expandedTeams.size, 'expanded teams:', Array.from(expandedTeams));
+            
+            setTimeout(() => {
+                const tableElement = document.querySelector('#table_div table');
+                if (!tableElement) {
+                    console.log('restoreExpandedTables: Table element not found');
+                    return;
+                }
+                
+                const rows = tableElement.querySelectorAll('tbody tr');
+                let restoredCount = 0;
+                const teamsToRestore = Array.from(expandedTeams); // Создаем копию для безопасности
+                
+                rows.forEach((tr, idx) => {
+                    const teamCell = tr.cells[1];
+                    if (teamCell) {
+                        const teamName = teamCell.textContent.trim();
+                        if (teamsToRestore.includes(teamName)) {
+                            // Восстанавливаем развернутую субтаблицу
+                            setTimeout(() => {
+                                console.log(`Restoring subtable for team: ${teamName}`);
+                                // Не используем toggleMiniTable для восстановления, 
+                                // создаем субтаблицу напрямую, чтобы избежать конфликтов
+                                restoreSubtable(tr, data, idx, teamName);
+                                restoredCount++;
+                            }, 200 * restoredCount); // Увеличиваем задержку для стабильности
+                        }
+                    }
+                });
+                
+                console.log(`restoreExpandedTables: Initiated restoration for ${restoredCount} subtables`);
+            }, 500); // Увеличиваем задержку для стабильности
+        }
+        
+        // Вспомогательная функция для восстановления субтаблицы без конфликтов
+        function restoreSubtable(tableRow, data, rowIndex, teamName) {
+            try {
+                // Проверяем, что под этой строкой еще нет субтаблицы
+                const nextRow = tableRow.nextElementSibling;
+                if (nextRow?.querySelector('.mini-table-wrapper')) {
+                    console.log(`Subtable already exists for team: ${teamName}, skipping`);
+                    return;
+                }
+                
+                // Добавляем класс активной строки
+                tableRow.classList.add('table-row-clicked');
+                
+                // Создаем мини-таблицу
+                const wrapper = document.createElement('tr');
+                wrapper.style.backgroundColor = '#f8f9fa';
+                wrapper.classList.add('mini-table-row-wrapper');
+                
+                const cell = document.createElement('td');
+                const parentTable = tableRow.closest('table');
+                const columnCount = parentTable.querySelector('tr')?.children.length || 7;
+                cell.colSpan = columnCount;
+                cell.style.padding = '0';
+                cell.style.border = 'none';
+                
+                const miniTable = createMiniTable(data, rowIndex);
+                cell.appendChild(miniTable);
+                wrapper.appendChild(cell);
+                
+                // Вставляем после текущей строки
+                tableRow.parentNode.insertBefore(wrapper, tableRow.nextSibling);
+                
+                // Анимируем появление
+                setTimeout(() => {
+                    // console.log('=== restoreSubtable: Adding expanded class ===');
+                    miniTable.classList.add('expanded');
+                    
+                    // КРИТИЧНЫЕ стили для работы
+                    miniTable.style.maxHeight = '300px';
+                    miniTable.style.opacity = '1';
+                    miniTable.style.display = 'block';
+                    miniTable.style.visibility = 'visible';
+                    miniTable.style.overflow = 'visible';
+                    
+                    // ПРИНУДИТЕЛЬНО показываем контейнер
+                    const container = miniTable.querySelector('.mini-table-container');
+                    if (container) {
+                        container.style.display = 'block';
+                        container.style.visibility = 'visible';
+                        container.style.opacity = '1';
+                        container.style.height = 'auto';
+                        container.style.minHeight = '100px';
+                    }
+                    
+                    // ПРИНУДИТЕЛЬНО показываем таблицу
+                    const table = miniTable.querySelector('.mini-table');
+                    if (table) {
+                        table.style.display = 'table';
+                        table.style.visibility = 'visible';
+                        table.style.opacity = '1';
+                        table.style.width = '100%';
+                        table.style.height = 'auto';
+                    }
+                    
+                    // ПРИНУДИТЕЛЬНО показываем все ячейки
+                    const cells = miniTable.querySelectorAll('.mini-table th, .mini-table td');
+                    cells.forEach(cell => {
+                        cell.style.display = 'table-cell';
+                        cell.style.visibility = 'visible';
+                        cell.style.opacity = '1';
+                        cell.style.padding = '8px';
+                        cell.style.border = '1px solid #ddd';
+                    });
+                    
+                    // console.log('=== restoreSubtable: After adding expanded class and styles ===');
+                }, 10);
+                
+                // Добавляем команду обратно в список развернутых
+                expandedTeams.add(teamName);
+                console.log(`Successfully restored subtable for team: ${teamName}`);
+                
+            } catch (error) {
+                console.error(`Error restoring subtable for team ${teamName}:`, error);
+            }
+        }
 
         google.charts.load('current', {'packages':['table']});
         google.charts.setOnLoadCallback(() => drawTable(currentCity));
@@ -613,27 +1085,21 @@
 
         function createMiniTable(data, rowIndex) {
             try {
+                console.log('=== createMiniTable called ===', { rowIndex });
+                
+                // Создаем главный wrapper
+                const wrapper = document.createElement('div');
+                wrapper.className = 'mini-table-wrapper';
+                
+                // Создаем контейнер для скролла
                 const container = document.createElement('div');
                 container.className = 'mini-table-container';
                 
                 // Отладочная информация (минимальная)
                 console.log('createMiniTable: rowIndex =', rowIndex, 'data columns:', data.getNumberOfColumns());
                 
-                // Стили для компактности и скролла
-                container.style.overflowX = 'auto';
-                container.style.padding = '10px';
-                container.style.backgroundColor = '#fff';
-                container.style.borderRadius = '8px';
-                container.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
-                
                 const table = document.createElement('table');
                 table.className = 'mini-table';
-                table.style.fontSize = '1.4rem';
-                table.style.fontWeight = '400';
-                table.style.minWidth = '800px';
-                table.style.whiteSpace = 'nowrap';
-                table.style.borderCollapse = 'collapse';
-                table.style.width = '100%';
                 
                 const tbody = document.createElement('tbody');
                 
@@ -852,14 +1318,17 @@
                 if (gameHeaders.length === 0) {
                     console.warn('No game headers found for mini table');
                     container.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Нет данных об играх для этой команды</div>';
-                    return container;
+                    wrapper.appendChild(container);
+                    return wrapper;
                 }
                 
                 // Создаём строку заголовков игр
                 const headerRow = document.createElement('tr');
-                headerRow.innerHTML = '<th style="font-weight:600; padding: 8px; background: #e0e0e0; border: 1px solid #ccc; text-align: center;">Игры</th>';
+                headerRow.innerHTML = '<th>Игры</th>';
                 for (let i = 0; i < gameHeaders.length; i++) {
-                    headerRow.innerHTML += `<th style='font-weight:500; padding: 8px; background: #e0e0e0; border: 1px solid #ccc; text-align: center; font-size: 1.2rem;'>${gameHeaders[i]}</th>`;
+                    // Упрощаем заголовки - только номер игры
+                    const gameNumber = gameHeaders[i].toString().replace(/[^\d]/g, '') || (195 + i);
+                    headerRow.innerHTML += `<th>${gameNumber}</th>`;
                 }
                 tbody.appendChild(headerRow);
                 
@@ -890,25 +1359,27 @@
                 if (actualRowIndex === -1) {
                     console.error(`Team "${teamNameFromTable}" not found in Google Sheets data`);
                     container.innerHTML = '<div style="text-align: center; padding: 20px; color: #721c24;">Команда не найдена в исходных данных</div>';
-                    return container;
+                    wrapper.appendChild(container);
+                    return wrapper;
                 }
                 
                 console.log(`Found team "${teamNameFromTable}" at row ${actualRowIndex} in Google Sheets`);
                 
                 // Строка с обычными баллами
                 const pointsRow = document.createElement('tr');
-                pointsRow.innerHTML = '<td style="font-weight:600; padding: 8px; background: #f5f5f5; border: 1px solid #ccc; text-align: center;">Баллы</td>';
+                pointsRow.innerHTML = '<td>Баллы</td>';
                 for (let i = regularStartCol; i <= regularEndCol; i++) {
                     const points = data.getValue(actualRowIndex, i);
                     const displayValue = (points !== null && points !== undefined && points !== '') ? points : '—';
-                    pointsRow.innerHTML += `<td style='padding: 8px; border: 1px solid #ccc; text-align: center; background: #fff;'>${displayValue}</td>`;
+                    pointsRow.innerHTML += `<td>${displayValue}</td>`;
                 }
                 tbody.appendChild(pointsRow);
                 
                 // Строка с рейтинговыми баллами (только если есть рейтинговые данные)
                 if (ratingStartCol !== -1 && ratingEndCol !== -1) {
                     const ratingRow = document.createElement('tr');
-                    ratingRow.innerHTML = '<td style="font-weight:600; padding: 8px; background: #f5f5f5; border: 1px solid #ccc; text-align: center;">Р.Баллы</td>';
+                    ratingRow.innerHTML = '<td>Р.Б.</td>';
+                    ratingRow.className = 'rating-row';
                     
                     // Получаем заголовки рейтинговых баллов из строки заголовков
                     let ratingHeaders = [];
@@ -933,84 +1404,189 @@
                             }
                         }
                         
-                        ratingRow.innerHTML += `<td style='padding: 8px; border: 1px solid #ccc; text-align: center; background: #fffacd;'>${displayValue}</td>`;
+                        ratingRow.innerHTML += `<td class="rating-cell">${displayValue}</td>`;
                     }
                     tbody.appendChild(ratingRow);
                 }
                 
                 table.appendChild(tbody);
                 container.appendChild(table);
-                return container;
+                wrapper.appendChild(container);
+                
+                // console.log('=== createMiniTable: Created wrapper ===');
+                
+                // Принудительно устанавливаем базовые стили для wrapper
+                wrapper.style.display = 'block';
+                wrapper.style.width = '100%';
+                wrapper.style.maxHeight = '0px';
+                wrapper.style.opacity = '0';
+                wrapper.style.overflow = 'hidden';
+                wrapper.style.transition = 'max-height 0.3s ease-out, opacity 0.3s ease-out';
+                
+                // console.log('=== createMiniTable: Applied base styles ===');
+                
+                return wrapper;
             } catch (error) {
-                console.error('Error in createMiniTable:', error);
+                console.error('Error in createMiniTable:', error, {
+                    rowIndex: rowIndex,
+                    dataColumns: data ? data.getNumberOfColumns() : 'N/A',
+                    dataRows: data ? data.getNumberOfRows() : 'N/A'
+                });
+                const wrapper = document.createElement('div');
+                wrapper.className = 'mini-table-wrapper';
                 const container = document.createElement('div');
                 container.className = 'mini-table-container';
-                container.innerHTML = '<div style="text-align: center; padding: 20px; color: #721c24;">Произошла ошибка при загрузке данных команды</div>';
-                return container;
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 20px; color: #721c24; background: #f8d7da; border-radius: 8px; margin: 10px;">
+                        <strong>Произошла ошибка при загрузке данных команды</strong><br>
+                        <small style="color: #666; margin-top: 10px; display: block;">
+                            Строка: ${rowIndex}, Ошибка: ${error.message || 'Неизвестная ошибка'}
+                        </small>
+                    </div>
+                `;
+                wrapper.appendChild(container);
+                return wrapper;
             }
         }
 
         function toggleMiniTable(tableRow, data, rowIndex) {
-            // Удаляем класс активной строки со всех строк
-            const allRows = document.querySelectorAll('#table_div tr');
-            allRows.forEach(row => row.classList.remove('table-row-clicked'));
-            
-            // Находим все существующие мини-таблицы
-            const existingContainers = document.querySelectorAll('.mini-table-container');
-            let isClosingSameRow = false;
-            
-            // Проверяем, есть ли уже мини-таблица под этой строкой
-            const nextRow = tableRow.nextElementSibling;
-            if (nextRow?.querySelector('.mini-table-container')) {
-                isClosingSameRow = true;
-                nextRow.querySelector('.mini-table-container').classList.remove('expanded');
-                setTimeout(() => {
-                    if (nextRow.parentNode) {
-                        nextRow.remove();
+            try {
+                console.log('=== toggleMiniTable called ===', { rowIndex, teamName: tableRow.cells[1]?.textContent?.trim() });
+                
+                // Получаем название команды для сохранения состояния
+                const teamName = tableRow.cells[1] ? tableRow.cells[1].textContent.trim() : null;
+                
+                // Удаляем класс активной строки со всех строк
+                const allRows = document.querySelectorAll('#table_div tr');
+                allRows.forEach(row => row.classList.remove('table-row-clicked'));
+                
+                // Проверяем, есть ли уже мини-таблица под этой строкой
+                const nextRow = tableRow.nextElementSibling;
+                const isCurrentRowExpanded = nextRow?.querySelector('.mini-table-wrapper');
+                
+                // Сначала закрываем ВСЕ существующие мини-таблицы
+                const existingWrappers = document.querySelectorAll('.mini-table-wrapper');
+                const existingRows = [];
+                
+                // Находим все wrapper-строки (родители контейнеров)
+                existingWrappers.forEach(wrapper => {
+                    const row = wrapper.closest('tr');
+                    if (row) {
+                        existingRows.push(row);
                     }
-                }, 300);
-            }
-            
-            // Закрываем все остальные мини-таблицы
-            existingContainers.forEach(container => {
-                if (!isClosingSameRow || container !== nextRow?.querySelector('.mini-table-container')) {
-                    container.classList.remove('expanded');
-                    setTimeout(() => {
-                        if (container.parentElement?.parentElement?.parentNode) {
-                            container.parentElement.parentElement.remove();
-                        }
-                    }, 300);
-                }
-            });
-
-            // Если мы не закрываем ту же строку, создаем новую мини-таблицу
-            if (!isClosingSameRow) {
-                // Добавляем класс активной строки
-                tableRow.classList.add('table-row-clicked');
+                });
                 
-                // Создаем новую мини-таблицу
-                const wrapper = document.createElement('tr');
-                wrapper.style.backgroundColor = '#f8f9fa';
+                // Очищаем состояние развернутых команд
+                expandedTeams.clear();
                 
-                const cell = document.createElement('td');
-                // Динамически определяем количество столбцов
-                const parentTable = tableRow.closest('table');
-                const columnCount = parentTable.querySelector('tr')?.children.length || 7;
-                cell.colSpan = columnCount;
-                cell.style.padding = '0';
-                cell.style.border = 'none';
+                // Закрываем все мини-таблицы с анимацией
+                existingWrappers.forEach(wrapper => {
+                    wrapper.classList.remove('expanded');
+                });
                 
-                const miniTable = createMiniTable(data, rowIndex);
-                cell.appendChild(miniTable);
-                wrapper.appendChild(cell);
-                
-                // Вставляем сразу после текущей строки
-                tableRow.parentNode.insertBefore(wrapper, tableRow.nextSibling);
-                
-                // Анимируем появление
+                // Удаляем все wrapper-строки после анимации
                 setTimeout(() => {
-                    miniTable.classList.add('expanded');
-                }, 10);
+                    existingRows.forEach(row => {
+                        if (row.parentNode) {
+                            row.remove();
+                        }
+                    });
+                }, 320);
+                
+                // Если кликнули по уже развернутой строке, просто закрываем её (не создаем новую)
+                if (isCurrentRowExpanded) {
+                    console.log(`Closing expanded subtable for team: ${teamName}`);
+                    return;
+                }
+                
+                // Создаем новую мини-таблицу с небольшой задержкой после закрытия старых
+                setTimeout(() => {
+                    try {
+                        // Добавляем класс активной строки
+                        tableRow.classList.add('table-row-clicked');
+                        
+                        // Создаем новую мини-таблицу
+                        const wrapper = document.createElement('tr');
+                        wrapper.style.backgroundColor = '#f8f9fa';
+                        wrapper.classList.add('mini-table-row-wrapper'); // Добавляем класс для лучшего поиска
+                        
+                        const cell = document.createElement('td');
+                        // Динамически определяем количество столбцов
+                        const parentTable = tableRow.closest('table');
+                        const columnCount = parentTable.querySelector('tr')?.children.length || 7;
+                        cell.colSpan = columnCount;
+                        cell.style.padding = '0';
+                        cell.style.border = 'none';
+                        
+                        const miniTable = createMiniTable(data, rowIndex);
+                        cell.appendChild(miniTable);
+                        wrapper.appendChild(cell);
+                        
+                        // Вставляем сразу после текущей строки
+                        tableRow.parentNode.insertBefore(wrapper, tableRow.nextSibling);
+                        
+                        // Анимируем появление
+                        setTimeout(() => {
+                            console.log('=== Adding expanded class ===', {
+                                wrapper: miniTable,
+                                container: miniTable.querySelector('.mini-table-container'),
+                                table: miniTable.querySelector('.mini-table'),
+                                cells: miniTable.querySelectorAll('.mini-table th, .mini-table td').length
+                            });
+                            miniTable.classList.add('expanded');
+                            
+                            // КРИТИЧНЫЕ стили для работы
+                            miniTable.style.maxHeight = '300px';
+                            miniTable.style.opacity = '1';
+                            miniTable.style.display = 'block';
+                            miniTable.style.visibility = 'visible';
+                            miniTable.style.overflow = 'visible';
+                            
+                            // ПРИНУДИТЕЛЬНО показываем контейнер
+                            const container = miniTable.querySelector('.mini-table-container');
+                            if (container) {
+                                container.style.display = 'block';
+                                container.style.visibility = 'visible';
+                                container.style.opacity = '1';
+                                container.style.height = 'auto';
+                                container.style.minHeight = '100px';
+                            }
+                            
+                            // ПРИНУДИТЕЛЬНО показываем таблицу  
+                            const table = miniTable.querySelector('.mini-table');
+                            if (table) {
+                                table.style.display = 'table';
+                                table.style.visibility = 'visible';
+                                table.style.opacity = '1';
+                                table.style.width = '100%';
+                                table.style.height = 'auto';
+                            }
+                            
+                            // ПРИНУДИТЕЛЬНО показываем все ячейки
+                            const cells = miniTable.querySelectorAll('.mini-table th, .mini-table td');
+                            cells.forEach(cell => {
+                                cell.style.display = 'table-cell';
+                                cell.style.visibility = 'visible';
+                                cell.style.opacity = '1';
+                                cell.style.padding = '8px';
+                                cell.style.border = '1px solid #ddd';
+                            });
+                            
+                            // console.log('=== After adding expanded class and styles ===');
+                        }, 10);
+                        
+                        // Добавляем команду в список развернутых
+                        if (teamName) {
+                            expandedTeams.add(teamName);
+                            console.log(`Opened subtable for team: ${teamName}`);
+                        }
+                    } catch (error) {
+                        console.error('Error creating mini table:', error);
+                    }
+                }, 350); // Задержка больше времени анимации закрытия
+                
+            } catch (error) {
+                console.error('Error in toggleMiniTable:', error);
             }
         }
 
@@ -1348,6 +1924,25 @@
                 view.setColumns([0,2,3,4,5,6,7]); // показываем только нужные столбцы
                 const table = new google.visualization.Table(document.getElementById('table_div'));
                 
+                // Добавляем обработчик события сортировки
+                google.visualization.events.addListener(table, 'sort', function() {
+                    setTimeout(() => {
+                        // Переустанавливаем обработчики кликов после сортировки
+                        const tableElement = document.querySelector('#table_div table');
+                        if (tableElement) {
+                            const rows = tableElement.querySelectorAll('tbody tr');
+                            rows.forEach((tr, idx) => {
+                                tr.onclick = function() {
+                                    toggleMiniTable(this, data, idx);
+                                };
+                            });
+                            
+                            // Восстанавливаем развернутые субтаблицы после сортировки
+                            restoreExpandedTables(data);
+                        }
+                    }, 100); // Небольшая задержка для завершения сортировки
+                });
+                
                 table.draw(view, {
                     showRowNumber: false,
                     width: '100%',
@@ -1385,6 +1980,9 @@
                                 toggleMiniTable(this, data, idx);
                             };
                         });
+                        
+                        // Восстанавливаем развернутые субтаблицы после установки обработчиков
+                        restoreExpandedTables(data);
                     }
                 }, 0);
                 // === Конец нового обработчика ===
@@ -1541,8 +2139,8 @@
             <div class="page" v-bind:class="state.view">
                 <div class="center">
                     <div class="custom-table-container">
-                        <h1 style="text-align:center; font-size:6.6rem; margin-bottom: 8px; color:#222;">🏆 Рейтинг НФ</h1>
-                        <p style="text-align:center; color:#666; margin-bottom: 24px;">Актуальная таблица лидеров</p>
+                        <h1 style="text-align:center; font-size:clamp(2rem, 4vw, 4.5rem); margin-bottom: clamp(4px, 0.8vw, 12px); color:#222; font-weight: 900;">🏆 Рейтинг НФ</h1>
+                        <p style="text-align:center; color:#666; margin-bottom: clamp(12px, 1.5vw, 24px); font-size: clamp(0.9rem, 1.2vw, 1.4rem);">Актуальная таблица лидеров</p>
                         <div class="city-switcher">
                             <script>
                                 document.write(
