@@ -673,7 +673,7 @@
             opacity: 0.8;
         }
 
-        /* Полностью адаптивная система субтаблиц */
+        /* Полностью адаптивная система субтаблиц - КОМПАКТНАЯ ВЕРСИЯ */
         .mini-table-wrapper {
             max-height: 0 !important;
             overflow: hidden !important;
@@ -686,17 +686,17 @@
         }
 
         .mini-table-wrapper.expanded {
-            max-height: clamp(200px, 25vh, 350px) !important;
-            margin: clamp(4px, 0.5vw, 8px) 0 !important;
+            max-height: clamp(120px, 15vh, 200px) !important;
+            margin: clamp(2px, 0.3vw, 4px) 0 !important;
             opacity: 1 !important;
             display: block !important;
         }
 
         .mini-table-container {
             background: #f8f8f8 !important;
-            border-radius: clamp(4px, 0.6vw, 8px) !important;
-            border: clamp(1px, 0.2vw, 2px) solid #FFD600 !important;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+            border-radius: clamp(3px, 0.4vw, 6px) !important;
+            border: clamp(1px, 0.15vw, 1.5px) solid #FFD600 !important;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1) !important;
             overflow-x: auto !important;
             overflow-y: hidden !important;
             width: 100% !important;
@@ -710,21 +710,21 @@
             min-width: 100% !important;
             border-collapse: separate !important;
             border-spacing: 0 !important;
-            font-size: clamp(0.6rem, 0.8vw, 1rem) !important;
+            font-size: 0.75rem !important;
             background: #fff !important;
             margin: 0 !important;
             display: table !important;
         }
 
         .mini-table th, .mini-table td {
-            padding: clamp(3px, 0.6vw, 8px) clamp(4px, 0.8vw, 12px) !important;
+            padding: clamp(2px, 0.4vw, 4px) clamp(3px, 0.6vw, 6px) !important;
             text-align: center;
-            font-size: clamp(0.6rem, 0.8vw, 1rem) !important;
+            font-size: 0.75rem !important;
             height: auto !important;
             border: none !important;
             white-space: nowrap;
-            min-width: clamp(35px, 4.5vw, 65px);
-            max-width: clamp(60px, 8vw, 100px);
+            min-width: clamp(25px, 3.5vw, 45px);
+            max-width: clamp(40px, 5.5vw, 70px);
             overflow: hidden;
             text-overflow: ellipsis;
             vertical-align: middle;
@@ -734,8 +734,8 @@
         .mini-table tr:first-child th {
             background: #e8e8e8 !important;
             font-weight: bold;
-            border-bottom: clamp(1px, 0.2vw, 2px) solid #FFD600 !important;
-            font-size: clamp(0.65rem, 0.85vw, 1.1rem) !important;
+            border-bottom: clamp(1px, 0.15vw, 1.5px) solid #FFD600 !important;
+            font-size: 0.75rem !important;
             position: sticky;
             top: 0;
             z-index: 4;
@@ -746,20 +746,20 @@
             position: sticky;
             left: 0;
             z-index: 5;
-            min-width: clamp(50px, 8vw, 100px) !important;
-            max-width: clamp(80px, 12vw, 150px) !important;
+            min-width: clamp(35px, 6vw, 70px) !important;
+            max-width: clamp(55px, 9vw, 100px) !important;
         }
 
         .mini-table tr td:first-child {
             text-align: left !important;
             font-weight: bold !important;
             background: #f0f0f0 !important;
-            border-right: clamp(1px, 0.2vw, 2px) solid #FFD600 !important;
+            border-right: clamp(1px, 0.15vw, 1.5px) solid #FFD600 !important;
             position: sticky;
             left: 0;
             z-index: 3;
-            min-width: clamp(50px, 8vw, 100px) !important;
-            max-width: clamp(80px, 12vw, 150px) !important;
+            min-width: clamp(35px, 6vw, 70px) !important;
+            max-width: clamp(55px, 9vw, 100px) !important;
         }
 
         .mini-table tr:hover td {
@@ -784,11 +784,11 @@
         .mini-table th:not(:first-child) {
             writing-mode: horizontal-tb !important;
             text-orientation: unset !important;
-            min-width: clamp(35px, 4.5vw, 60px) !important;
-            max-width: clamp(50px, 6vw, 80px) !important;
+            min-width: clamp(25px, 3.5vw, 40px) !important;
+            max-width: clamp(35px, 4.5vw, 55px) !important;
             height: auto !important;
-            padding: clamp(4px, 0.8vw, 8px) clamp(3px, 0.6vw, 6px) !important;
-            font-size: clamp(0.6rem, 0.8vw, 1rem) !important;
+            padding: clamp(2px, 0.4vw, 4px) clamp(2px, 0.4vw, 4px) !important;
+            font-size: 0.75rem !important;
         }
         
         /* Стили для скролла субтаблиц */
@@ -854,48 +854,48 @@
             border: 1px solid #ddd !important;
         }
         
-        /* Адаптивность для мобильных */
+        /* Адаптивность для мобильных - КОМПАКТНАЯ ВЕРСИЯ */
         @media (max-width: 900px) {
             .mini-table th:not(:first-child) {
                 writing-mode: horizontal-tb !important;
                 text-orientation: unset !important;
-                min-width: clamp(28px, 3.8vw, 45px) !important;
-                max-width: clamp(40px, 5.2vw, 60px) !important;
+                min-width: clamp(20px, 3vw, 35px) !important;
+                max-width: clamp(30px, 4vw, 45px) !important;
                 height: auto !important;
-                padding: clamp(3px, 0.6vw, 6px) clamp(2px, 0.4vw, 4px) !important;
-                font-size: clamp(0.55rem, 0.75vw, 0.9rem) !important;
+                padding: clamp(2px, 0.3vw, 3px) clamp(1px, 0.3vw, 3px) !important;
+                font-size: 0.7rem !important;
             }
             
             .mini-table th, .mini-table td {
-                font-size: clamp(0.55rem, 0.7vw, 0.9rem) !important;
-                min-width: clamp(28px, 4vw, 50px);
-                max-width: clamp(40px, 6vw, 70px);
+                font-size: 0.7rem !important;
+                min-width: clamp(20px, 3vw, 35px);
+                max-width: clamp(30px, 4.5vw, 50px);
             }
             
             .mini-table tr:first-child th:first-child,
             .mini-table tr td:first-child {
-                min-width: clamp(60px, 10vw, 120px) !important;
-                max-width: clamp(80px, 15vw, 150px) !important;
+                min-width: clamp(40px, 7vw, 80px) !important;
+                max-width: clamp(60px, 10vw, 100px) !important;
             }
         }
         
         @media (max-width: 600px) {
             .mini-table-wrapper.expanded {
-                max-height: clamp(150px, 20vh, 250px);
+                max-height: clamp(100px, 15vh, 180px);
             }
             
             .mini-table th, .mini-table td {
-                font-size: clamp(0.5rem, 0.65vw, 0.8rem) !important;
-                padding: clamp(2px, 0.4vw, 4px) clamp(1px, 0.3vw, 3px) !important;
-                min-width: clamp(25px, 3.5vw, 40px);
-                max-width: clamp(35px, 5vw, 55px);
+                font-size: 0.65rem !important;
+                padding: clamp(1px, 0.3vw, 2px) clamp(1px, 0.2vw, 2px) !important;
+                min-width: clamp(18px, 2.5vw, 30px);
+                max-width: clamp(25px, 3.5vw, 40px);
             }
             
             .mini-table tr:first-child th:first-child,
             .mini-table tr td:first-child {
-                min-width: clamp(50px, 8vw, 90px) !important;
-                max-width: clamp(70px, 12vw, 120px) !important;
-                font-size: clamp(0.55rem, 0.7vw, 0.85rem) !important;
+                min-width: clamp(35px, 6vw, 70px) !important;
+                max-width: clamp(50px, 8vw, 90px) !important;
+                font-size: 0.65rem !important;
             }
         }
 
@@ -1029,12 +1029,12 @@
                     // console.log('=== restoreSubtable: Adding expanded class ===');
                     miniTable.classList.add('expanded');
                     
-                    // КРИТИЧНЫЕ стили для работы
-                    miniTable.style.maxHeight = '300px';
-                    miniTable.style.opacity = '1';
-                    miniTable.style.display = 'block';
-                    miniTable.style.visibility = 'visible';
-                    miniTable.style.overflow = 'visible';
+                                                // КРИТИЧНЫЕ стили для работы - КОМПАКТНАЯ ВЕРСИЯ
+                            miniTable.style.maxHeight = '180px';
+                            miniTable.style.opacity = '1';
+                            miniTable.style.display = 'block';
+                            miniTable.style.visibility = 'visible';
+                            miniTable.style.overflow = 'visible';
                     
                     // ПРИНУДИТЕЛЬНО показываем контейнер
                     const container = miniTable.querySelector('.mini-table-container');
@@ -1535,8 +1535,8 @@
                             });
                             miniTable.classList.add('expanded');
                             
-                            // КРИТИЧНЫЕ стили для работы
-                            miniTable.style.maxHeight = '300px';
+                            // КРИТИЧНЫЕ стили для работы - КОМПАКТНАЯ ВЕРСИЯ
+                            miniTable.style.maxHeight = '180px';
                             miniTable.style.opacity = '1';
                             miniTable.style.display = 'block';
                             miniTable.style.visibility = 'visible';
