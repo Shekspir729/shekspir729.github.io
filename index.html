@@ -710,10 +710,11 @@
             width: 100% !important;
         }
 
+        /* --- Оставляем только одно правило для первого столбца мини-таблицы --- */
         .mini-table th:first-child, .mini-table td:first-child {
-            width: auto !important;
-            min-width: 0 !important;
-            max-width: none !important;
+            width: 1%;
+            min-width: unset !important;
+            max-width: unset !important;
             padding-left: 10px !important;
             padding-right: 10px !important;
             font-size: 0.75rem !important;
@@ -721,6 +722,11 @@
             text-align: left !important;
             white-space: nowrap !important;
         }
+        /* --- Удаляем/комментируем все остальные min-width/max-width для первого столбца мини-таблицы --- */
+        /* .mini-table tr:first-child th:first-child,
+           .mini-table tr td:first-child { ... } */
+        /* @media (max-width: 900px) { ... } */
+        /* @media (max-width: 600px) { ... } */
 
         .mini-table th:not(:first-child), .mini-table td:not(:first-child) {
             min-width: 22px !important;
