@@ -1155,6 +1155,18 @@
                 return container;
             }
         }
+
+        document.addEventListener('mouseover', function(e) {
+            const tr = e.target.closest('#table_div tr');
+            if (!tr) return;
+            document.querySelectorAll('#table_div tr').forEach(row => row.classList.remove('gchart-row-hover'));
+            tr.classList.add('gchart-row-hover');
+        });
+        document.addEventListener('mouseout', function(e) {
+            const tr = e.target.closest('#table_div tr');
+            if (!tr) return;
+            tr.classList.remove('gchart-row-hover');
+        });
     </script>
 </head>
 <body style="background: #f5f7fa;">
