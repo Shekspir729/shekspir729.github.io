@@ -730,7 +730,7 @@
                 }, 1300);
 
                 // После table.draw(view, {...}) и анимации добавляю:
-                setTimeout(() => {
+                google.visualization.events.addListener(table, 'ready', function() {
                     const tableElement = document.querySelector('#table_div table');
                     if (tableElement) {
                         const rows = tableElement.querySelectorAll('tbody tr');
@@ -740,7 +740,7 @@
                             };
                         });
                     }
-                }, 0);
+                });
             } catch (error) {
                 console.error('Error in handleQueryResponse:', error);
                 const newDiv = document.getElementById('table_fade_new');
