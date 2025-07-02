@@ -733,13 +733,23 @@
                 google.visualization.events.addListener(table, 'ready', function() {
                     const tableElement = document.querySelector('#table_div table');
                     if (tableElement) {
-                        const rows = tableElement.querySelectorAll('tbody tr');
-                        rows.forEach((tr) => {
-                            tr.onclick = function() {
-                                const teamName = this.cells[1]?.textContent?.trim();
-                                toggleMiniTable(this, data, teamName);
+                        const tbody = tableElement.querySelector('tbody');
+                        if (tbody) {
+                            tbody.onclick = function(e) {
+                                let tr = e.target.closest('tr');
+                                if (!tr) return;
+                                // Диагностика: выводим все ячейки строки
+                                let cellsArr = Array.from(tr.cells).map(td => td.textContent.trim());
+                                console.log('Клик по строке:', cellsArr);
+                                // Попробуем взять название команды из второй ячейки (cells[1])
+                                const teamName = tr.cells[1]?.textContent?.trim();
+                                if (teamName) {
+                                    toggleMiniTable(tr, data, teamName);
+                                } else {
+                                    console.log('Не удалось определить название команды для мини-таблицы');
+                                }
                             };
-                        });
+                        }
                     }
                 });
             } catch (error) {
