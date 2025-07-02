@@ -461,7 +461,7 @@
 
         /* Новые стили для мини-таблиц */
         .mini-table-container {
-            max-height: 0;
+            max-height: 800px !important;
             overflow: hidden;
             opacity: 0;
             transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
@@ -478,10 +478,10 @@
             visibility: visible !important;
             opacity: 1 !important;
             height: auto !important;
-            min-height: 100px !important;
+            min-height: 200px !important;
         }
         .mini-table-container.expanded {
-            max-height: 500px;
+            max-height: 800px !important;
             opacity: 1;
         }
         .mini-table {
