@@ -1440,32 +1440,23 @@
                 tbody.appendChild(pointsRow);
                 
                 // Строка с рейтинговыми баллами (только если есть рейтинговые данные)
-                if (ratingStartCol !== -1 && ratingEndCol !== -1) {
+                if (currentCity === 'Московский') {
+                    var rbStartCol = 16; // Q
+                    var rbEndCol = 29;   // AD
+                } else {
+                    var rbStartCol = 15; // P
+                    var rbEndCol = 27;   // AB
+                }
+                if (rbStartCol !== undefined && rbEndCol !== undefined) {
                     const ratingRow = document.createElement('tr');
                     ratingRow.className = 'rating-row';
                     const ratingCell = document.createElement('th');
                     ratingCell.textContent = 'Р.Б.';
                     ratingCell.className = 'mini-row-label';
                     ratingRow.appendChild(ratingCell);
-                    // Получаем заголовки рейтинговых баллов из строки заголовков
-                    let ratingHeaders = [];
-                    for (let i = ratingStartCol; i <= ratingEndCol; i++) {
-                        let header = '';
-                        if (headerRowIndex !== -1) {
-                            header = data.getValue(headerRowIndex, i);
-                        }
-                        ratingHeaders.push(header ? header.toString() : '—');
-                    }
-                    // Создаем ячейки для каждой игры
-                    for (let i = 0; i < (regularEndCol - regularStartCol + 1); i++) {
-                        let displayValue = '—';
-                        if (i < ratingHeaders.length) {
-                            const ratingColIndex = ratingStartCol + i;
-                            if (ratingColIndex <= ratingEndCol) {
-                                const ratingPoints = data.getValue(actualRowIndex, ratingColIndex);
-                                displayValue = (ratingPoints !== null && ratingPoints !== undefined && ratingPoints !== '') ? ratingPoints : '—';
-                            }
-                        }
+                    for (let i = rbStartCol; i <= rbEndCol; i++) {
+                        const ratingPoints = data.getValue(actualRowIndex, i);
+                        const displayValue = (ratingPoints !== null && ratingPoints !== undefined && ratingPoints !== '') ? ratingPoints : '—';
                         const td = document.createElement('td');
                         td.textContent = displayValue;
                         td.className = 'rating-cell';
