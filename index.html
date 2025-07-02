@@ -459,96 +459,81 @@
             opacity: 0.8;
         }
 
-        /* Стили для мини-таблицы */
+        /* Новые стили для мини-таблицы */
         .mini-table-container {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            background: #f8f8f8;
-            margin: 0;
-            width: 100%;
+            background: #222222 !important;
+            box-shadow: none !important;
+            max-width: 1800px;
+            margin: 40px auto;
+            border-radius: 32px;
+            padding: 32px 24px;
+            overflow-x: auto;
         }
-
-        .mini-table-container.expanded {
-            max-height: 300px;
-            margin: 16px 0;
-            border-top: 2px solid #FFD600;
-            border-bottom: 2px solid #FFD600;
-        }
-
         .mini-table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-            font-size: 1.8rem !important;
+            font-family: 'Arial', sans-serif;
+            font-size: 4.2rem;
+            background: #ededed !important;
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+            color: #111 !important;
         }
-
         .mini-table th, .mini-table td {
-            padding: 12px 16px !important;
+            padding: 24px 12px;
             text-align: center;
-            font-size: 1.8rem !important;
-            height: auto !important;
-            border: none !important;
+            border-bottom: 3px solid #ccc !important;
+            line-height: 1.4;
+            height: 80px;
+            background: #ededed !important;
+            color: #111 !important;
         }
-
-        .mini-table tr:first-child td,
-        .mini-table tr:first-child th {
-            background: #e8e8e8 !important;
+        .mini-table th {
+            background: #e0e0e0 !important;
             font-weight: bold;
-            border-bottom: 2px solid #FFD600 !important;
+            color: #111 !important;
+            font-size: 4.5rem;
         }
-
-        .mini-table tr:first-child th:first-child {
-            text-align: left !important;
+        .mini-table tr:nth-child(even) {
+            background: #f5f5f5 !important;
         }
-
-        .mini-table tr td:first-child {
-            text-align: left !important;
-            font-weight: bold !important;
-            background: #e8e8e8 !important;
-            border-right: 2px solid #FFD600 !important;
-        }
-
-        .mini-table tr:hover td {
+        .mini-table tr:hover {
             background: #ffe082 !important;
+            color: #111 !important;
         }
-
-        .mini-table tr:hover td:first-child {
-            background: #e8e8e8 !important;
+        .mini-table tr:last-child td {
+            border-bottom: none;
         }
-
-        /* Добавляем стили для сообщений об ошибках */
-        .error-message {
+        @media (max-width: 600px) {
+            .mini-table-container {
+                padding: 12px 2px;
+            }
+            .city-btn {
+                font-size: 1.2rem;
+                padding: 10px 16px;
+            }
+            .mini-table th, .mini-table td {
+                padding: 12px 2px;
+                font-size: 2.2rem;
+                height: 48px;
+            }
+        }
+        .mini-table-header {
             text-align: center;
-            padding: 40px;
-            color: #721c24;
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            border-radius: 8px;
-            margin: 20px;
-            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: white;
         }
-        
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #fff;
-            font-size: 1.8rem;
+        .mini-table-header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-weight: bold;
         }
-        
-        .spinner {
-            display: inline-block;
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(255,255,255,.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s ease-in-out infinite;
-            margin-bottom: 20px;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        .mini-table-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
         }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -570,113 +555,6 @@
         google.charts.setOnLoadCallback(() => drawTable(currentCity));
 
         let lastTableHTML = '';
-
-        function createMiniTable(data, rowIndex) {
-            try {
-                const container = document.createElement('div');
-                container.className = 'mini-table-container';
-                
-                // Стили для компактности и скролла
-                container.style.overflowX = 'auto';
-                container.style.padding = '0';
-                
-                const table = document.createElement('table');
-                table.className = 'mini-table';
-                table.style.fontSize = '1.1rem';
-                table.style.fontWeight = '400';
-                table.style.minWidth = '600px';
-                table.style.whiteSpace = 'nowrap';
-                
-                const tbody = document.createElement('tbody');
-                
-                // Определяем диапазон игр
-                const regularEndCol = (currentCity === 'Московский') ? 14 : 13;
-                const ratingStartCol = regularEndCol + 2;
-                
-                // Получаем заголовки игр из первой строки (B1-O1 или B1-N1)
-                let gameHeaders = [];
-                if (typeof data.getValue === 'function' && data.getNumberOfRows() > 0) {
-                    for (let i = 1; i <= regularEndCol; i++) {
-                        let header = data.getValue(0, i); // 0-я строка, i-й столбец
-                        gameHeaders.push(header ? header : '');
-                    }
-                } else {
-                    for (let i = 1; i <= regularEndCol; i++) gameHeaders.push('');
-                }
-                
-                // Создаём строку заголовков игр
-                const headerRow = document.createElement('tr');
-                headerRow.innerHTML = '<th style="font-weight:600;">Игры</th>';
-                for (let i = 0; i < gameHeaders.length; i++) {
-                    headerRow.innerHTML += `<th style='font-weight:400;'>${gameHeaders[i]}</th>`;
-                }
-                tbody.appendChild(headerRow);
-                
-                // Строка с баллами
-                const pointsRow = document.createElement('tr');
-                pointsRow.innerHTML = '<td style="font-weight:600;">Баллы</td>';
-                for (let i = 1; i <= regularEndCol; i++) {
-                    const points = data.getValue(rowIndex, i);
-                    pointsRow.innerHTML += `<td>${points !== null && points !== undefined ? points : ''}</td>`;
-                }
-                tbody.appendChild(pointsRow);
-                
-                // Строка с рейтинговыми баллами
-                const ratingRow = document.createElement('tr');
-                ratingRow.innerHTML = '<td style="font-weight:600;">Р.Баллы</td>';
-                for (let i = 1; i <= regularEndCol; i++) {
-                    const ratingPoints = data.getValue(rowIndex, ratingStartCol + i - 1);
-                    ratingRow.innerHTML += `<td>${ratingPoints !== null && ratingPoints !== undefined ? ratingPoints : ''}</td>`;
-                }
-                tbody.appendChild(ratingRow);
-                
-                table.appendChild(tbody);
-                container.appendChild(table);
-                return container;
-            } catch (error) {
-                console.error('Error in createMiniTable:', error);
-                const container = document.createElement('div');
-                container.className = 'mini-table-container';
-                container.innerHTML = '<div style="text-align: center; padding: 20px;">Произошла ошибка при загрузке данных</div>';
-                return container;
-            }
-        }
-
-        function toggleMiniTable(tableRow, data, rowIndex) {
-            // Находим все существующие мини-таблицы
-            const existingContainers = document.querySelectorAll('.mini-table-container');
-            existingContainers.forEach(container => {
-                container.classList.remove('expanded');
-                setTimeout(() => container.parentElement.parentElement.remove(), 300);
-            });
-
-            // Проверяем, есть ли уже мини-таблица под этой строкой
-            const nextRow = tableRow.nextElementSibling;
-            if (nextRow?.querySelector('.mini-table-container')) {
-                nextRow.querySelector('.mini-table-container').classList.remove('expanded');
-                setTimeout(() => nextRow.remove(), 300);
-            } else {
-                // Создаем новую мини-таблицу
-                const wrapper = document.createElement('tr');
-                const cell = document.createElement('td');
-                // Динамически определяем количество столбцов
-                const parentTable = tableRow.closest('table');
-                const columnCount = parentTable.querySelector('tr')?.children.length || 7;
-                cell.colSpan = columnCount;
-                
-                const miniTable = createMiniTable(data, rowIndex);
-                cell.appendChild(miniTable);
-                wrapper.appendChild(cell);
-                
-                // Вставляем сразу после текущей строки
-                tableRow.parentNode.insertBefore(wrapper, tableRow.nextSibling);
-                
-                // Анимируем появление
-                requestAnimationFrame(() => {
-                    miniTable.classList.add('expanded');
-                });
-            }
-        }
 
         function drawTable(city) {
             try {
@@ -849,20 +727,6 @@
                     document.getElementById('table_fade_old').style.transform = 'translateX(0)';
                     newDiv.style.transform = 'translateX(0)';
                 }, 1300);
-
-                // === Новый обработчик клика по строке ===
-                setTimeout(() => {
-                    const tableElement = document.querySelector('#table_div table');
-                    if (tableElement) {
-                        const rows = tableElement.querySelectorAll('tbody tr');
-                        rows.forEach((tr, idx) => {
-                            tr.onclick = function() {
-                                toggleMiniTable(this, data, idx);
-                            };
-                        });
-                    }
-                }, 0);
-                // === Конец нового обработчика ===
             } catch (error) {
                 console.error('Error in handleQueryResponse:', error);
                 const newDiv = document.getElementById('table_fade_new');
