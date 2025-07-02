@@ -895,6 +895,7 @@
 
         function toggleMiniTable(tableRow, data, teamName) {
             try {
+                console.log('=== toggleMiniTable called ===', { teamName });
                 const allRows = document.querySelectorAll('#table_div tr');
                 allRows.forEach(row => row.classList.remove('table-row-clicked'));
                 const nextRow = tableRow.nextElementSibling;
@@ -943,6 +944,7 @@
 
         function createMiniTable(data, teamName) {
             try {
+                console.log('=== createMiniTable called ===', { teamName });
                 const container = document.createElement('div');
                 container.className = 'mini-table-container';
                 const table = document.createElement('table');
@@ -955,19 +957,10 @@
                 let ratingEndCol = -1;
                 let headerRowIndex = -1;
                 for (let row = 0; row < Math.min(data.getNumberOfRows(), 3); row++) {
-                    const firstCell = data.getValue(row, 0);
-                    const secondCell = data.getValue(row, 1);
-                    const thirdCell = data.getValue(row, 2);
-                    if (firstCell && firstCell.toString().toLowerCase().includes('название')) {
-                        headerRowIndex = row;
-                        break;
-                    } else if (secondCell && secondCell.toString().toLowerCase().includes('игра')) {
-                        headerRowIndex = row;
-                        break;
-                    } else if (secondCell && thirdCell && !isNaN(parseInt(secondCell.toString())) && !isNaN(parseInt(thirdCell.toString())) && parseInt(secondCell.toString()) > 50 && parseInt(thirdCell.toString()) > 50) {
-                        headerRowIndex = row;
-                        break;
-                    }
+                    const first = data.getValue(row, 0);
+                    const second = data.getValue(row, 1);
+                    const third = data.getValue(row, 2);
+                    console.log(`  Row ${row}: "${first}" | "${second}" | "${third}"`);
                 }
                 if (headerRowIndex === -1) {
                     const firstCell = data.getValue(0, 0);
@@ -1063,6 +1056,12 @@
                         actualRowIndex = i;
                         break;
                     }
+                }
+                console.log(`Looking for team: "${teamName}" in Google Sheets data`);
+                if (actualRowIndex !== -1) {
+                    console.log(`Found team "${teamName}" at row ${actualRowIndex} in Google Sheets`);
+                } else {
+                    console.log(`Team "${teamName}" not found in Google Sheets data`);
                 }
                 if (actualRowIndex === -1) {
                     container.innerHTML = '<div style="text-align: center; padding: 20px; color: #721c24;">Команда не найдена в исходных данных</div>';
