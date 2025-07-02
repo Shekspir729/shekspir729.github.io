@@ -612,34 +612,25 @@
                 max-width: clamp(60px, 10vw, 100px) !important;
             }
         }
-        @media (max-width: 1200px) {
-            .custom-table-container {
-                padding: clamp(6px, 1vw, 16px) clamp(2px, 1vw, 16px);
-                border-radius: clamp(6px, 1vw, 16px);
-            }
-            #table_div table {
-                min-width: 500px;
-                font-size: clamp(0.7rem, 1vw, 1.2rem) !important;
-            }
-        }
-        @media (max-width: 900px) {
-            .custom-table-container {
-                padding: clamp(4px, 0.5vw, 8px) clamp(1px, 0.5vw, 8px);
-                border-radius: clamp(4px, 0.5vw, 8px);
-            }
-            #table_div table {
-                min-width: 400px;
-                font-size: clamp(0.65rem, 0.8vw, 1rem) !important;
-            }
-        }
         @media (max-width: 600px) {
-            .custom-table-container {
-                padding: 2px 1px;
-                border-radius: 6px;
+            .mini-table th:not(:first-child) {
+                writing-mode: horizontal-tb !important;
+                text-orientation: unset !important;
+                min-width: clamp(15px, 2vw, 25px) !important;
+                max-width: clamp(20px, 3vw, 35px) !important;
+                height: auto !important;
+                padding: clamp(1px, 0.2vw, 2px) clamp(1px, 0.2vw, 2px) !important;
+                font-size: 0.6rem !important;
             }
-            #table_div table {
-                min-width: 240px;
-                font-size: clamp(0.6rem, 0.7vw, 0.9rem) !important;
+            .mini-table th, .mini-table td {
+                font-size: 0.6rem !important;
+                min-width: clamp(15px, 2vw, 25px);
+                max-width: clamp(20px, 3vw, 35px);
+            }
+            .mini-table tr:first-child th:first-child,
+            .mini-table tr td:first-child {
+                min-width: clamp(25px, 4vw, 50px) !important;
+                max-width: clamp(40px, 7vw, 80px) !important;
             }
         }
     </style>
