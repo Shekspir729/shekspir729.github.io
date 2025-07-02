@@ -729,35 +729,36 @@
                     newDiv.style.transform = 'translateX(0)';
                 }, 1300);
 
-                // После table.draw(view, {...}) и анимации добавляю:
-                google.visualization.events.addListener(table, 'ready', function() {
+                // Новый обработчик клика по строке, как в index_mini.html
+                setTimeout(() => {
                     const tableElement = document.querySelector('#table_div table');
                     if (tableElement) {
-                        const tbody = tableElement.querySelector('tbody');
-                        console.log('tbody найден:', !!tbody, tbody);
-                        if (tbody) {
-                            console.log('tbody содержит строки:', tbody.querySelectorAll('tr').length);
-                        }
+                        const rows = tableElement.querySelectorAll('tbody tr');
+                        rows.forEach((tr, idx) => {
+                            tr.onclick = function() {
+                                const teamName = this.cells[1]?.textContent?.trim();
+                                toggleMiniTable(this, data, teamName);
+                            };
+                        });
                     }
-                    const tableDiv = document.getElementById('table_div');
-                    if (tableDiv) {
-                        tableDiv.onclick = function(e) {
-                            let tr = e.target.closest('tr');
-                            if (!tr) {
-                                console.log('Клик не по <tr>', e.target);
-                                return;
+                }, 0);
+                // Обработчик для сортировки
+                if (typeof google !== 'undefined' && google.visualization && google.visualization.events) {
+                    google.visualization.events.addListener(table, 'sort', function() {
+                        setTimeout(() => {
+                            const tableElement = document.querySelector('#table_div table');
+                            if (tableElement) {
+                                const rows = tableElement.querySelectorAll('tbody tr');
+                                rows.forEach((tr, idx) => {
+                                    tr.onclick = function() {
+                                        const teamName = this.cells[1]?.textContent?.trim();
+                                        toggleMiniTable(this, data, teamName);
+                                    };
+                                });
                             }
-                            let cellsArr = Array.from(tr.cells).map(td => td.textContent.trim());
-                            console.log('Клик по строке:', cellsArr);
-                            const teamName = tr.cells[1]?.textContent?.trim();
-                            if (teamName) {
-                                toggleMiniTable(tr, data, teamName);
-                            } else {
-                                console.log('Не удалось определить название команды для мини-таблицы');
-                            }
-                        };
-                    }
-                });
+                        }, 100);
+                    });
+                }
             } catch (error) {
                 console.error('Error in handleQueryResponse:', error);
                 const newDiv = document.getElementById('table_fade_new');
