@@ -771,6 +771,10 @@
                     sortColumn: 3, // сортировка по 'Сумма баллов'
                     sortAscending: false // по убыванию
                 });
+                // Принудительно сбрасываем сортировку по "Сумма баллов" после отрисовки
+                if (typeof table.sort === 'function') {
+                    table.sort([{column: 3, desc: true}]);
+                }
                 lastTableHTML = newDiv.innerHTML;
                 // Анимация: новый въезжает справа
                 gsap.fromTo(newDiv, {x: '100%', autoAlpha: 1}, {duration: 1.2, x: 0, autoAlpha: 1, ease: "power4.out"});
