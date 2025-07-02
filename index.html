@@ -952,46 +952,34 @@
         });
 
         function toggleMiniTable(tableRow, data, teamName) {
-            try {
-                const nextRow = tableRow.nextElementSibling;
-                const isCurrentRowExpanded = nextRow?.querySelector('.mini-table-row-wrapper');
-                // Закрываем все мини-таблицы
-                const existingWrappers = document.querySelectorAll('.mini-table-row-wrapper');
-                const existingRows = [];
-                existingWrappers.forEach(wrapper => {
-                    const row = wrapper.closest('tr');
-                    if (row) existingRows.push(row);
-                });
-                expandedTeams.clear();
-                existingWrappers.forEach(wrapper => wrapper.classList.remove('expanded'));
-                setTimeout(() => {
-                    existingRows.forEach(row => {
-                        if (row.parentNode) row.remove();
-                    });
-                }, 320);
-                // Если уже открыта — просто закрываем и выходим
-                if (isCurrentRowExpanded) {
-                    return;
-                }
-                // Если не открыта — открываем через 350 мс после закрытия всех
-                setTimeout(() => {
-                    try {
-                        tableRow.classList.add('table-row-clicked');
-                        const wrapper = document.createElement('tr');
-                        wrapper.className = 'mini-table-row-wrapper';
-                        const cell = document.createElement('td');
-                        const parentTable = tableRow.closest('table');
-                        const columnCount = parentTable.querySelector('tr')?.children.length || 7;
-                        cell.colSpan = columnCount;
-                        cell.style.padding = '0';
-                        cell.style.border = 'none';
-                        const miniTable = createMiniTable(data, teamName);
-                        cell.appendChild(miniTable);
-                        wrapper.appendChild(cell);
-                        tableRow.parentNode.insertBefore(wrapper, tableRow.nextSibling);
-                    } catch (error) {}
-                }, 350);
-            } catch (error) {}
+            const nextRow = tableRow.nextElementSibling;
+            const isCurrentRowExpanded = nextRow && nextRow.classList.contains('mini-table-row-wrapper');
+
+            // Если уже открыта — просто закрываем её и выходим
+            if (isCurrentRowExpanded) {
+                nextRow.remove();
+                tableRow.classList.remove('table-row-clicked');
+                return;
+            }
+
+            // Если не открыта — закрываем все мини-таблицы
+            document.querySelectorAll('.mini-table-row-wrapper').forEach(row => row.remove());
+            document.querySelectorAll('#table_div tr').forEach(row => row.classList.remove('table-row-clicked'));
+
+            // Открываем новую мини-таблицу
+            tableRow.classList.add('table-row-clicked');
+            const wrapper = document.createElement('tr');
+            wrapper.className = 'mini-table-row-wrapper';
+            const cell = document.createElement('td');
+            const parentTable = tableRow.closest('table');
+            const columnCount = parentTable.querySelector('tr')?.children.length || 7;
+            cell.colSpan = columnCount;
+            cell.style.padding = '0';
+            cell.style.border = 'none';
+            const miniTable = createMiniTable(data, teamName);
+            cell.appendChild(miniTable);
+            wrapper.appendChild(cell);
+            tableRow.parentNode.insertBefore(wrapper, tableRow.nextSibling);
         }
 
         function createMiniTable(data, teamName) {
