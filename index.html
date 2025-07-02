@@ -953,40 +953,27 @@
 
         function toggleMiniTable(tableRow, data, teamName) {
             try {
-                if (miniTableLock) return;
-                console.log('=== toggleMiniTable called ===', { teamName });
-                const allRows = document.querySelectorAll('#table_div tr');
-                allRows.forEach(row => row.classList.remove('table-row-clicked'));
                 const nextRow = tableRow.nextElementSibling;
                 const isCurrentRowExpanded = nextRow?.querySelector('.mini-table-row-wrapper');
-                // Сначала закрываем все мини-таблицы
+                // Закрываем все мини-таблицы
                 const existingWrappers = document.querySelectorAll('.mini-table-row-wrapper');
                 const existingRows = [];
                 existingWrappers.forEach(wrapper => {
                     const row = wrapper.closest('tr');
-                    if (row) {
-                        existingRows.push(row);
-                    }
+                    if (row) existingRows.push(row);
                 });
                 expandedTeams.clear();
-                existingWrappers.forEach(wrapper => {
-                    wrapper.classList.remove('expanded');
-                });
+                existingWrappers.forEach(wrapper => wrapper.classList.remove('expanded'));
                 setTimeout(() => {
                     existingRows.forEach(row => {
-                        if (row.parentNode) {
-                            row.remove();
-                        }
+                        if (row.parentNode) row.remove();
                     });
                 }, 320);
-                // Если кликнули по уже развернутой строке, просто закрываем её (не создаем новую)
+                // Если уже открыта — просто закрываем и выходим
                 if (isCurrentRowExpanded) {
-                    console.log(`Closing expanded subtable for team: ${teamName}`);
-                    miniTableLock = true;
-                    setTimeout(() => { miniTableLock = false; }, 350);
                     return;
                 }
-                // Создаем новую мини-таблицу с задержкой после закрытия старых
+                // Если не открыта — открываем через 350 мс после закрытия всех
                 setTimeout(() => {
                     try {
                         tableRow.classList.add('table-row-clicked');
