@@ -734,9 +734,10 @@
                     const tableElement = document.querySelector('#table_div table');
                     if (tableElement) {
                         const rows = tableElement.querySelectorAll('tbody tr');
-                        rows.forEach((tr, idx) => {
+                        rows.forEach((tr) => {
                             tr.onclick = function() {
-                                toggleMiniTable(this, data, idx);
+                                const teamName = this.cells[1]?.textContent?.trim();
+                                toggleMiniTable(this, data, teamName);
                             };
                         });
                     }
@@ -882,21 +883,66 @@
             }
         });
 
-        function createMiniTable(data, rowIndex) {
+        function toggleMiniTable(tableRow, data, teamName) {
             try {
-                // Создаем контейнер для скролла
+                const allRows = document.querySelectorAll('#table_div tr');
+                allRows.forEach(row => row.classList.remove('table-row-clicked'));
+                const nextRow = tableRow.nextElementSibling;
+                const isCurrentRowExpanded = nextRow?.querySelector('.mini-table-row-wrapper');
+                const existingWrappers = document.querySelectorAll('.mini-table-row-wrapper');
+                const existingRows = [];
+                existingWrappers.forEach(wrapper => {
+                    const row = wrapper.closest('tr');
+                    if (row) {
+                        existingRows.push(row);
+                    }
+                });
+                expandedTeams.clear();
+                existingWrappers.forEach(wrapper => {
+                    wrapper.classList.remove('expanded');
+                });
+                setTimeout(() => {
+                    existingRows.forEach(row => {
+                        if (row.parentNode) {
+                            row.remove();
+                        }
+                    });
+                }, 320);
+                if (isCurrentRowExpanded) {
+                    return;
+                }
+                setTimeout(() => {
+                    try {
+                        tableRow.classList.add('table-row-clicked');
+                        const wrapper = document.createElement('tr');
+                        wrapper.className = 'mini-table-row-wrapper';
+                        const cell = document.createElement('td');
+                        const parentTable = tableRow.closest('table');
+                        const columnCount = parentTable.querySelector('tr')?.children.length || 7;
+                        cell.colSpan = columnCount;
+                        cell.style.padding = '0';
+                        cell.style.border = 'none';
+                        const miniTable = createMiniTable(data, teamName);
+                        cell.appendChild(miniTable);
+                        wrapper.appendChild(cell);
+                        tableRow.parentNode.insertBefore(wrapper, tableRow.nextSibling);
+                    } catch (error) {}
+                }, 350);
+            } catch (error) {}
+        }
+
+        function createMiniTable(data, teamName) {
+            try {
                 const container = document.createElement('div');
                 container.className = 'mini-table-container';
                 const table = document.createElement('table');
                 table.className = 'mini-table';
                 const tbody = document.createElement('tbody');
-                // Динамически определяем структуру столбцов для данного города
                 const totalCols = data.getNumberOfColumns();
                 const regularStartCol = 1;
                 let regularEndCol = regularStartCol - 1;
                 let ratingStartCol = -1;
                 let ratingEndCol = -1;
-                // Найдем строку с заголовками
                 let headerRowIndex = -1;
                 for (let row = 0; row < Math.min(data.getNumberOfRows(), 3); row++) {
                     const firstCell = data.getValue(row, 0);
@@ -984,7 +1030,6 @@
                 }
                 if (gameHeaders.length === 0) {
                     container.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Нет данных об играх для этой команды</div>';
-                    container.appendChild(table);
                     return container;
                 }
                 const headerRow = document.createElement('tr');
@@ -999,22 +1044,18 @@
                     headerRow.appendChild(th);
                 }
                 tbody.appendChild(headerRow);
-                const tableElement = document.querySelector('#table_div table');
-                const tableRows = tableElement.querySelectorAll('tbody tr');
-                const clickedRow = tableRows[rowIndex];
-                const teamNameFromTable = clickedRow.children[1].textContent.trim();
+                // Поиск строки по названию команды
                 let actualRowIndex = -1;
                 for (let i = 0; i < data.getNumberOfRows(); i++) {
                     if (headerRowIndex !== -1 && i === headerRowIndex) continue;
                     const teamNameInSheet = data.getValue(i, 0);
-                    if (teamNameInSheet && teamNameInSheet.toString().trim() === teamNameFromTable) {
+                    if (teamNameInSheet && teamNameInSheet.toString().trim() === teamName) {
                         actualRowIndex = i;
                         break;
                     }
                 }
                 if (actualRowIndex === -1) {
                     container.innerHTML = '<div style="text-align: center; padding: 20px; color: #721c24;">Команда не найдена в исходных данных</div>';
-                    container.appendChild(table);
                     return container;
                 }
                 const pointsRow = document.createElement('tr');
@@ -1060,58 +1101,9 @@
             } catch (error) {
                 const container = document.createElement('div');
                 container.className = 'mini-table-container';
-                container.innerHTML = `<div style="text-align: center; padding: 20px; color: #721c24; background: #f8d7da; border-radius: 8px; margin: 10px;"><strong>Произошла ошибка при загрузке данных команды</strong><br><small style="color: #666; margin-top: 10px; display: block;">Строка: ${rowIndex}, Ошибка: ${error.message || 'Неизвестная ошибка'}</small></div>`;
+                container.innerHTML = `<div style="text-align: center; padding: 20px; color: #721c24; background: #f8d7da; border-radius: 8px; margin: 10px;"><strong>Произошла ошибка при загрузке данных команды</strong><br><small style="color: #666; margin-top: 10px; display: block;">Ошибка: ${error.message || 'Неизвестная ошибка'}</small></div>`;
                 return container;
             }
-        }
-
-        function toggleMiniTable(tableRow, data, rowIndex) {
-            try {
-                const teamName = tableRow.cells[1] ? tableRow.cells[1].textContent.trim() : null;
-                const allRows = document.querySelectorAll('#table_div tr');
-                allRows.forEach(row => row.classList.remove('table-row-clicked'));
-                const nextRow = tableRow.nextElementSibling;
-                const isCurrentRowExpanded = nextRow?.querySelector('.mini-table-row-wrapper');
-                const existingWrappers = document.querySelectorAll('.mini-table-row-wrapper');
-                const existingRows = [];
-                existingWrappers.forEach(wrapper => {
-                    const row = wrapper.closest('tr');
-                    if (row) {
-                        existingRows.push(row);
-                    }
-                });
-                expandedTeams.clear();
-                existingWrappers.forEach(wrapper => {
-                    wrapper.classList.remove('expanded');
-                });
-                setTimeout(() => {
-                    existingRows.forEach(row => {
-                        if (row.parentNode) {
-                            row.remove();
-                        }
-                    });
-                }, 320);
-                if (isCurrentRowExpanded) {
-                    return;
-                }
-                setTimeout(() => {
-                    try {
-                        tableRow.classList.add('table-row-clicked');
-                        const wrapper = document.createElement('tr');
-                        wrapper.className = 'mini-table-row-wrapper';
-                        const cell = document.createElement('td');
-                        const parentTable = tableRow.closest('table');
-                        const columnCount = parentTable.querySelector('tr')?.children.length || 7;
-                        cell.colSpan = columnCount;
-                        cell.style.padding = '0';
-                        cell.style.border = 'none';
-                        const miniTable = createMiniTable(data, rowIndex);
-                        cell.appendChild(miniTable);
-                        wrapper.appendChild(cell);
-                        tableRow.parentNode.insertBefore(wrapper, tableRow.nextSibling);
-                    } catch (error) {}
-                }, 350);
-            } catch (error) {}
         }
     </script>
 </head>
