@@ -475,12 +475,13 @@
             font-size: 2.6rem;
             transition: font-size 0.2s;
         }
-        .gchart-row-hover .place-cell {
+        #table_div tr.table-row-clicked .place-cell {
             color: #FFC107 !important;
             text-shadow: 0 0 2px #000, 0 1px 2px #000 !important;
         }
-        .gchart-row-hover .place-icon {
-            font-size: 3.2rem !important;
+        #table_div tr.gchart-row-hover .place-cell {
+            color: #FFC107 !important;
+            text-shadow: 0 0 6px #FFD600, 0 0 2px #000, 0 1px 2px #000 !important;
         }
         th.gchart-header-cell:first-child {
             pointer-events: none;
@@ -589,10 +590,6 @@
                 min-width: clamp(40px, 7vw, 80px) !important;
                 max-width: clamp(60px, 10vw, 100px) !important;
             }
-        }
-        #table_div tr.table-row-clicked .place-cell {
-            color: #FFC107 !important;
-            text-shadow: 0 0 2px #000, 0 1px 2px #000 !important;
         }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
