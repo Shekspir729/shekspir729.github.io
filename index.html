@@ -210,6 +210,8 @@
         }
 
         .custom-table-container {
+            flex: 1 0 auto;
+            min-height: 0;
             background: #222222 !important;
             box-shadow: none !important;
             max-width: 1800px;
@@ -387,7 +389,8 @@
         }
 
         body {
-            background: #222222 !important;
+            display: flex;
+            flex-direction: column;
             min-height: 100vh;
         }
 
