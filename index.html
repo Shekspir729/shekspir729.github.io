@@ -884,9 +884,6 @@
 
         function createMiniTable(data, rowIndex) {
             try {
-                // Создаем главный wrapper
-                const wrapper = document.createElement('div');
-                wrapper.className = 'mini-table-wrapper';
                 // Создаем контейнер для скролла
                 const container = document.createElement('div');
                 container.className = 'mini-table-container';
@@ -987,8 +984,8 @@
                 }
                 if (gameHeaders.length === 0) {
                     container.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Нет данных об играх для этой команды</div>';
-                    wrapper.appendChild(container);
-                    return wrapper;
+                    container.appendChild(table);
+                    return container;
                 }
                 const headerRow = document.createElement('tr');
                 const headerCell = document.createElement('th');
@@ -1017,8 +1014,8 @@
                 }
                 if (actualRowIndex === -1) {
                     container.innerHTML = '<div style="text-align: center; padding: 20px; color: #721c24;">Команда не найдена в исходных данных</div>';
-                    wrapper.appendChild(container);
-                    return wrapper;
+                    container.appendChild(table);
+                    return container;
                 }
                 const pointsRow = document.createElement('tr');
                 const pointsCell = document.createElement('th');
@@ -1059,22 +1056,12 @@
                 }
                 table.appendChild(tbody);
                 container.appendChild(table);
-                wrapper.appendChild(container);
-                wrapper.style.display = 'block';
-                wrapper.style.width = '100%';
-                wrapper.style.maxHeight = '0px';
-                wrapper.style.opacity = '0';
-                wrapper.style.overflow = 'hidden';
-                wrapper.style.transition = 'max-height 0.3s ease-out, opacity 0.3s ease-out';
-                return wrapper;
+                return container;
             } catch (error) {
-                const wrapper = document.createElement('div');
-                wrapper.className = 'mini-table-wrapper';
                 const container = document.createElement('div');
                 container.className = 'mini-table-container';
                 container.innerHTML = `<div style="text-align: center; padding: 20px; color: #721c24; background: #f8d7da; border-radius: 8px; margin: 10px;"><strong>Произошла ошибка при загрузке данных команды</strong><br><small style="color: #666; margin-top: 10px; display: block;">Строка: ${rowIndex}, Ошибка: ${error.message || 'Неизвестная ошибка'}</small></div>`;
-                wrapper.appendChild(container);
-                return wrapper;
+                return container;
             }
         }
 
@@ -1084,8 +1071,8 @@
                 const allRows = document.querySelectorAll('#table_div tr');
                 allRows.forEach(row => row.classList.remove('table-row-clicked'));
                 const nextRow = tableRow.nextElementSibling;
-                const isCurrentRowExpanded = nextRow?.querySelector('.mini-table-wrapper');
-                const existingWrappers = document.querySelectorAll('.mini-table-wrapper');
+                const isCurrentRowExpanded = nextRow?.querySelector('.mini-table-row-wrapper');
+                const existingWrappers = document.querySelectorAll('.mini-table-row-wrapper');
                 const existingRows = [];
                 existingWrappers.forEach(wrapper => {
                     const row = wrapper.closest('tr');
@@ -1111,8 +1098,7 @@
                     try {
                         tableRow.classList.add('table-row-clicked');
                         const wrapper = document.createElement('tr');
-                        wrapper.style.backgroundColor = '#f8f9fa';
-                        wrapper.classList.add('mini-table-row-wrapper');
+                        wrapper.className = 'mini-table-row-wrapper';
                         const cell = document.createElement('td');
                         const parentTable = tableRow.closest('table');
                         const columnCount = parentTable.querySelector('tr')?.children.length || 7;
@@ -1123,41 +1109,6 @@
                         cell.appendChild(miniTable);
                         wrapper.appendChild(cell);
                         tableRow.parentNode.insertBefore(wrapper, tableRow.nextSibling);
-                        setTimeout(() => {
-                            miniTable.classList.add('expanded');
-                            miniTable.style.maxHeight = '180px';
-                            miniTable.style.opacity = '1';
-                            miniTable.style.display = 'block';
-                            miniTable.style.visibility = 'visible';
-                            miniTable.style.overflow = 'visible';
-                            const container = miniTable.querySelector('.mini-table-container');
-                            if (container) {
-                                container.style.display = 'block';
-                                container.style.visibility = 'visible';
-                                container.style.opacity = '1';
-                                container.style.height = 'auto';
-                                container.style.minHeight = '100px';
-                            }
-                            const table = miniTable.querySelector('.mini-table');
-                            if (table) {
-                                table.style.display = 'table';
-                                table.style.visibility = 'visible';
-                                table.style.opacity = '1';
-                                table.style.width = '100%';
-                                table.style.height = 'auto';
-                            }
-                            const cells = miniTable.querySelectorAll('.mini-table th, .mini-table td');
-                            cells.forEach(cell => {
-                                cell.style.display = 'table-cell';
-                                cell.style.visibility = 'visible';
-                                cell.style.opacity = '1';
-                                cell.style.padding = '8px';
-                                cell.style.border = '1px solid #ddd';
-                            });
-                        }, 10);
-                        if (teamName) {
-                            expandedTeams.add(teamName);
-                        }
                     } catch (error) {}
                 }, 350);
             } catch (error) {}
