@@ -489,56 +489,31 @@
 
         /* Новые стили для мини-таблиц */
         .mini-table-container {
-            max-height: 800px !important;
-            overflow: hidden;
-            opacity: 0;
-            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
-            background: #f8f8f8 !important;
-            border-radius: clamp(3px, 0.4vw, 6px) !important;
-            border: clamp(1px, 0.15vw, 1.5px) solid #FFD600 !important;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.1) !important;
+            background: transparent !important;
+            border-radius: 12px !important;
+            border: 2px solid #FFD600 !important;
+            box-shadow: none !important;
             overflow-x: auto !important;
             overflow-y: hidden !important;
             width: 100% !important;
             max-width: 100% !important;
             position: relative !important;
             display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            height: auto !important;
             min-height: 200px !important;
         }
-        .mini-table-container.expanded {
-            max-height: 800px !important;
-            opacity: 1;
-        }
         .mini-table {
-            table-layout: auto !important;
-            width: 100% !important;
-            display: table !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            height: auto !important;
+            border-radius: 12px !important;
+            overflow: hidden !important;
+            background: #222222 !important;
         }
         .mini-table th, .mini-table td {
-            padding: 8px 12px !important;
-            font-size: 1.1rem !important;
-            min-width: 48px !important;
-            max-width: 120px !important;
-            font-weight: 700 !important;
-            text-align: center !important;
-            overflow: visible !important;
-            text-overflow: initial !important;
-            white-space: normal !important;
-            display: table-cell !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            border: 1px solid #ddd !important;
+            background: #222222 !important;
+            color: #fff !important;
+            border: 1px solid #FFD600 !important;
         }
-        .mini-table th:not(:first-child) {
-            min-width: 48px !important;
-            max-width: 80px !important;
-            font-size: 1rem !important;
+        .mini-table-row-wrapper {
+            background: #FFD600 !important;
+            border-radius: 12px !important;
         }
         .mini-table tr:first-child th, .mini-table tr:first-child td {
             font-size: 1rem !important;
