@@ -210,17 +210,18 @@
         }
 
         .custom-table-container {
-            width: 100vw;
-            max-width: 100vw;
+            max-width: 1800px;
+            margin: 40px auto;
+            border-radius: 32px;
+            padding: 32px 24px;
+            background: #222 !important;
+            box-shadow: none !important;
+            overflow-x: auto;
+            overflow-y: visible;
+            width: 100%;
             min-width: 0;
             min-height: 0;
             box-sizing: border-box;
-            margin: 0 auto;
-            padding: clamp(4px, 2vw, 32px) clamp(2px, 2vw, 32px);
-            border-radius: clamp(8px, 2vw, 32px);
-            background: #222 !important;
-            overflow-x: auto;
-            overflow-y: visible;
         }
         .city-switcher {
             display: flex;
@@ -288,12 +289,14 @@
             .custom-table-container {
                 padding: 2px 1px;
                 border-radius: 6px;
+                max-width: 100vw;
+                margin: 0 auto;
             }
-            .city-btn {
-                font-size: 1.2rem;
-                padding: 10px 16px;
+            #table_div table {
+                min-width: 240px;
+                font-size: clamp(0.6rem, 0.7vw, 0.9rem) !important;
             }
-            table.custom-table th, table.custom-table td {
+            #table_div th, #table_div td {
                 padding: 4px 2px !important;
                 font-size: clamp(0.6rem, 0.7vw, 0.9rem) !important;
                 min-width: 40px !important;
@@ -406,23 +409,30 @@
             max-width: 100vw;
             overflow-x: auto;
             overflow-y: visible;
-            border-radius: clamp(8px, 2vw, 32px);
+            border-radius: 24px;
             background: #ededed;
             box-sizing: border-box;
         }
         #table_div table {
             width: 100%;
-            min-width: 320px;
+            min-width: 600px;
             max-width: 100vw;
-            font-size: clamp(0.7rem, 1vw, 1.2rem) !important;
-            border-radius: clamp(8px, 2vw, 32px) !important;
+            font-size: 2.2rem !important;
+            border-radius: 24px !important;
             overflow: hidden !important;
             box-sizing: border-box;
             table-layout: auto;
         }
         #table_div th, #table_div td {
-            padding: clamp(8px, 1vw, 24px) clamp(4px, 1vw, 20px) !important;
-            font-size: clamp(0.7rem, 1vw, 1.2rem) !important;
+            text-align: left !important;
+            padding: 24px 24px !important;
+            font-size: 2.2rem !important;
+            font-weight: 700 !important;
+            border: none !important;
+            background: #ededed !important;
+            color: #111 !important;
+            vertical-align: middle !important;
+            height: 64px !important;
             min-width: 48px !important;
             box-sizing: border-box;
         }
