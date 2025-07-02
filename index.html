@@ -943,22 +943,32 @@
         }
 
         .mini-table th, .mini-table td {
-            padding: 2px 4px !important;
+            padding: 2px 2px !important;
             font-size: 0.75rem !important;
-            min-width: 22px !important;
-            max-width: 32px !important;
+            min-width: 18px !important;
+            max-width: 28px !important;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
         .mini-table th:first-child, .mini-table td:first-child {
-            min-width: 60px !important;
-            max-width: 120px !important;
-            padding-left: 8px !important;
-            padding-right: 8px !important;
+            min-width: 80px !important;
+            max-width: 140px !important;
+            padding-left: 12px !important;
+            padding-right: 12px !important;
             font-size: 0.75rem !important;
             font-weight: 600 !important;
+            text-align: left !important;
+        }
+
+        .mini-table .mini-row-label {
+            font-size: 0.75em !important;
+            font-weight: 600 !important;
+            color: #888 !important;
+            letter-spacing: 0.02em;
+            padding-left: 4px !important;
+            padding-right: 8px !important;
             text-align: left !important;
         }
 
@@ -987,16 +997,6 @@
             font-size: 0.65em !important;
             font-weight: 600 !important;
             color: #888 !important;
-        }
-
-        .mini-table .mini-row-label {
-            font-size: 0.65em !important;
-            font-weight: 600 !important;
-            color: #888 !important;
-            letter-spacing: 0.02em;
-            padding-left: 2px !important;
-            padding-right: 4px !important;
-            text-align: left !important;
         }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
