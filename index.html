@@ -212,216 +212,86 @@
         .custom-table-container {
             background: #222222 !important;
             box-shadow: none !important;
-            max-width: min(95vw, 1800px);
-            margin: 2vh auto;
-            border-radius: clamp(12px, 2vw, 32px);
-            padding: clamp(16px, 2vw, 32px) clamp(8px, 1.5vw, 24px);
+            max-width: 1800px;
+            margin: 40px auto;
+            border-radius: 32px;
+            padding: 32px 24px;
             overflow-x: auto;
-            position: relative;
         }
-        
         .city-switcher {
             display: flex;
             justify-content: center;
-            gap: clamp(8px, 1.5vw, 24px);
-            margin-bottom: clamp(16px, 2vw, 32px);
-            flex-wrap: wrap;
+            gap: 24px;
+            margin-bottom: 32px;
+            flex-wrap: nowrap;
         }
-        
         .city-btn {
             background: #FFD600 !important;
             color: #222 !important;
             border: none !important;
-            border-radius: clamp(6px, 0.8vw, 12px);
-            padding: clamp(8px, 1vw, 18px) clamp(16px, 2vw, 36px);
-            font-size: clamp(1rem, 1.2vw, 1.4rem);
+            border-radius: 12px;
+            padding: 18px 36px;
+            font-size: 2.2rem;
             font-family: 'Arial', sans-serif;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: background 0.2s, box-shadow 0.2s, color 0.2s;
             box-shadow: 0 2px 8px rgba(255,214,0,0.08);
-            white-space: nowrap;
         }
-        
         .city-btn.active, .city-btn:hover {
             background: #FFC107 !important;
             color: #000 !important;
             box-shadow: 0 4px 16px rgba(255,214,0,0.18);
-            transform: translateY(-1px);
         }
-        /* Устаревшие стили для custom-table удалены - используем только Google Charts стили */
-        /* Стили для скролла основной таблицы */
-        #table_div::-webkit-scrollbar {
-            height: clamp(6px, 0.8vw, 12px);
+        table.custom-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-family: 'Arial', sans-serif;
+            font-size: 4.2rem;
+            background: #ededed !important;
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+            color: #111 !important;
         }
-        
-        #table_div::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: clamp(3px, 0.5vw, 6px);
+        table.custom-table th, table.custom-table td {
+            padding: 24px 12px;
+            text-align: center;
+            border-bottom: 3px solid #ccc !important;
+            line-height: 1.4;
+            height: 80px;
+            background: #ededed !important;
+            color: #111 !important;
         }
-        
-        #table_div::-webkit-scrollbar-thumb {
-            background: #FFD600;
-            border-radius: clamp(3px, 0.5vw, 6px);
+        table.custom-table th {
+            background: #e0e0e0 !important;
+            font-weight: bold;
+            color: #111 !important;
+            font-size: 4.5rem;
         }
-        
-        #table_div::-webkit-scrollbar-thumb:hover {
-            background: #FFC107;
+        table.custom-table tr:nth-child(even) {
+            background: #f5f5f5 !important;
         }
-
-        /* Адаптивные медиа-запросы */
-        @media (max-width: 1200px) {
-            .custom-table-container {
-                max-width: 98vw;
-                margin: 1vh auto;
-            }
-            
-            h1 {
-                font-size: clamp(2rem, 5vw, 4rem) !important;
-            }
+        table.custom-table tr:hover {
+            background: #ffe082 !important;
+            color: #111 !important;
         }
-        
-        @media (max-width: 900px) {
-            .city-switcher {
-                gap: clamp(6px, 1vw, 16px);
-            }
-            
-            .city-btn {
-                font-size: clamp(0.8rem, 1vw, 1.2rem);
-                padding: clamp(6px, 0.8vw, 12px) clamp(12px, 1.5vw, 24px);
-            }
-            
-            #table_div table {
-                min-width: 600px;
-                font-size: clamp(0.7rem, 1vw, 1.2rem) !important;
-            }
-            
-            #table_div th, #table_div td {
-                padding: clamp(6px, 1vw, 16px) clamp(4px, 0.8vw, 12px) !important;
-                font-size: clamp(0.7rem, 1vw, 1.2rem) !important;
-                min-height: clamp(36px, 3.5vw, 48px) !important;
-            }
-            
-            #table_div th {
-                font-size: clamp(0.8rem, 1.1vw, 1.3rem) !important;
-            }
-            
-            #table_div td:first-child {
-                font-size: clamp(0.9rem, 1.2vw, 1.4rem) !important;
-                min-width: clamp(40px, 4vw, 60px) !important;
-            }
-            
-            #table_div td:nth-child(2) {
-                min-width: clamp(100px, 12vw, 160px) !important;
-                left: clamp(40px, 4vw, 60px);
-            }
+        table.custom-table tr:last-child td {
+            border-bottom: none;
         }
-        
         @media (max-width: 600px) {
             .custom-table-container {
-                padding: clamp(8px, 1.5vw, 16px) clamp(4px, 1vw, 8px);
-                margin: 0.5vh auto;
-                border-radius: clamp(8px, 1.5vw, 16px);
+                padding: 12px 2px;
             }
-            
-            .city-switcher {
-                gap: clamp(4px, 0.8vw, 12px);
-                margin-bottom: clamp(12px, 1.5vw, 20px);
-            }
-            
             .city-btn {
-                font-size: clamp(0.7rem, 0.9vw, 1rem);
-                padding: clamp(4px, 0.6vw, 8px) clamp(8px, 1.2vw, 16px);
-                border-radius: clamp(4px, 0.6vw, 8px);
+                font-size: 1.2rem;
+                padding: 10px 16px;
             }
-            
-            h1 {
-                font-size: clamp(1.5rem, 4vw, 2.5rem) !important;
-                margin-bottom: clamp(4px, 0.5vw, 8px) !important;
-            }
-            
-            p {
-                font-size: clamp(0.8rem, 1vw, 1.2rem) !important;
-                margin-bottom: clamp(8px, 1vw, 16px) !important;
-            }
-            
-            #table_div table {
-                min-width: 500px;
-                font-size: clamp(0.6rem, 0.8vw, 1rem) !important;
-            }
-            
-            #table_div th, #table_div td {
-                padding: clamp(4px, 0.8vw, 8px) clamp(3px, 0.6vw, 6px) !important;
-                font-size: clamp(0.6rem, 0.8vw, 1rem) !important;
-                min-height: clamp(28px, 3vw, 36px) !important;
-            }
-            
-            #table_div th {
-                font-size: clamp(0.65rem, 0.85vw, 1.1rem) !important;
-            }
-            
-            #table_div td:first-child {
-                font-size: clamp(0.7rem, 0.9vw, 1.2rem) !important;
-                min-width: clamp(30px, 3.5vw, 45px) !important;
-            }
-            
-            #table_div td:nth-child(2) {
-                min-width: clamp(80px, 10vw, 120px) !important;
-                left: clamp(30px, 3.5vw, 45px);
-            }
-            
-            #table_div td {
-                min-width: clamp(45px, 6vw, 80px) !important;
-            }
-            
-            .mini-table-container.expanded {
-                max-height: clamp(200px, 25vh, 300px);
-            }
-            
-            .mini-table th, .mini-table td {
-                padding: clamp(4px, 0.8vw, 8px) clamp(6px, 1vw, 10px) !important;
-                font-size: clamp(0.6rem, 0.8vw, 1rem) !important;
-                min-width: clamp(30px, 5vw, 60px);
-            }
-            
-            .mini-table tr:first-child td,
-            .mini-table tr:first-child th {
-                font-size: clamp(0.65rem, 0.85vw, 1.1rem) !important;
-            }
-        }
-        
-        @media (max-width: 400px) {
-            .custom-table-container {
-                padding: 6px 2px;
-                border-radius: 8px;
-            }
-            
-            h1 {
-                font-size: clamp(1.2rem, 3.5vw, 2rem) !important;
-            }
-            
-            .city-btn {
-                font-size: 0.7rem;
-                padding: 4px 8px;
-            }
-            
-            #table_div table {
-                min-width: 400px;
-            }
-            
-            #table_div th, #table_div td {
-                padding: 3px 2px !important;
-                font-size: 0.6rem !important;
-                min-height: 24px !important;
-            }
-            
-            #table_div td:first-child {
-                min-width: 25px !important;
-            }
-            
-            #table_div td:nth-child(2) {
-                min-width: 70px !important;
-                left: 25px;
+            table.custom-table th, table.custom-table td {
+                padding: 12px 2px;
+                font-size: 2.2rem;
+                height: 48px;
             }
         }
         h1, p {
@@ -520,99 +390,55 @@
             color: #111 !important;
         }
 
-        /* Основная таблица - адаптивная система */
-        #table_div {
-            overflow-x: auto;
-            overflow-y: visible;
-            width: 100%;
-            border-radius: clamp(12px, 1.5vw, 24px);
-            background: #ededed;
-        }
-        
         #table_div table {
             border-collapse: separate !important;
             border-spacing: 0 !important;
             width: 100% !important;
-            min-width: 800px; /* Минимальная ширина для горизонтального скролла */
             background: #ededed !important;
-            font-size: clamp(0.8rem, 1.2vw, 1.6rem) !important;
+            font-size: 2.2rem !important;
             font-family: 'Arial', sans-serif !important;
-            border-radius: clamp(12px, 1.5vw, 24px) !important;
+            border-radius: 24px !important;
             overflow: hidden !important;
         }
-        
         #table_div th, #table_div td {
             text-align: left !important;
-            padding: clamp(8px, 1.5vw, 24px) clamp(6px, 1.2vw, 20px) !important;
-            font-size: clamp(0.8rem, 1.2vw, 1.6rem) !important;
+            padding: 24px 24px !important;
+            font-size: 2.2rem !important;
             font-weight: 700 !important;
             border: none !important;
             background: #ededed !important;
             color: #111 !important;
             vertical-align: middle !important;
-            height: auto !important;
-            min-height: clamp(40px, 4vw, 64px) !important;
-            white-space: nowrap;
-            position: relative;
+            height: 64px !important;
         }
-        
         #table_div th {
             background: #e0e0e0 !important;
             color: #111 !important;
-            font-size: clamp(0.9rem, 1.3vw, 1.7rem) !important;
+            font-size: 2.4rem !important;
             font-weight: 900 !important;
-            border-bottom: clamp(2px, 0.3vw, 3px) solid #FFD600 !important;
-            letter-spacing: 0.02em;
-            position: sticky;
-            top: 0;
-            z-index: 10;
+            border-bottom: 3px solid #FFD600 !important;
+            letter-spacing: 0.04em;
         }
-        
         #table_div tr {
             background: #ededed !important;
-            border-bottom: clamp(1px, 0.2vw, 2px) solid #fff !important;
-            transition: all 0.2s ease;
+            border-bottom: 2px solid #fff !important;
+            transition: background 0.2s;
         }
-        
         #table_div tr:hover td {
             background: #ffe082 !important;
             color: #111 !important;
-            transform: scale(1.005);
         }
-        
         #table_div tr:last-child td {
             border-bottom: none !important;
         }
-        
         #table_div td:first-child {
-            font-size: clamp(1rem, 1.4vw, 1.8rem) !important;
-            min-width: clamp(50px, 5vw, 80px) !important;
+            font-size: 2.6rem !important;
+            width: 80px !important;
             text-align: center !important;
             font-weight: 900 !important;
-            background: #f0f0f0 !important;
-            position: sticky;
-            left: 0;
-            z-index: 5;
-            border-right: clamp(1px, 0.2vw, 2px) solid #FFD600 !important;
         }
-        
-        #table_div td:nth-child(2) {
-            min-width: clamp(120px, 15vw, 200px) !important;
-            font-weight: 800 !important;
-            position: sticky;
-            left: clamp(50px, 5vw, 80px);
-            z-index: 5;
-            background: #ededed !important;
-        }
-        
-        #table_div tr:hover td:first-child,
-        #table_div tr:hover td:nth-child(2) {
-            background: #ffe082 !important;
-        }
-        
         #table_div td {
             font-weight: 700 !important;
-            min-width: clamp(60px, 8vw, 120px) !important;
         }
         .place-cell {
             transition: color 0.2s, font-size 0.2s;
@@ -620,46 +446,6 @@
         .place-icon {
             font-size: 2.6rem;
             transition: font-size 0.2s;
-        }
-
-        /* Стили для выпадающих мини-таблиц */
-        .mini-table-container {
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
-        }
-        
-        .mini-table-container.expanded {
-            max-height: 500px;
-            opacity: 1;
-        }
-        
-        .mini-table {
-            animation: slideDown 0.3s ease-out;
-        }
-        
-        @keyframes slideDown {
-            from {
-                transform: translateY(-10px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-        
-        /* Стили для строк основной таблицы при клике */
-        #table_div tr:hover {
-            cursor: pointer;
-            transform: scale(1.01);
-            transition: transform 0.2s ease;
-        }
-        
-        #table_div tr.table-row-clicked {
-            background: #e3f2fd !important;
-            color: #111 !important;
         }
         .gchart-row-hover .place-cell {
             color: #FFC107 !important;
@@ -673,222 +459,62 @@
             opacity: 0.8;
         }
 
-        /* Полностью адаптивная система субтаблиц - КОМПАКТНАЯ ВЕРСИЯ */
-        .mini-table-wrapper {
-            max-height: 0 !important;
-            overflow: hidden !important;
-            transition: max-height 0.3s ease-out, opacity 0.3s ease-out !important;
-            margin: 0 !important;
-            width: 100% !important;
-            opacity: 0 !important;
-            position: relative !important;
-            display: block !important;
-        }
-
-        .mini-table-wrapper.expanded {
-            max-height: none !important;
-            margin: 4px 0 !important;
-            opacity: 1 !important;
-            display: block !important;
-        }
-
+        /* Стили для мини-таблицы */
         .mini-table-container {
-            background: #f8f8f8 !important;
-            border-radius: clamp(3px, 0.4vw, 6px) !important;
-            border: clamp(1px, 0.15vw, 1.5px) solid #FFD600 !important;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.1) !important;
-            overflow-x: auto !important;
-            overflow-y: hidden !important;
-            width: 100% !important;
-            max-width: 100% !important;
-            position: relative !important;
-            display: block !important;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: #f8f8f8;
+            margin: 0;
+            width: 100%;
+        }
+
+        .mini-table-container.expanded {
+            max-height: 300px;
+            margin: 16px 0;
+            border-top: 2px solid #FFD600;
+            border-bottom: 2px solid #FFD600;
         }
 
         .mini-table {
-            table-layout: auto !important;
-            width: 100% !important;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 1.8rem !important;
         }
 
         .mini-table th, .mini-table td {
-            padding: 8px 12px !important;
-            font-size: 1rem !important;
-            min-width: 60px !important;
-            max-width: 120px !important;
-            font-weight: 700 !important;
-            text-align: center !important;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            padding: 12px 16px !important;
+            text-align: center;
+            font-size: 1.8rem !important;
+            height: auto !important;
+            border: none !important;
         }
 
         .mini-table tr:first-child td,
         .mini-table tr:first-child th {
             background: #e8e8e8 !important;
             font-weight: bold;
-            border-bottom: clamp(1px, 0.15vw, 1.5px) solid #FFD600 !important;
-            font-size: 0.75rem !important;
-            position: sticky;
-            top: 0;
-            z-index: 4;
+            border-bottom: 2px solid #FFD600 !important;
         }
 
         .mini-table tr:first-child th:first-child {
             text-align: left !important;
-            position: sticky;
-            left: 0;
-            z-index: 5;
-            min-width: clamp(35px, 6vw, 70px) !important;
-            max-width: clamp(55px, 9vw, 100px) !important;
         }
 
         .mini-table tr td:first-child {
             text-align: left !important;
             font-weight: bold !important;
-            background: #f0f0f0 !important;
-            border-right: clamp(1px, 0.15vw, 1.5px) solid #FFD600 !important;
-            position: sticky;
-            left: 0;
-            z-index: 3;
-            min-width: clamp(35px, 6vw, 70px) !important;
-            max-width: clamp(55px, 9vw, 100px) !important;
+            background: #e8e8e8 !important;
+            border-right: 2px solid #FFD600 !important;
         }
 
         .mini-table tr:hover td {
             background: #ffe082 !important;
-            transition: background 0.2s ease;
         }
 
         .mini-table tr:hover td:first-child {
-            background: #f0f0f0 !important;
-        }
-        
-        /* Стили для рейтинговой строки */
-        .mini-table .rating-row .rating-cell {
-            background: #fffacd !important;
-        }
-        
-        .mini-table tr:hover .rating-cell {
-            background: #fff3cd !important;
-        }
-        
-        /* Горизонтальные заголовки для игр */
-        .mini-table th:not(:first-child) {
-            writing-mode: horizontal-tb !important;
-            text-orientation: unset !important;
-            min-width: clamp(25px, 3.5vw, 40px) !important;
-            max-width: clamp(35px, 4.5vw, 55px) !important;
-            height: auto !important;
-            padding: clamp(2px, 0.4vw, 4px) clamp(2px, 0.4vw, 4px) !important;
-            font-size: 0.75rem !important;
-        }
-        
-        /* Стили для скролла субтаблиц */
-        .mini-table-container::-webkit-scrollbar {
-            height: clamp(4px, 0.6vw, 8px);
-        }
-        
-        .mini-table-container::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: clamp(2px, 0.3vw, 4px);
-        }
-        
-        .mini-table-container::-webkit-scrollbar-thumb {
-            background: #FFD600;
-            border-radius: clamp(2px, 0.3vw, 4px);
-        }
-        
-        .mini-table-container::-webkit-scrollbar-thumb:hover {
-            background: #FFC107;
-        }
-        
-        /* Стили для родительских элементов субтаблицы */
-        .mini-table-row-wrapper {
-            background-color: #f8f9fa !important;
-        }
-        
-        .mini-table-row-wrapper td {
-            padding: 0 !important;
-            border: none !important;
-            vertical-align: top !important;
-        }
-        
-        /* КРИТИЧНЫЕ стили для работы субтаблицы */
-        .mini-table-wrapper.expanded {
-            display: block !important;
-            visibility: visible !important;
-            max-height: 400px !important;
-            opacity: 1 !important;
-            overflow: visible !important;
-        }
-        
-        .mini-table-container {
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            height: auto !important;
-            min-height: 100px !important;
-        }
-        
-        .mini-table {
-            display: table !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            width: 100% !important;
-            height: auto !important;
-        }
-        
-        .mini-table th, .mini-table td {
-            display: table-cell !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            padding: 8px !important;
-            border: 1px solid #ddd !important;
-        }
-        
-        /* Адаптивность для мобильных - КОМПАКТНАЯ ВЕРСИЯ */
-        @media (max-width: 900px) {
-            .mini-table th:not(:first-child) {
-                writing-mode: horizontal-tb !important;
-                text-orientation: unset !important;
-                min-width: clamp(20px, 3vw, 35px) !important;
-                max-width: clamp(30px, 4vw, 45px) !important;
-                height: auto !important;
-                padding: clamp(2px, 0.3vw, 3px) clamp(1px, 0.3vw, 3px) !important;
-                font-size: 0.7rem !important;
-            }
-            
-            .mini-table th, .mini-table td {
-                font-size: 0.7rem !important;
-                min-width: clamp(20px, 3vw, 35px);
-                max-width: clamp(30px, 4.5vw, 50px);
-            }
-            
-            .mini-table tr:first-child th:first-child,
-            .mini-table tr td:first-child {
-                min-width: clamp(40px, 7vw, 80px) !important;
-                max-width: clamp(60px, 10vw, 100px) !important;
-            }
-        }
-        
-        @media (max-width: 600px) {
-            .mini-table-wrapper.expanded {
-                max-height: clamp(100px, 15vh, 180px);
-            }
-            
-            .mini-table th, .mini-table td {
-                font-size: 0.65rem !important;
-                padding: clamp(1px, 0.3vw, 2px) clamp(1px, 0.2vw, 2px) !important;
-                min-width: clamp(18px, 2.5vw, 30px);
-                max-width: clamp(25px, 3.5vw, 40px);
-            }
-            
-            .mini-table tr:first-child th:first-child,
-            .mini-table tr td:first-child {
-                min-width: clamp(35px, 6vw, 70px) !important;
-                max-width: clamp(50px, 8vw, 90px) !important;
-                font-size: 0.65rem !important;
-            }
+            background: #e8e8e8 !important;
         }
 
         /* Добавляем стили для сообщений об ошибках */
@@ -924,69 +550,6 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-
-        .mini-table {
-            table-layout: fixed !important;
-            width: 100% !important;
-            min-width: 0 !important;
-        }
-
-        .mini-table th, .mini-table td {
-            padding: 2px 2px !important;
-            font-size: 0.75rem !important;
-            min-width: 18px !important;
-            max-width: 28px !important;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .mini-table th:first-child, .mini-table td:first-child {
-            min-width: 80px !important;
-            max-width: 140px !important;
-            padding-left: 12px !important;
-            padding-right: 12px !important;
-            font-size: 0.75rem !important;
-            font-weight: 600 !important;
-            text-align: left !important;
-        }
-
-        .mini-table .mini-row-label {
-            font-size: 0.75em !important;
-            font-weight: 600 !important;
-            color: #888 !important;
-            letter-spacing: 0.02em;
-            padding-left: 4px !important;
-            padding-right: 8px !important;
-            text-align: left !important;
-        }
-
-        .mini-table-wrapper,
-        .mini-table-row-wrapper,
-        .mini-table-container {
-            max-height: none !important;
-            height: auto !important;
-            overflow: visible !important;
-        }
-
-        .mini-table {
-            height: auto !important;
-        }
-
-        .mini-table-wrapper.expanded {
-            max-height: none !important;
-            height: auto !important;
-            margin: 8px 0 !important;
-            opacity: 1 !important;
-            display: block !important;
-        }
-
-        .mini-table tr > th:first-child,
-        .mini-table tr > td:first-child {
-            font-size: 0.65em !important;
-            font-weight: 600 !important;
-            color: #888 !important;
-        }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -1002,136 +565,6 @@
         ];
         let currentCity = cities[0].name;
         let selectedTeamData = null;
-        
-        // Сохраняем состояние раскрытых субтаблиц
-        let expandedTeams = new Set();
-
-        // Функция для восстановления развернутых субтаблиц после сортировки
-        function restoreExpandedTables(data) {
-            if (expandedTeams.size === 0) {
-                console.log('restoreExpandedTables: No expanded teams to restore');
-                return;
-            }
-            
-            console.log('restoreExpandedTables: Restoring', expandedTeams.size, 'expanded teams:', Array.from(expandedTeams));
-            
-            setTimeout(() => {
-                const tableElement = document.querySelector('#table_div table');
-                if (!tableElement) {
-                    console.log('restoreExpandedTables: Table element not found');
-                    return;
-                }
-                
-                const rows = tableElement.querySelectorAll('tbody tr');
-                let restoredCount = 0;
-                const teamsToRestore = Array.from(expandedTeams); // Создаем копию для безопасности
-                
-                rows.forEach((tr, idx) => {
-                    const teamCell = tr.cells[1];
-                    if (teamCell) {
-                        const teamName = teamCell.textContent.trim();
-                        if (teamsToRestore.includes(teamName)) {
-                            // Восстанавливаем развернутую субтаблицу
-                            setTimeout(() => {
-                                console.log(`Restoring subtable for team: ${teamName}`);
-                                // Не используем toggleMiniTable для восстановления, 
-                                // создаем субтаблицу напрямую, чтобы избежать конфликтов
-                                restoreSubtable(tr, data, idx, teamName);
-                                restoredCount++;
-                            }, 200 * restoredCount); // Увеличиваем задержку для стабильности
-                        }
-                    }
-                });
-                
-                console.log(`restoreExpandedTables: Initiated restoration for ${restoredCount} subtables`);
-            }, 500); // Увеличиваем задержку для стабильности
-        }
-        
-        // Вспомогательная функция для восстановления субтаблицы без конфликтов
-        function restoreSubtable(tableRow, data, rowIndex, teamName) {
-            try {
-                // Проверяем, что под этой строкой еще нет субтаблицы
-                const nextRow = tableRow.nextElementSibling;
-                if (nextRow?.querySelector('.mini-table-wrapper')) {
-                    console.log(`Subtable already exists for team: ${teamName}, skipping`);
-                    return;
-                }
-                
-                // Добавляем класс активной строки
-                tableRow.classList.add('table-row-clicked');
-                
-                // Создаем мини-таблицу
-                const wrapper = document.createElement('tr');
-                wrapper.style.backgroundColor = '#f8f9fa';
-                wrapper.classList.add('mini-table-row-wrapper');
-                
-                const cell = document.createElement('td');
-                const parentTable = tableRow.closest('table');
-                const columnCount = parentTable.querySelector('tr')?.children.length || 7;
-                cell.colSpan = columnCount;
-                cell.style.padding = '0';
-                cell.style.border = 'none';
-                
-                const miniTable = createMiniTable(data, rowIndex);
-                cell.appendChild(miniTable);
-                wrapper.appendChild(cell);
-                
-                // Вставляем после текущей строки
-                tableRow.parentNode.insertBefore(wrapper, tableRow.nextSibling);
-                
-                // Анимируем появление
-                setTimeout(() => {
-                    // console.log('=== restoreSubtable: Adding expanded class ===');
-                    miniTable.classList.add('expanded');
-                    
-                                                // КРИТИЧНЫЕ стили для работы - КОМПАКТНАЯ ВЕРСИЯ
-                            miniTable.style.maxHeight = '180px';
-                            miniTable.style.opacity = '1';
-                            miniTable.style.display = 'block';
-                            miniTable.style.visibility = 'visible';
-                            miniTable.style.overflow = 'visible';
-                    
-                    // ПРИНУДИТЕЛЬНО показываем контейнер
-                    const container = miniTable.querySelector('.mini-table-container');
-                    if (container) {
-                        container.style.display = 'block';
-                        container.style.visibility = 'visible';
-                        container.style.opacity = '1';
-                        container.style.height = 'auto';
-                        container.style.minHeight = '100px';
-                    }
-                    
-                    // ПРИНУДИТЕЛЬНО показываем таблицу
-                    const table = miniTable.querySelector('.mini-table');
-                    if (table) {
-                        table.style.display = 'table';
-                        table.style.visibility = 'visible';
-                        table.style.opacity = '1';
-                        table.style.width = '100%';
-                        table.style.height = 'auto';
-                    }
-                    
-                    // ПРИНУДИТЕЛЬНО показываем все ячейки
-                    const cells = miniTable.querySelectorAll('.mini-table th, .mini-table td');
-                    cells.forEach(cell => {
-                        cell.style.display = 'table-cell';
-                        cell.style.visibility = 'visible';
-                        cell.style.opacity = '1';
-                        cell.style.padding = '8px';
-                        cell.style.border = '1px solid #ddd';
-                    });
-                    
-                    // console.log('=== restoreSubtable: After adding expanded class and styles ===');
-                }, 10);
-                
-                // Добавляем команду обратно в список развернутых
-                expandedTeams.add(teamName);
-                console.log(`Successfully restored subtable for team: ${teamName}`);
-                
-            } catch (error) {
-                console.error(`Error restoring subtable for team ${teamName}:`, error);
-            }
-        }
 
         google.charts.load('current', {'packages':['table']});
         google.charts.setOnLoadCallback(() => drawTable(currentCity));
@@ -1140,509 +573,108 @@
 
         function createMiniTable(data, rowIndex) {
             try {
-                console.log('=== createMiniTable called ===', { rowIndex });
-                
-                // Создаем главный wrapper
-                const wrapper = document.createElement('div');
-                wrapper.className = 'mini-table-wrapper';
-                
-                // Создаем контейнер для скролла
                 const container = document.createElement('div');
                 container.className = 'mini-table-container';
                 
-                // Отладочная информация (минимальная)
-                console.log('createMiniTable: rowIndex =', rowIndex, 'data columns:', data.getNumberOfColumns());
+                // Стили для компактности и скролла
+                container.style.overflowX = 'auto';
+                container.style.padding = '0';
                 
                 const table = document.createElement('table');
                 table.className = 'mini-table';
+                table.style.fontSize = '1.1rem';
+                table.style.fontWeight = '400';
+                table.style.minWidth = '600px';
+                table.style.whiteSpace = 'nowrap';
                 
                 const tbody = document.createElement('tbody');
                 
-                // Динамически определяем структуру столбцов для данного города
-                const totalCols = data.getNumberOfColumns();
-                const regularStartCol = 1;
-                let regularEndCol = regularStartCol - 1; // Инициализируем как "не найдено"
-                let ratingStartCol = -1;
-                let ratingEndCol = -1;
+                // Определяем диапазон игр
+                const regularEndCol = (currentCity === 'Московский') ? 14 : 13;
+                const ratingStartCol = regularEndCol + 2;
                 
-                // Найдем строку с заголовками
-                let headerRowIndex = -1;
-                for (let row = 0; row < Math.min(data.getNumberOfRows(), 3); row++) {
-                    const firstCell = data.getValue(row, 0);
-                    const secondCell = data.getValue(row, 1);
-                    const thirdCell = data.getValue(row, 2);
-                    
-                    console.log(`Row ${row}: "${firstCell}" | "${secondCell}" | "${thirdCell}"`);
-                    
-                    // Ищем строку с заголовками игр
-                    if (firstCell && firstCell.toString().toLowerCase().includes('название')) {
-                        headerRowIndex = row;
-                        console.log(`Found header row by "название" at row ${row}`);
-                        break;
-                    } else if (secondCell && secondCell.toString().toLowerCase().includes('игра')) {
-                        // Если во втором столбце есть слово "игра", это точно заголовки
-                        headerRowIndex = row;
-                        console.log(`Found header row by "игра" at row ${row}`);
-                        break;
-                    } else if (secondCell && thirdCell && 
-                               !isNaN(parseInt(secondCell.toString())) && 
-                               !isNaN(parseInt(thirdCell.toString())) &&
-                               parseInt(secondCell.toString()) > 50 && 
-                               parseInt(thirdCell.toString()) > 50) {
-                        // Если второй и третий столбцы содержат большие числа (>50), это может быть номера игр
-                        headerRowIndex = row;
-                        console.log(`Found header row by game numbers at row ${row}`);
-                        break;
-                    }
-                }
-                
-                // Если не нашли явную строку заголовков, проверим структуру данных
-                if (headerRowIndex === -1) {
-                    console.log('No header row found, checking if data starts directly with teams');
-                    
-                    // Проверим, начинаются ли данные сразу с команд (без заголовков)
-                    const firstCell = data.getValue(0, 0);
-                    const secondCell = data.getValue(0, 1);
-                    
-                    if (firstCell && typeof secondCell === 'number' && secondCell > 0 && secondCell < 100) {
-                        // Похоже, что данные начинаются сразу с команд, заголовков нет
-                        console.log('Data appears to start directly with team data, no header row present');
-                        headerRowIndex = -1; // Указываем, что заголовков нет
-                    } else {
-                        console.log('Using row 0 as headers');
-                        headerRowIndex = 0;
-                    }
-                }
-                
-                // Детальное логирование заголовков для отладки
-                console.log(`createMiniTable: using header row ${headerRowIndex}, analyzing ${totalCols} columns`);
-                console.log('Checking first few rows to understand structure:');
-                for (let row = 0; row < Math.min(data.getNumberOfRows(), 3); row++) {
-                    const first = data.getValue(row, 0);
-                    const second = data.getValue(row, 1);
-                    const third = data.getValue(row, 2);
-                    console.log(`  Row ${row}: "${first}" | "${second}" | "${third}"`);
-                }
-                
-                if (headerRowIndex === -1) {
-                    console.log('No header row - data starts directly with teams, will create virtual headers');
-                } else {
-                    console.log(`Headers from row ${headerRowIndex}:`);
-                    for (let i = 0; i < Math.min(totalCols, 20); i++) {
-                        const header = data.getValue(headerRowIndex, i);
-                        console.log(`  Column ${i}: "${header}" (type: ${typeof header})`);
-                    }
-                }
-                
-                // Найдем последний столбец с игрой
-                if (headerRowIndex === -1) {
-                    // Если заголовков нет, анализируем данные команд
-                    console.log('Analyzing team data to find game columns...');
-                    for (let i = regularStartCol; i < totalCols; i++) {
-                        let hasGameData = false;
-                        
-                        // Проверяем несколько команд на наличие числовых данных в этом столбце
-                        for (let row = 0; row < Math.min(data.getNumberOfRows(), 5); row++) {
-                            const cellValue = data.getValue(row, i);
-                            if (typeof cellValue === 'number' && cellValue > 0 && cellValue <= 100) {
-                                hasGameData = true;
-                                break;
-                            }
-                        }
-                        
-                        if (hasGameData) {
-                            regularEndCol = i;
-                            console.log(`Found game column at ${i} (by analyzing data)`);
-                        } else if (regularEndCol >= regularStartCol) {
-                            // Если нашли хотя бы одну игру и встретили пустую колонку, останавливаемся
-                            console.log(`Stopping at column ${i} - no more game data`);
-                            break;
-                        }
-                    }
-                } else {
-                    // Ищем заголовки, которые содержат числа (включая "Игра XXX" и просто "XXX")
-                    for (let i = regularStartCol; i < totalCols; i++) {
-                        const header = data.getValue(headerRowIndex, i);
-                        if (!header) continue;
-                        
-                        const headerStr = header.toString().toLowerCase().trim();
-                        
-                        // Проверяем на "сумма" - если нашли, останавливаемся
-                        if (headerStr.includes('сумма')) {
-                            console.log(`Found sum column at ${i}: "${header}"`);
-                            break;
-                        }
-                        
-                        // Ищем столбцы с играми - могут быть в разных форматах:
-                        // 1. Просто число: "195", "121" и т.д.
-                        // 2. "Игра XXX"
-                        // 3. Числа с префиксами
-                        const hasNumber = /\d+/.test(headerStr);
-                        const isGameColumn = hasNumber && !headerStr.includes('р.б.') && !headerStr.includes('сумма');
-                        
-                        if (isGameColumn) {
-                            regularEndCol = i;
-                            console.log(`Found game column at ${i}: "${header}"`);
-                        }
-                    }
-                }
-                
-                // Найдем рейтинговые баллы (столбцы с "р.б." в заголовке)
-                // Начинаем поиск после последнего обычного столбца
-                if (headerRowIndex !== -1) {
-                    for (let i = regularEndCol + 1; i < totalCols; i++) {
-                        const header = data.getValue(headerRowIndex, i);
-                        if (!header) continue;
-                        
-                        const headerStr = header.toString().toLowerCase().trim();
-                        
-                        if (headerStr.includes('р.б.') || headerStr.includes('рб') || headerStr.includes('rating')) {
-                            if (ratingStartCol === -1) {
-                                ratingStartCol = i;
-                                console.log(`Found first rating column at ${i}: "${header}"`);
-                            }
-                            ratingEndCol = i;
-                            console.log(`Found rating column at ${i}: "${header}"`);
-                        } else if (ratingStartCol !== -1 && headerStr.includes('сумма')) {
-                            // Нашли конец рейтинговых баллов
-                            console.log(`Found rating sum column at ${i}: "${header}"`);
-                            break;
-                        }
-                    }
-                } else {
-                    console.log('createMiniTable: No headers available, skipping rating columns search');
-                }
-                
-                console.log('Detected structure:', {
-                    regularStartCol, 
-                    regularEndCol, 
-                    ratingStartCol, 
-                    ratingEndCol,
-                    totalCols
-                });
-                
-                // Проверяем, найдены ли игровые столбцы
-                if (regularEndCol < regularStartCol) {
-                    console.warn('No game columns found, trying alternative detection');
-                    // Альтернативный поиск: ищем любые столбцы с числами до первого столбца "сумма"
-                    for (let i = regularStartCol; i < totalCols; i++) {
-                        // Безопасная проверка заголовков только если они есть
-                        if (headerRowIndex !== -1) {
-                            const header = data.getValue(headerRowIndex, i);
-                            if (header) {
-                                const headerStr = header.toString().toLowerCase().trim();
-                                if (headerStr.includes('сумма')) break;
-                            }
-                        }
-                        
-                        // Если в столбце есть числовые данные в других строках, считаем его игровым
-                        if (data.getNumberOfRows() > 1) {
-                            const startRow = headerRowIndex === -1 ? 0 : headerRowIndex + 1;
-                            for (let row = startRow; row < Math.min(startRow + 5, data.getNumberOfRows()); row++) {
-                                const cellValue = data.getValue(row, i);
-                                if (typeof cellValue === 'number' && cellValue > 0) {
-                                    regularEndCol = i;
-                                    console.log(`Alternative detection: Found game column at ${i}`);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                
-                // Получаем заголовки игр
+                // Получаем заголовки игр из первой строки (B1-O1 или B1-N1)
                 let gameHeaders = [];
-                if (typeof data.getValue === 'function' && data.getNumberOfRows() > 0 && regularEndCol >= regularStartCol) {
-                    if (headerRowIndex === -1) {
-                        // Создаем виртуальные заголовки, начиная с номера 195 (стандарт для Н-Ф)
-                        for (let i = regularStartCol; i <= regularEndCol; i++) {
-                            const gameNumber = 195 + (i - regularStartCol);
-                            gameHeaders.push(`Игра ${gameNumber}`);
-                        }
-                        console.log('Created virtual headers:', gameHeaders);
-                    } else {
-                        // Используем заголовки из Google Sheets
-                        for (let i = regularStartCol; i <= regularEndCol; i++) {
-                            let header = data.getValue(headerRowIndex, i);
-                            gameHeaders.push(header ? header.toString() : `Игра ${i}`);
-                        }
+                if (typeof data.getValue === 'function' && data.getNumberOfRows() > 0) {
+                    for (let i = 1; i <= regularEndCol; i++) {
+                        let header = data.getValue(0, i); // 0-я строка, i-й столбец
+                        gameHeaders.push(header ? header : '');
                     }
-                }
-                
-                // Если нет игр, выводим сообщение
-                if (gameHeaders.length === 0) {
-                    console.warn('No game headers found for mini table');
-                    container.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Нет данных об играх для этой команды</div>';
-                    wrapper.appendChild(container);
-                    return wrapper;
+                } else {
+                    for (let i = 1; i <= regularEndCol; i++) gameHeaders.push('');
                 }
                 
                 // Создаём строку заголовков игр
                 const headerRow = document.createElement('tr');
-                const headerCell = document.createElement('th');
-                headerCell.textContent = 'Игры';
-                headerCell.className = 'mini-row-label';
-                headerRow.appendChild(headerCell);
+                headerRow.innerHTML = '<th style="font-weight:600;">Игры</th>';
                 for (let i = 0; i < gameHeaders.length; i++) {
-                    const th = document.createElement('th');
-                    const gameNumber = gameHeaders[i].toString().replace(/[^\d]/g, '') || (195 + i);
-                    th.textContent = gameNumber;
-                    headerRow.appendChild(th);
+                    headerRow.innerHTML += `<th style='font-weight:400;'>${gameHeaders[i]}</th>`;
                 }
                 tbody.appendChild(headerRow);
                 
-                // Найдем команду в исходных данных по имени
-                // rowIndex - это позиция в отсортированной таблице, нужно найти исходную строку
-                
-                // Сначала получим имя команды из отсортированной таблицы
-                const tableElement = document.querySelector('#table_div table');
-                const tableRows = tableElement.querySelectorAll('tbody tr');
-                const clickedRow = tableRows[rowIndex];
-                const teamNameFromTable = clickedRow.children[1].textContent.trim(); // Название команды
-                
-                console.log(`Looking for team: "${teamNameFromTable}" in Google Sheets data`);
-                
-                // Найдем эту команду в исходных данных Google Sheets
-                let actualRowIndex = -1;
-                for (let i = 0; i < data.getNumberOfRows(); i++) {
-                    // Пропускаем строку заголовков (только если она есть)
-                    if (headerRowIndex !== -1 && i === headerRowIndex) continue;
-                    
-                    const teamNameInSheet = data.getValue(i, 0);
-                    if (teamNameInSheet && teamNameInSheet.toString().trim() === teamNameFromTable) {
-                        actualRowIndex = i;
-                        break;
-                    }
-                }
-                
-                if (actualRowIndex === -1) {
-                    console.error(`Team "${teamNameFromTable}" not found in Google Sheets data`);
-                    container.innerHTML = '<div style="text-align: center; padding: 20px; color: #721c24;">Команда не найдена в исходных данных</div>';
-                    wrapper.appendChild(container);
-                    return wrapper;
-                }
-                
-                console.log(`Found team "${teamNameFromTable}" at row ${actualRowIndex} in Google Sheets`);
-                
-                // Строка с обычными баллами
+                // Строка с баллами
                 const pointsRow = document.createElement('tr');
-                const pointsCell = document.createElement('th');
-                pointsCell.textContent = 'Балл';
-                pointsCell.className = 'mini-row-label';
-                pointsRow.appendChild(pointsCell);
-                for (let i = regularStartCol; i <= regularEndCol; i++) {
-                    const points = data.getValue(actualRowIndex, i);
-                    const displayValue = (points !== null && points !== undefined && points !== '') ? points : '—';
-                    const td = document.createElement('td');
-                    td.textContent = displayValue;
-                    pointsRow.appendChild(td);
+                pointsRow.innerHTML = '<td style="font-weight:600;">Баллы</td>';
+                for (let i = 1; i <= regularEndCol; i++) {
+                    const points = data.getValue(rowIndex, i);
+                    pointsRow.innerHTML += `<td>${points !== null && points !== undefined ? points : ''}</td>`;
                 }
                 tbody.appendChild(pointsRow);
                 
-                // Строка с рейтинговыми баллами (только если есть рейтинговые данные)
-                if (currentCity === 'Московский') {
-                    var rbStartCol = 16; // Q
-                    var rbEndCol = 29;   // AD
-                } else {
-                    var rbStartCol = 15; // P
-                    var rbEndCol = 27;   // AB
+                // Строка с рейтинговыми баллами
+                const ratingRow = document.createElement('tr');
+                ratingRow.innerHTML = '<td style="font-weight:600;">Р.Баллы</td>';
+                for (let i = 1; i <= regularEndCol; i++) {
+                    const ratingPoints = data.getValue(rowIndex, ratingStartCol + i - 1);
+                    ratingRow.innerHTML += `<td>${ratingPoints !== null && ratingPoints !== undefined ? ratingPoints : ''}</td>`;
                 }
-                if (rbStartCol !== undefined && rbEndCol !== undefined) {
-                    const ratingRow = document.createElement('tr');
-                    ratingRow.className = 'rating-row';
-                    const ratingCell = document.createElement('th');
-                    ratingCell.textContent = 'Р.Б.';
-                    ratingCell.className = 'mini-row-label';
-                    ratingRow.appendChild(ratingCell);
-                    for (let i = rbStartCol; i <= rbEndCol; i++) {
-                        const ratingPoints = data.getValue(actualRowIndex, i);
-                        const displayValue = (ratingPoints !== null && ratingPoints !== undefined && ratingPoints !== '') ? ratingPoints : '—';
-                        const td = document.createElement('td');
-                        td.textContent = displayValue;
-                        td.className = 'rating-cell';
-                        ratingRow.appendChild(td);
-                    }
-                    tbody.appendChild(ratingRow);
-                }
+                tbody.appendChild(ratingRow);
                 
                 table.appendChild(tbody);
                 container.appendChild(table);
-                wrapper.appendChild(container);
-                
-                // console.log('=== createMiniTable: Created wrapper ===');
-                
-                // Принудительно устанавливаем базовые стили для wrapper
-                wrapper.style.display = 'block';
-                wrapper.style.width = '100%';
-                wrapper.style.maxHeight = '0px';
-                wrapper.style.opacity = '0';
-                wrapper.style.overflow = 'hidden';
-                wrapper.style.transition = 'max-height 0.3s ease-out, opacity 0.3s ease-out';
-                
-                // console.log('=== createMiniTable: Applied base styles ===');
-                
-                return wrapper;
+                return container;
             } catch (error) {
-                console.error('Error in createMiniTable:', error, {
-                    rowIndex: rowIndex,
-                    dataColumns: data ? data.getNumberOfColumns() : 'N/A',
-                    dataRows: data ? data.getNumberOfRows() : 'N/A'
-                });
-                const wrapper = document.createElement('div');
-                wrapper.className = 'mini-table-wrapper';
+                console.error('Error in createMiniTable:', error);
                 const container = document.createElement('div');
                 container.className = 'mini-table-container';
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 20px; color: #721c24; background: #f8d7da; border-radius: 8px; margin: 10px;">
-                        <strong>Произошла ошибка при загрузке данных команды</strong><br>
-                        <small style="color: #666; margin-top: 10px; display: block;">
-                            Строка: ${rowIndex}, Ошибка: ${error.message || 'Неизвестная ошибка'}
-                        </small>
-                    </div>
-                `;
-                wrapper.appendChild(container);
-                return wrapper;
+                container.innerHTML = '<div style="text-align: center; padding: 20px;">Произошла ошибка при загрузке данных</div>';
+                return container;
             }
         }
 
         function toggleMiniTable(tableRow, data, rowIndex) {
-            try {
-                console.log('=== toggleMiniTable called ===', { rowIndex, teamName: tableRow.cells[1]?.textContent?.trim() });
+            // Находим все существующие мини-таблицы
+            const existingContainers = document.querySelectorAll('.mini-table-container');
+            existingContainers.forEach(container => {
+                container.classList.remove('expanded');
+                setTimeout(() => container.parentElement.parentElement.remove(), 300);
+            });
+
+            // Проверяем, есть ли уже мини-таблица под этой строкой
+            const nextRow = tableRow.nextElementSibling;
+            if (nextRow?.querySelector('.mini-table-container')) {
+                nextRow.querySelector('.mini-table-container').classList.remove('expanded');
+                setTimeout(() => nextRow.remove(), 300);
+            } else {
+                // Создаем новую мини-таблицу
+                const wrapper = document.createElement('tr');
+                const cell = document.createElement('td');
+                // Динамически определяем количество столбцов
+                const parentTable = tableRow.closest('table');
+                const columnCount = parentTable.querySelector('tr')?.children.length || 7;
+                cell.colSpan = columnCount;
                 
-                // Получаем название команды для сохранения состояния
-                const teamName = tableRow.cells[1] ? tableRow.cells[1].textContent.trim() : null;
+                const miniTable = createMiniTable(data, rowIndex);
+                cell.appendChild(miniTable);
+                wrapper.appendChild(cell);
                 
-                // Удаляем класс активной строки со всех строк
-                const allRows = document.querySelectorAll('#table_div tr');
-                allRows.forEach(row => row.classList.remove('table-row-clicked'));
+                // Вставляем сразу после текущей строки
+                tableRow.parentNode.insertBefore(wrapper, tableRow.nextSibling);
                 
-                // Проверяем, есть ли уже мини-таблица под этой строкой
-                const nextRow = tableRow.nextElementSibling;
-                const isCurrentRowExpanded = nextRow?.querySelector('.mini-table-wrapper');
-                
-                // Сначала закрываем ВСЕ существующие мини-таблицы
-                const existingWrappers = document.querySelectorAll('.mini-table-wrapper');
-                const existingRows = [];
-                
-                // Находим все wrapper-строки (родители контейнеров)
-                existingWrappers.forEach(wrapper => {
-                    const row = wrapper.closest('tr');
-                    if (row) {
-                        existingRows.push(row);
-                    }
+                // Анимируем появление
+                requestAnimationFrame(() => {
+                    miniTable.classList.add('expanded');
                 });
-                
-                // Очищаем состояние развернутых команд
-                expandedTeams.clear();
-                
-                // Закрываем все мини-таблицы с анимацией
-                existingWrappers.forEach(wrapper => {
-                    wrapper.classList.remove('expanded');
-                });
-                
-                // Удаляем все wrapper-строки после анимации
-                setTimeout(() => {
-                    existingRows.forEach(row => {
-                        if (row.parentNode) {
-                            row.remove();
-                        }
-                    });
-                }, 320);
-                
-                // Если кликнули по уже развернутой строке, просто закрываем её (не создаем новую)
-                if (isCurrentRowExpanded) {
-                    console.log(`Closing expanded subtable for team: ${teamName}`);
-                    return;
-                }
-                
-                // Создаем новую мини-таблицу с небольшой задержкой после закрытия старых
-                setTimeout(() => {
-                    try {
-                        // Добавляем класс активной строки
-                        tableRow.classList.add('table-row-clicked');
-                        
-                        // Создаем новую мини-таблицу
-                        const wrapper = document.createElement('tr');
-                        wrapper.style.backgroundColor = '#f8f9fa';
-                        wrapper.classList.add('mini-table-row-wrapper'); // Добавляем класс для лучшего поиска
-                        
-                        const cell = document.createElement('td');
-                        // Динамически определяем количество столбцов
-                        const parentTable = tableRow.closest('table');
-                        const columnCount = parentTable.querySelector('tr')?.children.length || 7;
-                        cell.colSpan = columnCount;
-                        cell.style.padding = '0';
-                        cell.style.border = 'none';
-                        
-                        const miniTable = createMiniTable(data, rowIndex);
-                        cell.appendChild(miniTable);
-                        wrapper.appendChild(cell);
-                        
-                        // Вставляем сразу после текущей строки
-                        tableRow.parentNode.insertBefore(wrapper, tableRow.nextSibling);
-                        
-                        // Анимируем появление
-                        setTimeout(() => {
-                            console.log('=== Adding expanded class ===', {
-                                wrapper: miniTable,
-                                container: miniTable.querySelector('.mini-table-container'),
-                                table: miniTable.querySelector('.mini-table'),
-                                cells: miniTable.querySelectorAll('.mini-table th, .mini-table td').length
-                            });
-                            miniTable.classList.add('expanded');
-                            
-                            // КРИТИЧНЫЕ стили для работы - КОМПАКТНАЯ ВЕРСИЯ
-                            miniTable.style.maxHeight = '180px';
-                            miniTable.style.opacity = '1';
-                            miniTable.style.display = 'block';
-                            miniTable.style.visibility = 'visible';
-                            miniTable.style.overflow = 'visible';
-                            
-                            // ПРИНУДИТЕЛЬНО показываем контейнер
-                            const container = miniTable.querySelector('.mini-table-container');
-                            if (container) {
-                                container.style.display = 'block';
-                                container.style.visibility = 'visible';
-                                container.style.opacity = '1';
-                                container.style.height = 'auto';
-                                container.style.minHeight = '100px';
-                            }
-                            
-                            // ПРИНУДИТЕЛЬНО показываем таблицу  
-                            const table = miniTable.querySelector('.mini-table');
-                            if (table) {
-                                table.style.display = 'table';
-                                table.style.visibility = 'visible';
-                                table.style.opacity = '1';
-                                table.style.width = '100%';
-                                table.style.height = 'auto';
-                            }
-                            
-                            // ПРИНУДИТЕЛЬНО показываем все ячейки
-                            const cells = miniTable.querySelectorAll('.mini-table th, .mini-table td');
-                            cells.forEach(cell => {
-                                cell.style.display = 'table-cell';
-                                cell.style.visibility = 'visible';
-                                cell.style.opacity = '1';
-                                cell.style.padding = '8px';
-                                cell.style.border = '1px solid #ddd';
-                            });
-                            
-                            // console.log('=== After adding expanded class and styles ===');
-                        }, 10);
-                        
-                        // Добавляем команду в список развернутых
-                        if (teamName) {
-                            expandedTeams.add(teamName);
-                            console.log(`Opened subtable for team: ${teamName}`);
-                        }
-                    } catch (error) {
-                        console.error('Error creating mini table:', error);
-                    }
-                }, 350); // Задержка больше времени анимации закрытия
-                
-            } catch (error) {
-                console.error('Error in toggleMiniTable:', error);
             }
         }
 
@@ -1710,201 +742,7 @@
                 const result = [['Место', 'Название команды', 'Сумма баллов', 'Сумма Р.Б.', 'Игр', 'Средний балл', 'Средний Р.Б.']];
                 let teams = [];
                 
-                // Динамически определяем структуру столбцов для этого города
-                const totalCols = data.getNumberOfColumns();
-                const regularStartCol = 1;
-                let regularEndCol = regularStartCol - 1; // Инициализируем как "не найдено"
-                let ratingStartCol = -1;
-                let ratingEndCol = -1;
-                
-                // Найдем строку с заголовками
-                let headerRowIndex = -1;
-                for (let row = 0; row < Math.min(data.getNumberOfRows(), 3); row++) {
-                    const firstCell = data.getValue(row, 0);
-                    const secondCell = data.getValue(row, 1);
-                    const thirdCell = data.getValue(row, 2);
-                    
-                    console.log(`Main table Row ${row}: "${firstCell}" | "${secondCell}" | "${thirdCell}"`);
-                    
-                    // Ищем строку с заголовками игр
-                    if (firstCell && firstCell.toString().toLowerCase().includes('название')) {
-                        headerRowIndex = row;
-                        console.log(`Main table: Found header row by "название" at row ${row}`);
-                        break;
-                    } else if (secondCell && secondCell.toString().toLowerCase().includes('игра')) {
-                        // Если во втором столбце есть слово "игра", это точно заголовки
-                        headerRowIndex = row;
-                        console.log(`Main table: Found header row by "игра" at row ${row}`);
-                        break;
-                    } else if (secondCell && thirdCell && 
-                               !isNaN(parseInt(secondCell.toString())) && 
-                               !isNaN(parseInt(thirdCell.toString())) &&
-                               parseInt(secondCell.toString()) > 50 && 
-                               parseInt(thirdCell.toString()) > 50) {
-                        // Если второй и третий столбцы содержат большие числа (>50), это может быть номера игр
-                        headerRowIndex = row;
-                        console.log(`Main table: Found header row by game numbers at row ${row}`);
-                        break;
-                    }
-                }
-                
-                // Если не нашли явную строку заголовков, проверим структуру данных
-                if (headerRowIndex === -1) {
-                    console.log('Main table: No header row found, checking if data starts directly with teams');
-                    
-                    // Проверим, начинаются ли данные сразу с команд (без заголовков)
-                    const firstCell = data.getValue(0, 0);
-                    const secondCell = data.getValue(0, 1);
-                    
-                    if (firstCell && typeof secondCell === 'number' && secondCell > 0 && secondCell < 100) {
-                        // Похоже, что данные начинаются сразу с команд, заголовков нет
-                        console.log('Main table: Data appears to start directly with team data, no header row present');
-                        headerRowIndex = -1; // Указываем, что заголовков нет
-                    } else {
-                        console.log('Main table: Using row 0 as headers');
-                        headerRowIndex = 0;
-                    }
-                }
-                
-                // Детальное логирование заголовков для отладки
-                console.log(`handleQueryResponse: using header row ${headerRowIndex} for ${currentCity} - ${totalCols} columns`);
-                if (headerRowIndex === -1) {
-                    console.log('Main table: No header row - data starts directly with teams, will create virtual headers');
-                } else {
-                    for (let i = 0; i < Math.min(totalCols, 20); i++) {
-                        const header = data.getValue(headerRowIndex, i);
-                        console.log(`Column ${i}: "${header}" (type: ${typeof header})`);
-                    }
-                }
-                
-                // Найдем последний столбец с игрой
-                if (headerRowIndex === -1) {
-                    // Если заголовков нет, анализируем данные команд
-                    console.log('Analyzing team data to find game columns...');
-                    for (let i = regularStartCol; i < totalCols; i++) {
-                        let hasGameData = false;
-                        
-                        // Проверяем несколько команд на наличие числовых данных в этом столбце
-                        for (let row = 0; row < Math.min(data.getNumberOfRows(), 5); row++) {
-                            const cellValue = data.getValue(row, i);
-                            if (typeof cellValue === 'number' && cellValue > 0 && cellValue <= 100) {
-                                hasGameData = true;
-                                break;
-                            }
-                        }
-                        
-                        if (hasGameData) {
-                            regularEndCol = i;
-                            console.log(`Found game column at ${i} (by analyzing data)`);
-                        } else if (regularEndCol >= regularStartCol) {
-                            // Если нашли хотя бы одну игру и встретили пустую колонку, останавливаемся
-                            console.log(`Stopping at column ${i} - no more game data`);
-                            break;
-                        }
-                    }
-                } else {
-                    // Ищем заголовки, которые содержат числа (включая "Игра XXX" и просто "XXX")
-                    for (let i = regularStartCol; i < totalCols; i++) {
-                        const header = data.getValue(headerRowIndex, i);
-                        if (!header) continue;
-                        
-                        const headerStr = header.toString().toLowerCase().trim();
-                        
-                        // Проверяем на "сумма" - если нашли, останавливаемся
-                        if (headerStr.includes('сумма')) {
-                            console.log(`Found sum column at ${i}: "${header}"`);
-                            break;
-                        }
-                        
-                        // Ищем столбцы с играми - могут быть в разных форматах:
-                        // 1. Просто число: "195", "121" и т.д.
-                        // 2. "Игра XXX"
-                        // 3. Числа с префиксами
-                        const hasNumber = /\d+/.test(headerStr);
-                        const isGameColumn = hasNumber && !headerStr.includes('р.б.') && !headerStr.includes('сумма');
-                        
-                        if (isGameColumn) {
-                            regularEndCol = i;
-                            console.log(`Found game column at ${i}: "${header}"`);
-                        }
-                    }
-                }
-                
-                // Найдем рейтинговые баллы (столбцы с "р.б." в заголовке)
-                // Начинаем поиск после последнего обычного столбца
-                if (headerRowIndex !== -1) {
-                    for (let i = regularEndCol + 1; i < totalCols; i++) {
-                        const header = data.getValue(headerRowIndex, i);
-                        if (!header) continue;
-                        
-                        const headerStr = header.toString().toLowerCase().trim();
-                        
-                        if (headerStr.includes('р.б.') || headerStr.includes('рб') || headerStr.includes('rating')) {
-                            if (ratingStartCol === -1) {
-                                ratingStartCol = i;
-                                console.log(`Found first rating column at ${i}: "${header}"`);
-                            }
-                            ratingEndCol = i;
-                            console.log(`Found rating column at ${i}: "${header}"`);
-                        } else if (ratingStartCol !== -1 && headerStr.includes('сумма')) {
-                            // Нашли конец рейтинговых баллов
-                            console.log(`Found rating sum column at ${i}: "${header}"`);
-                            break;
-                        }
-                    }
-                } else {
-                    console.log('createMiniTable: No headers available, skipping rating columns search');
-                }
-                
-                // Проверяем, найдены ли игровые столбцы
-                if (regularEndCol < regularStartCol) {
-                    console.warn('No game columns found in main table, trying alternative detection');
-                    // Альтернативный поиск: ищем любые столбцы с числами до первого столбца "сумма"
-                    for (let i = regularStartCol; i < totalCols; i++) {
-                        // Безопасная проверка заголовков только если они есть
-                        if (headerRowIndex !== -1) {
-                            const header = data.getValue(headerRowIndex, i);
-                            if (header) {
-                                const headerStr = header.toString().toLowerCase().trim();
-                                if (headerStr.includes('сумма')) break;
-                            }
-                        }
-                        
-                        // Если в столбце есть числовые данные в других строках, считаем его игровым
-                        if (data.getNumberOfRows() > 1) {
-                            const startRow = headerRowIndex === -1 ? 0 : headerRowIndex + 1;
-                            for (let row = startRow; row < Math.min(startRow + 5, data.getNumberOfRows()); row++) {
-                                const cellValue = data.getValue(row, i);
-                                if (typeof cellValue === 'number' && cellValue > 0) {
-                                    regularEndCol = i;
-                                    console.log(`Alternative detection: Found game column at ${i}`);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                console.log('Main table structure:', {
-                    regularStartCol, 
-                    regularEndCol, 
-                    ratingStartCol, 
-                    ratingEndCol,
-                    totalCols
-                });
-
-                // Если игровые столбцы не найдены, не можем обработать данные
-                if (regularEndCol < regularStartCol) {
-                    console.error('No game columns found, cannot process team data');
-                    newDiv.innerHTML = '<div id="table_div" class="error-message">Ошибка: не удалось определить структуру данных для этого города</div>';
-                    gsap.fromTo(newDiv, {x: '100%', autoAlpha: 1}, {duration: 1.2, x: 0, autoAlpha: 1, ease: "power4.out"});
-                    return;
-                }
-
                 for (let i = 0; i < data.getNumberOfRows(); i++) {
-                    // Пропускаем строку заголовков (только если она есть)
-                    if (headerRowIndex !== -1 && i === headerRowIndex) continue;
-                    
                     const name = data.getValue(i, 0);
                     if (name === 'название команды') continue; // Пропускаем строку-заголовок
                     
@@ -1912,8 +750,15 @@
                     let sumRating = 0;  // Сумма рейтинговых баллов
                     let count = 0;
                     
-                    // Обрабатываем обычные баллы
-                    for (let j = regularStartCol; j <= regularEndCol; j++) {
+                    // Определяем количество игр в зависимости от города
+                    let lastGameCol = (currentCity === 'Московский') ? 14 : 13;
+                    
+                    // Обрабатываем обычные баллы, исключаем столбцы сумм
+                    // Для Московского: обычные баллы B-O (индексы 1-14), исключаем P (15) - сумма обычных баллов
+                    // Для остальных: обычные баллы B-N (индексы 1-13), исключаем O (14) - сумма обычных баллов
+                    let regularEndCol = (currentCity === 'Московский') ? 14 : 13; // До столбца с суммой обычных баллов
+                    
+                    for (let j = 1; j <= regularEndCol; j++) {
                         const val = data.getValue(i, j);
                         if (typeof val === 'number') {
                             sumRegular += val;
@@ -1921,13 +766,16 @@
                         }
                     }
                     
-                    // Обрабатываем рейтинговые баллы (если они есть)
-                    if (ratingStartCol !== -1 && ratingEndCol !== -1) {
-                        for (let j = ratingStartCol; j <= ratingEndCol; j++) {
-                            const val = data.getValue(i, j);
-                            if (typeof val === 'number') {
-                                sumRating += val;
-                            }
+                    // Обрабатываем рейтинговые баллы (столбцы после обычных баллов)
+                    // Для Московского: рейтинговые баллы Q-AD (индексы 16-29), исключаем AE (30) - сумма Р.Б., AF (31) - средний Р.Б.
+                    // Для остальных: рейтинговые баллы P-AB (индексы 15-27), исключаем AC (28) - сумма Р.Б., AD (29) - средний Р.Б.
+                    let ratingStartCol = regularEndCol + 2; // Пропускаем столбец суммы обычных баллов
+                    let ratingEndCol = (currentCity === 'Московский') ? 29 : 27; // До столбца суммы Р.Б.
+                    
+                    for (let j = ratingStartCol; j <= ratingEndCol; j++) {
+                        const val = data.getValue(i, j);
+                        if (typeof val === 'number') {
+                            sumRating += val;
                         }
                     }
                     
@@ -1946,12 +794,6 @@
                 // Сортируем по сумме обычных баллов по убыванию
                 teams.sort((a, b) => b.sumRegular - a.sumRegular);
                 
-                // Отладочная информация: показываем первые 5 команд после сортировки
-                console.log('Top 5 teams after sorting:');
-                teams.slice(0, 5).forEach((team, idx) => {
-                    console.log(`${idx + 1}. ${team.name}: ${team.sumRegular} баллов`);
-                });
-                
                 // Формируем итоговую таблицу с местом
                 teams.forEach((team, idx) => {
                     let placeIcon = '';
@@ -1963,11 +805,11 @@
                         placeIcon, // 0: визуальное место
                         idx + 1,   // 1: числовое место (для сортировки)
                         team.name, // 2
-                        Number(team.sumRegular), // 3: обязательно число
-                        Number(team.sumRating),  // 4: обязательно число
-                        Number(team.count),      // 5: обязательно число
-                        Number(team.avgRegular), // 6: обязательно число
-                        Number(team.avgRating)   // 7: обязательно число
+                        team.sumRegular, // 3
+                        team.sumRating,  // 4
+                        team.count,      // 5
+                        team.avgRegular, // 6
+                        team.avgRating   // 7
                     ]);
                 });
                 
@@ -1979,25 +821,6 @@
                 const view = new google.visualization.DataView(dataTable);
                 view.setColumns([0,2,3,4,5,6,7]); // показываем только нужные столбцы
                 const table = new google.visualization.Table(document.getElementById('table_div'));
-                
-                // Добавляем обработчик события сортировки
-                google.visualization.events.addListener(table, 'sort', function() {
-                    setTimeout(() => {
-                        // Переустанавливаем обработчики кликов после сортировки
-                        const tableElement = document.querySelector('#table_div table');
-                        if (tableElement) {
-                            const rows = tableElement.querySelectorAll('tbody tr');
-                            rows.forEach((tr, idx) => {
-                                tr.onclick = function() {
-                                    toggleMiniTable(this, data, idx);
-                                };
-                            });
-                            
-                            // Восстанавливаем развернутые субтаблицы после сортировки
-                            restoreExpandedTables(data);
-                        }
-                    }, 100); // Небольшая задержка для завершения сортировки
-                });
                 
                 table.draw(view, {
                     showRowNumber: false,
@@ -2013,8 +836,9 @@
                         hoverTableRow: 'gchart-row-hover',
                         tableCell: 'gchart-cell',
                         headerCell: 'gchart-header-cell'
-                    }
-                    // Убираем параметры сортировки, чтобы использовать порядок из данных
+                    },
+                    sortColumn: 3, // Корректируем индекс для сортировки по 'Сумма баллов'
+                    sortAscending: false // по убыванию
                 });
                 lastTableHTML = newDiv.innerHTML;
                 // Анимация: новый въезжает справа
@@ -2036,9 +860,6 @@
                                 toggleMiniTable(this, data, idx);
                             };
                         });
-                        
-                        // Восстанавливаем развернутые субтаблицы после установки обработчиков
-                        restoreExpandedTables(data);
                     }
                 }, 0);
                 // === Конец нового обработчика ===
@@ -2195,8 +1016,8 @@
             <div class="page" v-bind:class="state.view">
                 <div class="center">
                     <div class="custom-table-container">
-                        <h1 style="text-align:center; font-size:clamp(2rem, 4vw, 4.5rem); margin-bottom: clamp(4px, 0.8vw, 12px); color:#222; font-weight: 900;">🏆 Рейтинг НФ</h1>
-                        <p style="text-align:center; color:#666; margin-bottom: clamp(12px, 1.5vw, 24px); font-size: clamp(0.9rem, 1.2vw, 1.4rem);">Актуальная таблица лидеров</p>
+                        <h1 style="text-align:center; font-size:6.6rem; margin-bottom: 8px; color:#222;">🏆 Рейтинг НФ</h1>
+                        <p style="text-align:center; color:#666; margin-bottom: 24px;">Актуальная таблица лидеров</p>
                         <div class="city-switcher">
                             <script>
                                 document.write(
