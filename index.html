@@ -734,22 +734,28 @@
                     const tableElement = document.querySelector('#table_div table');
                     if (tableElement) {
                         const tbody = tableElement.querySelector('tbody');
+                        console.log('tbody найден:', !!tbody, tbody);
                         if (tbody) {
-                            tbody.onclick = function(e) {
-                                let tr = e.target.closest('tr');
-                                if (!tr) return;
-                                // Диагностика: выводим все ячейки строки
-                                let cellsArr = Array.from(tr.cells).map(td => td.textContent.trim());
-                                console.log('Клик по строке:', cellsArr);
-                                // Попробуем взять название команды из второй ячейки (cells[1])
-                                const teamName = tr.cells[1]?.textContent?.trim();
-                                if (teamName) {
-                                    toggleMiniTable(tr, data, teamName);
-                                } else {
-                                    console.log('Не удалось определить название команды для мини-таблицы');
-                                }
-                            };
+                            console.log('tbody содержит строки:', tbody.querySelectorAll('tr').length);
                         }
+                    }
+                    const tableDiv = document.getElementById('table_div');
+                    if (tableDiv) {
+                        tableDiv.onclick = function(e) {
+                            let tr = e.target.closest('tr');
+                            if (!tr) {
+                                console.log('Клик не по <tr>', e.target);
+                                return;
+                            }
+                            let cellsArr = Array.from(tr.cells).map(td => td.textContent.trim());
+                            console.log('Клик по строке:', cellsArr);
+                            const teamName = tr.cells[1]?.textContent?.trim();
+                            if (teamName) {
+                                toggleMiniTable(tr, data, teamName);
+                            } else {
+                                console.log('Не удалось определить название команды для мини-таблицы');
+                            }
+                        };
                     }
                 });
             } catch (error) {
