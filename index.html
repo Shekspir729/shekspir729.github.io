@@ -550,6 +550,7 @@
         ];
         let currentCity = cities[0].name;
         let selectedTeamData = null;
+        let expandedTeams = new Set();
 
         google.charts.load('current', {'packages':['table']});
         google.charts.setOnLoadCallback(() => drawTable(currentCity));
@@ -880,6 +881,287 @@
                 }
             }
         });
+
+        function createMiniTable(data, rowIndex) {
+            try {
+                // Создаем главный wrapper
+                const wrapper = document.createElement('div');
+                wrapper.className = 'mini-table-wrapper';
+                // Создаем контейнер для скролла
+                const container = document.createElement('div');
+                container.className = 'mini-table-container';
+                const table = document.createElement('table');
+                table.className = 'mini-table';
+                const tbody = document.createElement('tbody');
+                // Динамически определяем структуру столбцов для данного города
+                const totalCols = data.getNumberOfColumns();
+                const regularStartCol = 1;
+                let regularEndCol = regularStartCol - 1;
+                let ratingStartCol = -1;
+                let ratingEndCol = -1;
+                // Найдем строку с заголовками
+                let headerRowIndex = -1;
+                for (let row = 0; row < Math.min(data.getNumberOfRows(), 3); row++) {
+                    const firstCell = data.getValue(row, 0);
+                    const secondCell = data.getValue(row, 1);
+                    const thirdCell = data.getValue(row, 2);
+                    if (firstCell && firstCell.toString().toLowerCase().includes('название')) {
+                        headerRowIndex = row;
+                        break;
+                    } else if (secondCell && secondCell.toString().toLowerCase().includes('игра')) {
+                        headerRowIndex = row;
+                        break;
+                    } else if (secondCell && thirdCell && !isNaN(parseInt(secondCell.toString())) && !isNaN(parseInt(thirdCell.toString())) && parseInt(secondCell.toString()) > 50 && parseInt(thirdCell.toString()) > 50) {
+                        headerRowIndex = row;
+                        break;
+                    }
+                }
+                if (headerRowIndex === -1) {
+                    const firstCell = data.getValue(0, 0);
+                    const secondCell = data.getValue(0, 1);
+                    if (firstCell && typeof secondCell === 'number' && secondCell > 0 && secondCell < 100) {
+                        headerRowIndex = -1;
+                    } else {
+                        headerRowIndex = 0;
+                    }
+                }
+                if (headerRowIndex === -1) {
+                    for (let i = regularStartCol; i < totalCols; i++) {
+                        let hasGameData = false;
+                        for (let row = 0; row < Math.min(data.getNumberOfRows(), 5); row++) {
+                            const cellValue = data.getValue(row, i);
+                            if (typeof cellValue === 'number' && cellValue > 0 && cellValue <= 100) {
+                                hasGameData = true;
+                                break;
+                            }
+                        }
+                        if (hasGameData) {
+                            regularEndCol = i;
+                        } else if (regularEndCol >= regularStartCol) {
+                            break;
+                        }
+                    }
+                } else {
+                    for (let i = regularStartCol; i < totalCols; i++) {
+                        const header = data.getValue(headerRowIndex, i);
+                        if (!header) continue;
+                        const headerStr = header.toString().toLowerCase().trim();
+                        if (headerStr.includes('сумма')) {
+                            break;
+                        }
+                        const hasNumber = /\d+/.test(headerStr);
+                        const isGameColumn = hasNumber && !headerStr.includes('р.б.') && !headerStr.includes('сумма');
+                        if (isGameColumn) {
+                            regularEndCol = i;
+                        }
+                    }
+                }
+                if (headerRowIndex !== -1) {
+                    for (let i = regularEndCol + 1; i < totalCols; i++) {
+                        const header = data.getValue(headerRowIndex, i);
+                        if (!header) continue;
+                        const headerStr = header.toString().toLowerCase().trim();
+                        if (headerStr.includes('р.б.') || headerStr.includes('рб') || headerStr.includes('rating')) {
+                            if (ratingStartCol === -1) {
+                                ratingStartCol = i;
+                            }
+                            ratingEndCol = i;
+                        } else if (ratingStartCol !== -1 && headerStr.includes('сумма')) {
+                            break;
+                        }
+                    }
+                }
+                let gameHeaders = [];
+                if (typeof data.getValue === 'function' && data.getNumberOfRows() > 0 && regularEndCol >= regularStartCol) {
+                    if (headerRowIndex === -1) {
+                        for (let i = regularStartCol; i <= regularEndCol; i++) {
+                            const gameNumber = 195 + (i - regularStartCol);
+                            gameHeaders.push(`Игра ${gameNumber}`);
+                        }
+                    } else {
+                        for (let i = regularStartCol; i <= regularEndCol; i++) {
+                            let header = data.getValue(headerRowIndex, i);
+                            gameHeaders.push(header ? header.toString() : `Игра ${i}`);
+                        }
+                    }
+                }
+                if (gameHeaders.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Нет данных об играх для этой команды</div>';
+                    wrapper.appendChild(container);
+                    return wrapper;
+                }
+                const headerRow = document.createElement('tr');
+                const headerCell = document.createElement('th');
+                headerCell.textContent = 'Игры';
+                headerCell.className = 'mini-row-label';
+                headerRow.appendChild(headerCell);
+                for (let i = 0; i < gameHeaders.length; i++) {
+                    const th = document.createElement('th');
+                    const gameNumber = gameHeaders[i].toString().replace(/[^\d]/g, '') || (195 + i);
+                    th.textContent = gameNumber;
+                    headerRow.appendChild(th);
+                }
+                tbody.appendChild(headerRow);
+                const tableElement = document.querySelector('#table_div table');
+                const tableRows = tableElement.querySelectorAll('tbody tr');
+                const clickedRow = tableRows[rowIndex];
+                const teamNameFromTable = clickedRow.children[1].textContent.trim();
+                let actualRowIndex = -1;
+                for (let i = 0; i < data.getNumberOfRows(); i++) {
+                    if (headerRowIndex !== -1 && i === headerRowIndex) continue;
+                    const teamNameInSheet = data.getValue(i, 0);
+                    if (teamNameInSheet && teamNameInSheet.toString().trim() === teamNameFromTable) {
+                        actualRowIndex = i;
+                        break;
+                    }
+                }
+                if (actualRowIndex === -1) {
+                    container.innerHTML = '<div style="text-align: center; padding: 20px; color: #721c24;">Команда не найдена в исходных данных</div>';
+                    wrapper.appendChild(container);
+                    return wrapper;
+                }
+                const pointsRow = document.createElement('tr');
+                const pointsCell = document.createElement('th');
+                pointsCell.textContent = 'Балл';
+                pointsCell.className = 'mini-row-label';
+                pointsRow.appendChild(pointsCell);
+                for (let i = regularStartCol; i <= regularEndCol; i++) {
+                    const points = data.getValue(actualRowIndex, i);
+                    const displayValue = (points !== null && points !== undefined && points !== '') ? points : '—';
+                    const td = document.createElement('td');
+                    td.textContent = displayValue;
+                    pointsRow.appendChild(td);
+                }
+                tbody.appendChild(pointsRow);
+                if (currentCity === 'Московский') {
+                    var rbStartCol = 16;
+                    var rbEndCol = 29;
+                } else {
+                    var rbStartCol = 15;
+                    var rbEndCol = 27;
+                }
+                if (rbStartCol !== undefined && rbEndCol !== undefined) {
+                    const ratingRow = document.createElement('tr');
+                    ratingRow.className = 'rating-row';
+                    const ratingCell = document.createElement('th');
+                    ratingCell.textContent = 'Р.Б.';
+                    ratingCell.className = 'mini-row-label';
+                    ratingRow.appendChild(ratingCell);
+                    for (let i = rbStartCol; i <= rbEndCol; i++) {
+                        const ratingPoints = data.getValue(actualRowIndex, i);
+                        const displayValue = (ratingPoints !== null && ratingPoints !== undefined && ratingPoints !== '') ? ratingPoints : '—';
+                        const td = document.createElement('td');
+                        td.textContent = displayValue;
+                        td.className = 'rating-cell';
+                        ratingRow.appendChild(td);
+                    }
+                    tbody.appendChild(ratingRow);
+                }
+                table.appendChild(tbody);
+                container.appendChild(table);
+                wrapper.appendChild(container);
+                wrapper.style.display = 'block';
+                wrapper.style.width = '100%';
+                wrapper.style.maxHeight = '0px';
+                wrapper.style.opacity = '0';
+                wrapper.style.overflow = 'hidden';
+                wrapper.style.transition = 'max-height 0.3s ease-out, opacity 0.3s ease-out';
+                return wrapper;
+            } catch (error) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'mini-table-wrapper';
+                const container = document.createElement('div');
+                container.className = 'mini-table-container';
+                container.innerHTML = `<div style="text-align: center; padding: 20px; color: #721c24; background: #f8d7da; border-radius: 8px; margin: 10px;"><strong>Произошла ошибка при загрузке данных команды</strong><br><small style="color: #666; margin-top: 10px; display: block;">Строка: ${rowIndex}, Ошибка: ${error.message || 'Неизвестная ошибка'}</small></div>`;
+                wrapper.appendChild(container);
+                return wrapper;
+            }
+        }
+
+        function toggleMiniTable(tableRow, data, rowIndex) {
+            try {
+                const teamName = tableRow.cells[1] ? tableRow.cells[1].textContent.trim() : null;
+                const allRows = document.querySelectorAll('#table_div tr');
+                allRows.forEach(row => row.classList.remove('table-row-clicked'));
+                const nextRow = tableRow.nextElementSibling;
+                const isCurrentRowExpanded = nextRow?.querySelector('.mini-table-wrapper');
+                const existingWrappers = document.querySelectorAll('.mini-table-wrapper');
+                const existingRows = [];
+                existingWrappers.forEach(wrapper => {
+                    const row = wrapper.closest('tr');
+                    if (row) {
+                        existingRows.push(row);
+                    }
+                });
+                expandedTeams.clear();
+                existingWrappers.forEach(wrapper => {
+                    wrapper.classList.remove('expanded');
+                });
+                setTimeout(() => {
+                    existingRows.forEach(row => {
+                        if (row.parentNode) {
+                            row.remove();
+                        }
+                    });
+                }, 320);
+                if (isCurrentRowExpanded) {
+                    return;
+                }
+                setTimeout(() => {
+                    try {
+                        tableRow.classList.add('table-row-clicked');
+                        const wrapper = document.createElement('tr');
+                        wrapper.style.backgroundColor = '#f8f9fa';
+                        wrapper.classList.add('mini-table-row-wrapper');
+                        const cell = document.createElement('td');
+                        const parentTable = tableRow.closest('table');
+                        const columnCount = parentTable.querySelector('tr')?.children.length || 7;
+                        cell.colSpan = columnCount;
+                        cell.style.padding = '0';
+                        cell.style.border = 'none';
+                        const miniTable = createMiniTable(data, rowIndex);
+                        cell.appendChild(miniTable);
+                        wrapper.appendChild(cell);
+                        tableRow.parentNode.insertBefore(wrapper, tableRow.nextSibling);
+                        setTimeout(() => {
+                            miniTable.classList.add('expanded');
+                            miniTable.style.maxHeight = '180px';
+                            miniTable.style.opacity = '1';
+                            miniTable.style.display = 'block';
+                            miniTable.style.visibility = 'visible';
+                            miniTable.style.overflow = 'visible';
+                            const container = miniTable.querySelector('.mini-table-container');
+                            if (container) {
+                                container.style.display = 'block';
+                                container.style.visibility = 'visible';
+                                container.style.opacity = '1';
+                                container.style.height = 'auto';
+                                container.style.minHeight = '100px';
+                            }
+                            const table = miniTable.querySelector('.mini-table');
+                            if (table) {
+                                table.style.display = 'table';
+                                table.style.visibility = 'visible';
+                                table.style.opacity = '1';
+                                table.style.width = '100%';
+                                table.style.height = 'auto';
+                            }
+                            const cells = miniTable.querySelectorAll('.mini-table th, .mini-table td');
+                            cells.forEach(cell => {
+                                cell.style.display = 'table-cell';
+                                cell.style.visibility = 'visible';
+                                cell.style.opacity = '1';
+                                cell.style.padding = '8px';
+                                cell.style.border = '1px solid #ddd';
+                            });
+                        }, 10);
+                        if (teamName) {
+                            expandedTeams.add(teamName);
+                        }
+                    } catch (error) {}
+                }, 350);
+            } catch (error) {}
+        }
     </script>
 </head>
 <body style="background: #f5f7fa;">
