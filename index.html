@@ -1426,7 +1426,7 @@
                 
                 // Строка с обычными баллами
                 const pointsRow = document.createElement('tr');
-                const pointsCell = document.createElement('td');
+                const pointsCell = document.createElement('th');
                 pointsCell.textContent = 'Балл';
                 pointsCell.className = 'mini-row-label';
                 pointsRow.appendChild(pointsCell);
@@ -1443,7 +1443,7 @@
                 if (ratingStartCol !== -1 && ratingEndCol !== -1) {
                     const ratingRow = document.createElement('tr');
                     ratingRow.className = 'rating-row';
-                    const ratingCell = document.createElement('td');
+                    const ratingCell = document.createElement('th');
                     ratingCell.textContent = 'Р.Б.';
                     ratingCell.className = 'mini-row-label';
                     ratingRow.appendChild(ratingCell);
