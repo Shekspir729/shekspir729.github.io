@@ -603,6 +603,7 @@
         let currentCity = cities[0].name;
         let selectedTeamData = null;
         let expandedTeams = new Set();
+        let miniTableLock = false;
 
         google.charts.load('current', {'packages':['table']});
         google.charts.setOnLoadCallback(() => drawTable(currentCity));
@@ -952,6 +953,7 @@
 
         function toggleMiniTable(tableRow, data, teamName) {
             try {
+                if (miniTableLock) return;
                 console.log('=== toggleMiniTable called ===', { teamName });
                 const allRows = document.querySelectorAll('#table_div tr');
                 allRows.forEach(row => row.classList.remove('table-row-clicked'));
@@ -980,6 +982,8 @@
                 // Если кликнули по уже развернутой строке, просто закрываем её (не создаем новую)
                 if (isCurrentRowExpanded) {
                     console.log(`Closing expanded subtable for team: ${teamName}`);
+                    miniTableLock = true;
+                    setTimeout(() => { miniTableLock = false; }, 350);
                     return;
                 }
                 // Создаем новую мини-таблицу с задержкой после закрытия старых
