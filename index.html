@@ -724,8 +724,8 @@
                     }
                 }
                 
-                // Сортируем по сумме обычных баллов по убыванию
-                teams.sort((a, b) => b.sumRegular - a.sumRegular);
+                // Сортируем по сумме рейтинговых баллов по убыванию
+                teams.sort((a, b) => b.sumRating - a.sumRating);
                 
                 // Формируем итоговую таблицу с местом
                 teams.forEach((team, idx) => {
@@ -761,6 +761,8 @@
                     height: '100%',
                     allowHtml: true,
                     theme: 'none',
+                    sortColumn: 4,
+                    sortAscending: false,
                     cssClassNames: {
                         headerRow: 'gchart-header',
                         tableRow: 'gchart-row',
