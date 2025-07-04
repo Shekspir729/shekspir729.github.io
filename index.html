@@ -761,8 +761,6 @@
                     height: '100%',
                     allowHtml: true,
                     theme: 'none',
-                    sortColumn: 4,
-                    sortAscending: false,
                     cssClassNames: {
                         headerRow: 'gchart-header',
                         tableRow: 'gchart-row',
@@ -773,6 +771,11 @@
                         headerCell: 'gchart-header-cell'
                     }
                 });
+                
+                // Применяем сортировку по умолчанию по столбцу "Сумма Р.Б." (индекс 4)
+                setTimeout(() => {
+                    table.setSortInfo({column: 4, desc: true});
+                }, 100);
                 lastTableHTML = newDiv.innerHTML;
                 // Анимация: новый въезжает справа
                 gsap.fromTo(newDiv, {x: '100%', autoAlpha: 1}, {duration: 1.2, x: 0, autoAlpha: 1, ease: "power4.out"});
