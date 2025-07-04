@@ -15,6 +15,7 @@
             padding: 20px;
             font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
         }
 
         /* Заголовок */
@@ -114,14 +115,6 @@
 
         /* Адаптивность */
         @media (max-width: 768px) {
-            body, .rating-container {
-                min-height: unset !important;
-            }
-            .custom-table-container {
-                padding-bottom: 32px;
-                background: #fff !important;
-                border-radius: 0 0 18px 18px;
-            }
             .rating-container {
                 padding: 10px;
             }
@@ -464,6 +457,7 @@
         body {
             display: flex;
             flex-direction: column;
+            min-height: 100vh;
             background: #222222 !important;
         }
 
