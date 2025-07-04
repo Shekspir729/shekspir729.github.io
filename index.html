@@ -373,35 +373,22 @@
             border-bottom: none;
         }
         @media (max-width: 600px) {
-            .custom-table-container {
-                padding: 4px 2px;
-                border-radius: 10px;
-                max-width: 100vw;
-                margin: 0 auto;
-                overflow-x: auto;
-            }
-            #table_div {
-                overflow-x: auto;
-                max-width: 100vw;
+            #table_div th:nth-child(3),
+            #table_div td:nth-child(3), /* Сумма баллов */
+            #table_div th:nth-child(5),
+            #table_div td:nth-child(5), /* Игр */
+            #table_div th:nth-child(6),
+            #table_div td:nth-child(6)  /* Средний балл */
+            {
+                display: none !important;
             }
             #table_div table {
-                min-width: 320px !important;
-                font-size: 0.85rem !important;
+                font-size: 0.8rem !important;
+                min-width: 0 !important;
             }
             #table_div th, #table_div td {
-                padding: 4px 2px !important;
-                font-size: 0.85rem !important;
-                height: 24px !important;
-            }
-            .city-btn {
-                font-size: 0.9rem;
-                padding: 7px 10px;
-                border-radius: 9px;
-            }
-            table.custom-table th, table.custom-table td {
-                padding: 8px 1px;
-                font-size: 1.5rem;
-                height: 36px;
+                padding: 3px 2px !important;
+                height: 20px !important;
             }
         }
         @media (max-width: 400px) {
