@@ -1475,6 +1475,35 @@
             if (!tr) return;
             tr.classList.remove('gchart-row-hover');
         });
+
+        // Автоматическое уменьшение шрифта в ячейках таблицы на мобильных
+        function autoFitTableFont() {
+            if (window.innerWidth > 600) return; // Только для мобильных
+            const table = document.querySelector('#table_div table');
+            if (!table) return;
+            const cells = table.querySelectorAll('th, td');
+            cells.forEach(cell => {
+                let fontSize = 14; // стартовый размер
+                cell.style.fontSize = fontSize + 'px';
+                cell.style.whiteSpace = 'nowrap';
+                cell.style.wordBreak = 'normal';
+                cell.style.overflow = 'visible';
+                // Уменьшаем шрифт, пока текст не влезет
+                while (cell.scrollWidth > cell.clientWidth && fontSize > 8) {
+                    fontSize--;
+                    cell.style.fontSize = fontSize + 'px';
+                }
+            });
+        }
+        // Вызов после отрисовки таблицы
+        window.addEventListener('load', autoFitTableFont);
+        window.addEventListener('resize', autoFitTableFont);
+        // Также вызывать после каждой перерисовки таблицы Google Charts
+        const origDrawTable = window.drawTable;
+        window.drawTable = function() {
+            if (origDrawTable) origDrawTable.apply(this, arguments);
+            setTimeout(autoFitTableFont, 200);
+        };
     </script>
 </head>
 <body style="background: #f5f7fa;">
