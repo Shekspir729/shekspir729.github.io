@@ -136,6 +136,61 @@
                 width: 80%;
                 margin: 5px 0;
             }
+            
+            /* Улучшения для мобильных устройств */
+            .main-title {
+                font-size: 3rem !important;
+            }
+            
+            .main-subtitle {
+                font-size: 1rem !important;
+                margin-bottom: 20px !important;
+            }
+            
+            .custom-table-container {
+                max-width: 100vw;
+                padding: 0 5px;
+            }
+            
+            .city-switcher {
+                gap: 8px;
+                margin-bottom: 16px;
+                overflow-x: auto;
+                padding: 0 10px;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .city-btn {
+                font-size: 1.2rem;
+                padding: 10px 16px;
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+            
+            #table_div {
+                margin: 16px auto;
+                max-width: 100vw;
+            }
+            
+            #table_div table {
+                font-size: 1.2rem !important;
+                min-width: 600px !important;
+            }
+            
+            #table_div th, #table_div td {
+                padding: 8px 4px !important;
+                font-size: 1.2rem !important;
+                height: 40px !important;
+            }
+            
+            #table_div th {
+                font-size: 1.3rem !important;
+            }
+            
+            #table_div td:first-child {
+                font-size: 1.4rem !important;
+                width: 50px !important;
+            }
         }
 
         /* Анимации */
@@ -301,16 +356,16 @@
                 max-width: 100vw;
             }
             #table_div table {
-                min-width: 420px !important;
-                font-size: 0.7rem !important;
+                min-width: 500px !important;
+                font-size: 1rem !important;
             }
             #table_div th, #table_div td {
-                padding: 4px 1px !important;
-                font-size: 0.7rem !important;
-                height: 28px !important;
+                padding: 6px 2px !important;
+                font-size: 1rem !important;
+                height: 32px !important;
             }
             .city-btn {
-                font-size: 0.8rem;
+                font-size: 1rem;
                 padding: 8px 12px;
             }
             table.custom-table th, table.custom-table td {
@@ -627,6 +682,122 @@
             
             .modal-mini-table th, .modal-mini-table td {
                 padding: 8px 4px;
+            }
+        }
+
+        /* Очень маленькие экраны (смартфоны) */
+        @media (max-width: 480px) {
+            .rating-container {
+                padding: 5px;
+            }
+            
+            .main-title {
+                font-size: 2.2rem !important;
+            }
+            
+            .main-subtitle {
+                font-size: 0.9rem !important;
+                margin-bottom: 16px !important;
+            }
+            
+            .city-switcher {
+                gap: 6px;
+                margin-bottom: 12px;
+                padding: 0 5px;
+            }
+            
+            .city-btn {
+                font-size: 0.9rem;
+                padding: 8px 12px;
+                border-radius: 8px;
+            }
+            
+            #table_div {
+                margin: 12px auto;
+            }
+            
+            #table_div table {
+                min-width: 450px !important;
+                font-size: 0.9rem !important;
+            }
+            
+            #table_div th, #table_div td {
+                padding: 4px 1px !important;
+                font-size: 0.9rem !important;
+                height: 28px !important;
+            }
+            
+            #table_div th {
+                font-size: 1rem !important;
+            }
+            
+            #table_div td:first-child {
+                font-size: 1.1rem !important;
+                width: 40px !important;
+            }
+            
+            .modal-content {
+                padding: 15px;
+                max-width: 98vw;
+                border-radius: 15px;
+            }
+            
+            .modal-title {
+                font-size: 1.4rem;
+            }
+            
+            .modal-close {
+                width: 35px;
+                height: 35px;
+                font-size: 1.2rem;
+            }
+            
+            .modal-mini-table {
+                padding: 10px;
+            }
+            
+            .modal-mini-table table {
+                font-size: 0.8rem;
+            }
+            
+            .modal-mini-table th, .modal-mini-table td {
+                padding: 6px 3px;
+            }
+        }
+
+        /* Экстремально маленькие экраны */
+        @media (max-width: 360px) {
+            .main-title {
+                font-size: 2.5rem !important;
+            }
+            
+            .main-subtitle {
+                font-size: 0.8rem !important;
+                margin-bottom: 16px !important;
+            }
+            
+            .city-btn {
+                font-size: 0.8rem;
+                padding: 6px 10px;
+            }
+            
+            #table_div table {
+                min-width: 400px !important;
+                font-size: 0.8rem !important;
+            }
+            
+            #table_div th, #table_div td {
+                padding: 3px 1px !important;
+                font-size: 0.8rem !important;
+                height: 24px !important;
+            }
+            
+            .modal-content {
+                padding: 10px;
+            }
+            
+            .modal-title {
+                font-size: 1.2rem;
             }
         }
     </style>
@@ -1268,8 +1439,8 @@
             <div class="page" v-bind:class="state.view">
                 <div class="center">
                     <div class="custom-table-container">
-                        <h1 style="text-align:center; font-size:4.4rem; margin-bottom: 8px; color:#222;">🏆 Рейтинг НФ</h1>
-                        <p style="text-align:center; color:#666; margin-bottom: 24px;">Актуальная таблица лидеров</p>
+                        <h1 style="text-align:center; font-size:4.4rem; margin-bottom: 8px; color:#222;" class="main-title">🏆 Рейтинг НФ</h1>
+                        <p style="text-align:center; color:#666; margin-bottom: 24px;" class="main-subtitle">Актуальная таблица лидеров</p>
                         <div class="city-switcher">
                             <script>
                                 document.write(
