@@ -485,107 +485,148 @@
             opacity: 0.8;
         }
 
-        /* Новые стили для мини-таблиц */
-        .mini-table-container {
-            background: transparent !important;
-            border-radius: 12px !important;
-            border: 2px solid #FFD600 !important;
-            box-shadow: none !important;
-            overflow-x: auto !important;
-            overflow-y: hidden !important;
-            width: 100% !important;
-            max-width: 100% !important;
-            position: relative !important;
-            display: block !important;
-            min-height: 200px !important;
-        }
-        .mini-table {
-            border-radius: 12px !important;
-            overflow: hidden !important;
-            background: #222222 !important;
-        }
-        .mini-table th, .mini-table td {
-            background: #222222 !important;
-            color: #fff !important;
-            border: 1px solid #FFD600 !important;
-        }
-        .mini-table-row-wrapper {
-            background: #FFD600 !important;
-            border-radius: 12px !important;
-        }
-        .mini-table tr:first-child th, .mini-table tr:first-child td {
-            font-size: 0.7rem !important;
-        }
-        .mini-table tr:first-child td,
-        .mini-table tr:first-child th {
-            background: #e8e8e8 !important;
-            font-weight: bold;
-            border-bottom: clamp(1px, 0.15vw, 1.5px) solid #FFD600 !important;
-            font-size: 0.5rem !important;
-            position: sticky;
+
+
+
+        /* Стили для модального окна */
+        .modal-overlay {
+            position: fixed;
             top: 0;
-            z-index: 4;
-        }
-        .mini-table tr:first-child th:first-child {
-            text-align: left !important;
-            position: sticky;
             left: 0;
-            z-index: 5;
-            min-width: clamp(35px, 6vw, 70px) !important;
-            max-width: clamp(55px, 9vw, 100px) !important;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
         }
-        .mini-table tr td:first-child {
-            text-align: left !important;
-            font-weight: bold !important;
-            background: #f0f0f0 !important;
-            border-right: clamp(1px, 0.15vw, 1.5px) solid #FFD600 !important;
-            position: sticky;
-            left: 0;
-            z-index: 3;
-            min-width: clamp(35px, 6vw, 70px) !important;
-            max-width: clamp(55px, 9vw, 100px) !important;
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
         }
-        .mini-table tr:hover td {
-            background: #ffe082 !important;
-            transition: background 0.2s ease;
+
+        .modal-content {
+            background: #222222;
+            border: 3px solid #FFD600;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 90vw;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.7);
+            transition: transform 0.3s ease;
         }
-        .mini-table tr:hover td:first-child {
-            background: #f0f0f0 !important;
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
         }
-        .mini-table .rating-row .rating-cell {
-            background: #fffacd !important;
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #FFD600;
         }
-        .mini-table tr:hover .rating-cell {
-            background: #fff3cd !important;
+
+        .modal-title {
+            color: #FFD600;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 0;
         }
-        .mini-table th:not(:first-child) {
-            writing-mode: horizontal-tb !important;
-            text-orientation: unset !important;
-            min-width: clamp(25px, 3.5vw, 40px) !important;
-            max-width: clamp(35px, 4.5vw, 55px) !important;
-            height: auto !important;
-            padding: clamp(2px, 0.4vw, 4px) clamp(2px, 0.4vw, 4px) !important;
-            font-size: 0.5rem !important;
+
+        .modal-close {
+            background: #FFD600;
+            color: #222;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
         }
-        @media (max-width: 900px) {
-            .mini-table th:not(:first-child) {
-                writing-mode: horizontal-tb !important;
-                text-orientation: unset !important;
-                min-width: clamp(20px, 3vw, 35px) !important;
-                max-width: clamp(30px, 4vw, 45px) !important;
-                height: auto !important;
-                padding: clamp(2px, 0.3vw, 3px) clamp(1px, 0.3vw, 3px) !important;
-                font-size: 0.5rem !important;
+
+        .modal-close:hover {
+            background: #FFC107;
+            transform: scale(1.1);
+        }
+
+        .modal-mini-table {
+            background: #333;
+            border-radius: 15px;
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .modal-mini-table table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-family: 'Arial', sans-serif;
+            font-size: 1.2rem;
+            background: #444;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .modal-mini-table th, .modal-mini-table td {
+            padding: 12px 8px;
+            text-align: center;
+            border: 1px solid #555;
+            background: #444;
+            color: #fff;
+        }
+
+        .modal-mini-table th {
+            background: #555;
+            font-weight: bold;
+            color: #FFD600;
+        }
+
+        .modal-mini-table .rating-cell {
+            background: #4a4a4a;
+        }
+
+        .modal-mini-table tr:hover td {
+            background: #666;
+        }
+
+        .modal-mini-table tr:hover .rating-cell {
+            background: #5a5a5a;
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                padding: 20px;
+                max-width: 95vw;
             }
-            .mini-table th, .mini-table td {
-                font-size: 0.5rem !important;
-                min-width: clamp(20px, 3vw, 35px);
-                max-width: clamp(30px, 4.5vw, 50px);
+            
+            .modal-title {
+                font-size: 1.8rem;
             }
-            .mini-table tr:first-child th:first-child,
-            .mini-table tr td:first-child {
-                min-width: clamp(40px, 7vw, 80px) !important;
-                max-width: clamp(60px, 10vw, 100px) !important;
+            
+            .modal-mini-table {
+                padding: 15px;
+            }
+            
+            .modal-mini-table table {
+                font-size: 1rem;
+            }
+            
+            .modal-mini-table th, .modal-mini-table td {
+                padding: 8px 4px;
             }
         }
     </style>
@@ -786,7 +827,7 @@
                     newDiv.style.transform = 'translateX(0)';
                 }, 1300);
 
-                // Новый обработчик клика по строке, как в index_mini.html
+                // Обработчик клика по строке для открытия модального окна
                 setTimeout(() => {
                     const tableElement = document.querySelector('#table_div table');
                     if (tableElement) {
@@ -799,6 +840,7 @@
                         });
                     }
                 }, 0);
+                
                 // Обработчик для сортировки
                 if (typeof google !== 'undefined' && google.visualization && google.visualization.events) {
                     google.visualization.events.addListener(table, 'sort', function() {
@@ -958,43 +1000,84 @@
         });
 
         function toggleMiniTable(tableRow, data, teamName) {
-            const nextRow = tableRow.nextElementSibling;
-            const isCurrentRowExpanded = nextRow && nextRow.classList.contains('mini-table-row-wrapper');
-
-            // Если уже открыта — просто закрываем её и выходим
-            if (isCurrentRowExpanded) {
-                nextRow.remove();
-                tableRow.classList.remove('table-row-clicked');
-                return;
-            }
-
-            // Если не открыта — закрываем все мини-таблицы
-            document.querySelectorAll('.mini-table-row-wrapper').forEach(row => row.remove());
+            // Убираем выделение со всех строк
             document.querySelectorAll('#table_div tr').forEach(row => row.classList.remove('table-row-clicked'));
-
-            // Открываем новую мини-таблицу
+            
+            // Добавляем выделение к текущей строке
             tableRow.classList.add('table-row-clicked');
-            const wrapper = document.createElement('tr');
-            wrapper.className = 'mini-table-row-wrapper';
-            const cell = document.createElement('td');
-            const parentTable = tableRow.closest('table');
-            const columnCount = parentTable.querySelector('tr')?.children.length || 7;
-            cell.colSpan = columnCount;
-            cell.style.padding = '0';
-            cell.style.border = 'none';
+            
+            // Создаем модальное окно
+            const modalOverlay = document.createElement('div');
+            modalOverlay.className = 'modal-overlay';
+            
+            const modalContent = document.createElement('div');
+            modalContent.className = 'modal-content';
+            
+            const modalHeader = document.createElement('div');
+            modalHeader.className = 'modal-header';
+            
+            const modalTitle = document.createElement('h2');
+            modalTitle.className = 'modal-title';
+            modalTitle.textContent = teamName;
+            
+            const modalClose = document.createElement('button');
+            modalClose.className = 'modal-close';
+            modalClose.innerHTML = '×';
+            modalClose.onclick = function() {
+                closeModal();
+            };
+            
+            modalHeader.appendChild(modalTitle);
+            modalHeader.appendChild(modalClose);
+            
+            const modalMiniTable = document.createElement('div');
+            modalMiniTable.className = 'modal-mini-table';
+            
+            // Создаем мини-таблицу
             const miniTable = createMiniTable(data, teamName);
-            cell.appendChild(miniTable);
-            wrapper.appendChild(cell);
-            tableRow.parentNode.insertBefore(wrapper, tableRow.nextSibling);
+            modalMiniTable.appendChild(miniTable);
+            
+            modalContent.appendChild(modalHeader);
+            modalContent.appendChild(modalMiniTable);
+            modalOverlay.appendChild(modalContent);
+            
+            document.body.appendChild(modalOverlay);
+            
+            // Анимация появления
+            setTimeout(() => {
+                modalOverlay.classList.add('active');
+            }, 10);
+            
+            // Закрытие по клику вне модального окна
+            modalOverlay.onclick = function(e) {
+                if (e.target === modalOverlay) {
+                    closeModal();
+                }
+            };
+            
+            // Закрытие по Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+            
+            function closeModal() {
+                modalOverlay.classList.remove('active');
+                setTimeout(() => {
+                    document.body.removeChild(modalOverlay);
+                    tableRow.classList.remove('table-row-clicked');
+                }, 300);
+            }
         }
 
         function createMiniTable(data, teamName) {
             try {
                 console.log('=== createMiniTable called ===', { teamName });
                 const container = document.createElement('div');
-                container.className = 'mini-table-container';
+                container.className = 'modal-mini-table';
                 const table = document.createElement('table');
-                table.className = 'mini-table';
+                table.className = 'modal-mini-table';
                 const tbody = document.createElement('tbody');
                 const totalCols = data.getNumberOfColumns();
                 const regularStartCol = 1;
