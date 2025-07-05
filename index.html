@@ -1076,7 +1076,7 @@
                     }
                 });
                 
-                applyAdaptiveTableStyles();
+                applyAdaptiveTableStylesDelayed();
                 
                 // Применяем сортировку по умолчанию по столбцу "Сумма Р.Б." (индекс 4)
                 setTimeout(() => {
@@ -1120,7 +1120,7 @@
                                     };
                                 });
                             }
-                            applyAdaptiveTableStyles();
+                            applyAdaptiveTableStylesDelayed();
                         }, 100);
                     });
                 }
@@ -1532,25 +1532,34 @@
 
         function applyAdaptiveTableStyles() {
             const scale = getTableScale();
-            // Базовые значения для десктопа
-            const baseFont = 28; // px
+            const baseFont = 28;
             const baseThFont = 32;
             const basePadding = 16;
             const baseHeight = 48;
 
+            // th и td
             document.querySelectorAll('#table_div th, #table_div td').forEach(el => {
-                el.style.fontSize = (baseFont * scale) + 'px';
-                el.style.padding = (basePadding * scale) + 'px ' + (8 * scale) + 'px';
-                el.style.height = (baseHeight * scale) + 'px';
+                el.style.setProperty('font-size', (baseFont * scale) + 'px', 'important');
+                el.style.setProperty('padding', (basePadding * scale) + 'px ' + (8 * scale) + 'px', 'important');
+                el.style.setProperty('height', (baseHeight * scale) + 'px', 'important');
             });
+            // th отдельно
             document.querySelectorAll('#table_div th').forEach(el => {
-                el.style.fontSize = (baseThFont * scale) + 'px';
+                el.style.setProperty('font-size', (baseThFont * scale) + 'px', 'important');
+            });
+            // вложенные span и div
+            document.querySelectorAll('#table_div th span, #table_div td span, #table_div th div, #table_div td div').forEach(el => {
+                el.style.setProperty('font-size', (baseFont * scale) + 'px', 'important');
             });
         }
 
+        function applyAdaptiveTableStylesDelayed() {
+            setTimeout(applyAdaptiveTableStyles, 100);
+        }
+
         // Добавить вызов applyAdaptiveTableStyles при изменении размера окна
-        window.addEventListener('resize', applyAdaptiveTableStyles);
-        window.addEventListener('orientationchange', () => setTimeout(applyAdaptiveTableStyles, 200));
+        window.addEventListener('resize', applyAdaptiveTableStylesDelayed);
+        window.addEventListener('orientationchange', () => setTimeout(applyAdaptiveTableStylesDelayed, 200));
     </script>
 </head>
 <body style="background: #f5f7fa;">
