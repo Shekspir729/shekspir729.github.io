@@ -1051,6 +1051,9 @@
                     return;
                 }
                 
+                // Сохраняем данные Google Sheets глобально для мобильной мини-таблицы
+                window.lastGoogleSheetsData = data;
+                
                 const result = [['Место', 'Название команды', 'Сумма баллов', 'Сумма Р.Б.', 'Игр', 'Средний балл', 'Средний Р.Б.']];
                 let teams = [];
                 
@@ -1374,9 +1377,18 @@
             const modalMiniTable = document.createElement('div');
             modalMiniTable.className = 'modal-mini-table';
             
-            // Создаем мини-таблицу
-            const miniTable = createMiniTable(data, teamName);
-            modalMiniTable.appendChild(miniTable);
+            // Используем ту же функцию createMiniTable что и в десктопной версии
+            // Нужно передать данные Google Sheets и название команды
+            // Для этого нужно сохранить данные Google Sheets глобально
+            if (window.lastGoogleSheetsData) {
+                const miniTable = createMiniTable(window.lastGoogleSheetsData, teamName);
+                modalMiniTable.appendChild(miniTable);
+            } else {
+                // Fallback если данные недоступны
+                const fallbackDiv = document.createElement('div');
+                fallbackDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Данные по играм недоступны</div>';
+                modalMiniTable.appendChild(fallbackDiv);
+            }
             
             modalContent.appendChild(modalHeader);
             modalContent.appendChild(modalMiniTable);
@@ -1407,7 +1419,8 @@
                 modalOverlay.classList.remove('active');
                 setTimeout(() => {
                     document.body.removeChild(modalOverlay);
-                    tableRow.classList.remove('table-row-clicked');
+                    // Убираем выделение с карточки
+                    document.querySelectorAll('.table-card').forEach(c => c.classList.remove('clicked'));
                 }, 300);
             }
         }
@@ -1742,9 +1755,18 @@
             const modalMiniTable = document.createElement('div');
             modalMiniTable.className = 'modal-mini-table';
             
-            // Создаем мини-таблицу с данными команды
-            const miniTable = createTeamMiniTable(teamData);
-            modalMiniTable.appendChild(miniTable);
+            // Используем ту же функцию createMiniTable что и в десктопной версии
+            // Нужно передать данные Google Sheets и название команды
+            // Для этого нужно сохранить данные Google Sheets глобально
+            if (window.lastGoogleSheetsData) {
+                const miniTable = createMiniTable(window.lastGoogleSheetsData, teamName);
+                modalMiniTable.appendChild(miniTable);
+            } else {
+                // Fallback если данные недоступны
+                const fallbackDiv = document.createElement('div');
+                fallbackDiv.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">Данные по играм недоступны</div>';
+                modalMiniTable.appendChild(fallbackDiv);
+            }
             
             modalContent.appendChild(modalHeader);
             modalContent.appendChild(modalMiniTable);
@@ -1779,44 +1801,6 @@
                     document.querySelectorAll('.table-card').forEach(c => c.classList.remove('clicked'));
                 }, 300);
             }
-        }
-
-        // Функция для создания мини-таблицы команды
-        function createTeamMiniTable(teamData) {
-            const container = document.createElement('div');
-            container.className = 'modal-mini-table';
-            
-            const table = document.createElement('table');
-            table.className = 'modal-mini-table';
-            const tbody = document.createElement('tbody');
-            
-            // Создаем строки с данными команды
-            const dataRows = [
-                { label: 'Сумма баллов', value: teamData.sumRegular },
-                { label: 'Сумма Р.Б.', value: teamData.sumRating },
-                { label: 'Количество игр', value: teamData.count },
-                { label: 'Средний балл', value: teamData.avgRegular },
-                { label: 'Средний Р.Б.', value: teamData.avgRating }
-            ];
-            
-            dataRows.forEach(row => {
-                const tr = document.createElement('tr');
-                
-                const th = document.createElement('th');
-                th.textContent = row.label;
-                th.className = 'mini-row-label';
-                
-                const td = document.createElement('td');
-                td.textContent = row.value;
-                
-                tr.appendChild(th);
-                tr.appendChild(td);
-                tbody.appendChild(tr);
-            });
-            
-            table.appendChild(tbody);
-            container.appendChild(table);
-            return container;
         }
 
         // Функция для переключения между режимами
