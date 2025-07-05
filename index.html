@@ -873,6 +873,19 @@
                 padding: 16px;
                 box-shadow: 0 2px 8px rgba(0,0,0,0.1);
                 border: 2px solid #FFD600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            
+            .table-card:hover {
+                background: #ffe082;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 16px rgba(255,214,0,0.3);
+            }
+            
+            .table-card.clicked {
+                background: #ffe082;
+                border-color: #FFC107;
             }
             
             .table-card-header {
@@ -1680,10 +1693,130 @@
                 
                 card.appendChild(header);
                 card.appendChild(dataSection);
+                
+                // Добавляем обработчик клика для открытия мини-таблицы
+                card.onclick = function() {
+                    // Убираем выделение со всех карточек
+                    document.querySelectorAll('.table-card').forEach(c => c.classList.remove('clicked'));
+                    // Добавляем выделение к текущей карточке
+                    this.classList.add('clicked');
+                    
+                    // Открываем мини-таблицу
+                    // Нужно передать данные команды и название
+                    // Для этого нужно сохранить данные команд глобально или передать их в функцию
+                    openMobileMiniTable(team.name, team);
+                };
+                
                 mobileCards.appendChild(card);
             });
             
             container.appendChild(mobileCards);
+        }
+
+        // Функция для открытия мини-таблицы в мобильной версии
+        function openMobileMiniTable(teamName, teamData) {
+            // Создаем модальное окно
+            const modalOverlay = document.createElement('div');
+            modalOverlay.className = 'modal-overlay';
+            
+            const modalContent = document.createElement('div');
+            modalContent.className = 'modal-content';
+            
+            const modalHeader = document.createElement('div');
+            modalHeader.className = 'modal-header';
+            
+            const modalTitle = document.createElement('h2');
+            modalTitle.className = 'modal-title';
+            modalTitle.textContent = teamName;
+            
+            const modalClose = document.createElement('button');
+            modalClose.className = 'modal-close';
+            modalClose.innerHTML = '×';
+            modalClose.onclick = function() {
+                closeModal();
+            };
+            
+            modalHeader.appendChild(modalTitle);
+            modalHeader.appendChild(modalClose);
+            
+            const modalMiniTable = document.createElement('div');
+            modalMiniTable.className = 'modal-mini-table';
+            
+            // Создаем мини-таблицу с данными команды
+            const miniTable = createTeamMiniTable(teamData);
+            modalMiniTable.appendChild(miniTable);
+            
+            modalContent.appendChild(modalHeader);
+            modalContent.appendChild(modalMiniTable);
+            modalOverlay.appendChild(modalContent);
+            
+            document.body.appendChild(modalOverlay);
+            
+            // Анимация появления
+            setTimeout(() => {
+                modalOverlay.classList.add('active');
+            }, 10);
+            
+            // Закрытие по клику вне модального окна
+            modalOverlay.onclick = function(e) {
+                if (e.target === modalOverlay) {
+                    closeModal();
+                }
+            };
+            
+            // Закрытие по Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+            
+            function closeModal() {
+                modalOverlay.classList.remove('active');
+                setTimeout(() => {
+                    document.body.removeChild(modalOverlay);
+                    // Убираем выделение с карточки
+                    document.querySelectorAll('.table-card').forEach(c => c.classList.remove('clicked'));
+                }, 300);
+            }
+        }
+
+        // Функция для создания мини-таблицы команды
+        function createTeamMiniTable(teamData) {
+            const container = document.createElement('div');
+            container.className = 'modal-mini-table';
+            
+            const table = document.createElement('table');
+            table.className = 'modal-mini-table';
+            const tbody = document.createElement('tbody');
+            
+            // Создаем строки с данными команды
+            const dataRows = [
+                { label: 'Сумма баллов', value: teamData.sumRegular },
+                { label: 'Сумма Р.Б.', value: teamData.sumRating },
+                { label: 'Количество игр', value: teamData.count },
+                { label: 'Средний балл', value: teamData.avgRegular },
+                { label: 'Средний Р.Б.', value: teamData.avgRating }
+            ];
+            
+            dataRows.forEach(row => {
+                const tr = document.createElement('tr');
+                
+                const th = document.createElement('th');
+                th.textContent = row.label;
+                th.className = 'mini-row-label';
+                
+                const td = document.createElement('td');
+                td.textContent = row.value;
+                
+                tr.appendChild(th);
+                tr.appendChild(td);
+                tbody.appendChild(tr);
+            });
+            
+            table.appendChild(tbody);
+            container.appendChild(table);
+            return container;
         }
 
         // Функция для переключения между режимами
