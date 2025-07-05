@@ -880,6 +880,29 @@
         google.charts.load('current', {'packages':['table']});
         google.charts.setOnLoadCallback(() => drawTable(currentCity));
 
+        // Функция для вывода разрешения экрана в консоль
+        function logScreenResolution() {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const screenWidth = window.screen.width;
+            const screenHeight = window.screen.height;
+            const devicePixelRatio = window.devicePixelRatio;
+            
+            console.log('=== РАЗРЕШЕНИЕ ЭКРАНА ===');
+            console.log(`Внутреннее окно браузера: ${width}x${height}px`);
+            console.log(`Физическое разрешение экрана: ${screenWidth}x${screenHeight}px`);
+            console.log(`Плотность пикселей: ${devicePixelRatio}`);
+            console.log(`Эффективное разрешение: ${Math.round(width * devicePixelRatio)}x${Math.round(height * devicePixelRatio)}px`);
+            console.log(`Тип устройства: ${width <= 768 ? 'Мобильное' : width <= 1024 ? 'Планшет' : 'Десктоп'}`);
+            console.log('========================');
+        }
+
+        // Вызываем функцию при загрузке страницы
+        window.addEventListener('load', logScreenResolution);
+        
+        // Вызываем функцию при изменении размера окна
+        window.addEventListener('resize', logScreenResolution);
+
         let lastTableHTML = '';
 
         function drawTable(city) {
