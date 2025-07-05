@@ -377,8 +377,6 @@
                 width: 98vw !important;
                 max-width: 98vw !important;
                 overflow-x: auto !important;
-                transform: scale(0.85) !important;
-                transform-origin: top center !important;
             }
             #table_div table {
                 width: 98vw !important;
@@ -404,10 +402,6 @@
             }
         }
         @media (max-width: 400px) {
-            #table_div {
-                transform: scale(0.7) !important;
-                transform-origin: top center !important;
-            }
             #table_div table {
                 min-width: 260px !important;
                 font-size: 1.5rem !important;
@@ -765,8 +759,6 @@
             
             #table_div {
                 margin: 12px auto;
-                transform: scale(0.75) !important;
-                transform-origin: top center !important;
             }
             
             #table_div table {
@@ -835,10 +827,7 @@
                 border-radius: 6px;
             }
             
-            #table_div {
-                transform: scale(0.65) !important;
-                transform-origin: top center !important;
-            }
+
             
             #table_div table {
                 min-width: 400px !important;
@@ -897,11 +886,50 @@
             console.log('========================');
         }
 
-        // Вызываем функцию при загрузке страницы
-        window.addEventListener('load', logScreenResolution);
+        // Функция для автоматического масштабирования таблицы
+        function autoScaleTable() {
+            const width = window.innerWidth;
+            const tableDiv = document.getElementById('table_div');
+            
+            if (!tableDiv) return;
+            
+            let scale = 1; // Базовый масштаб для десктопа
+            
+            // Адаптивное масштабирование на основе ширины экрана
+            if (width <= 360) {
+                scale = 0.6; // Очень маленькие экраны
+            } else if (width <= 400) {
+                scale = 0.65; // Маленькие экраны
+            } else if (width <= 480) {
+                scale = 0.7; // Средние мобильные
+            } else if (width <= 600) {
+                scale = 0.8; // Большие мобильные
+            } else if (width <= 768) {
+                scale = 0.85; // Планшеты
+            } else if (width <= 1024) {
+                scale = 0.9; // Маленькие ноутбуки
+            } else {
+                scale = 1; // Десктоп
+            }
+            
+            // Применяем масштабирование
+            tableDiv.style.transform = `scale(${scale})`;
+            tableDiv.style.transformOrigin = 'top center';
+            
+            console.log(`Применен масштаб: ${scale} для ширины экрана: ${width}px`);
+        }
+
+        // Вызываем функции при загрузке страницы
+        window.addEventListener('load', () => {
+            logScreenResolution();
+            autoScaleTable();
+        });
         
-        // Вызываем функцию при изменении размера окна
-        window.addEventListener('resize', logScreenResolution);
+        // Вызываем функции при изменении размера окна
+        window.addEventListener('resize', () => {
+            logScreenResolution();
+            autoScaleTable();
+        });
 
         let lastTableHTML = '';
 
@@ -1073,11 +1101,13 @@
                 lastTableHTML = newDiv.innerHTML;
                 // Анимация: новый въезжает справа
                 gsap.fromTo(newDiv, {x: '100%', autoAlpha: 1}, {duration: 1.2, x: 0, autoAlpha: 1, ease: "power4.out"});
-                // После анимации сбрасываем старый слой
+                // После анимации сбрасываем старый слой и применяем масштабирование
                 setTimeout(() => {
                     document.getElementById('table_fade_old').innerHTML = '';
                     document.getElementById('table_fade_old').style.transform = 'translateX(0)';
                     newDiv.style.transform = 'translateX(0)';
+                    // Применяем масштабирование после отрисовки таблицы
+                    autoScaleTable();
                 }, 1300);
 
                 // Обработчик клика по строке для открытия модального окна
