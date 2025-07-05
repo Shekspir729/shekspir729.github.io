@@ -381,24 +381,27 @@
             #table_div table {
                 width: 98vw !important;
                 min-width: unset !important;
-                font-size: 0.9rem !important;
+                font-size: 9px !important;
                 table-layout: fixed !important;
             }
             #table_div th, #table_div td {
-                padding: 6px 2px !important;
-                height: 24px !important;
+                padding: 1px 1px !important;
+                height: 16px !important;
                 white-space: nowrap !important;
                 word-break: normal !important;
-                font-size: 0.9rem !important;
-                overflow: visible !important;
-                text-overflow: unset !important;
+                font-size: 9px !important;
+                max-width: 60px !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
             }
             #table_div th {
-                font-size: 1rem !important;
+                font-size: 10px !important;
+                max-width: 70px !important;
             }
             #table_div td:first-child {
-                font-size: 1.1rem !important;
-                width: 30px !important;
+                font-size: 10px !important;
+                width: 18px !important;
+                max-width: 18px !important;
             }
         }
         @media (max-width: 400px) {
@@ -407,7 +410,7 @@
                 font-size: 0.7rem !important;
             }
             #table_div th, #table_div td {
-                padding: 3px 1px !important;
+                padding: 2px 1px !important;
                 font-size: 0.7rem !important;
                 height: 18px !important;
             }
@@ -416,7 +419,7 @@
             }
             #table_div td:first-child {
                 font-size: 0.8rem !important;
-                width: 20px !important;
+                width: 24px !important;
             }
         }
         h1, p {
@@ -763,22 +766,22 @@
             
             #table_div table {
                 min-width: 450px !important;
-                font-size: 1.5rem !important;
+                font-size: 0.9rem !important;
             }
             
             #table_div th, #table_div td {
-                padding: 16px 12px !important;
-                font-size: 1.5rem !important;
-                height: 48px !important;
+                padding: 4px 1px !important;
+                font-size: 0.9rem !important;
+                height: 28px !important;
             }
             
             #table_div th {
-                font-size: 1.6rem !important;
+                font-size: 1rem !important;
             }
             
             #table_div td:first-child {
-                font-size: 1.7rem !important;
-                width: 60px !important;
+                font-size: 1.1rem !important;
+                width: 40px !important;
             }
             
             .modal-content {
@@ -827,17 +830,15 @@
                 border-radius: 6px;
             }
             
-
-            
             #table_div table {
                 min-width: 400px !important;
-                font-size: 1.5rem !important;
+                font-size: 0.8rem !important;
             }
             
             #table_div th, #table_div td {
-                padding: 16px 12px !important;
-                font-size: 1.5rem !important;
-                height: 48px !important;
+                padding: 3px 1px !important;
+                font-size: 0.8rem !important;
+                height: 24px !important;
             }
             
             .modal-content {
@@ -846,33 +847,6 @@
             
             .modal-title {
                 font-size: 1.2rem;
-            }
-        }
-
-        @media (max-width: 600px) {
-            #table_div table,
-            #table_div table th,
-            #table_div table td,
-            #table_div .gchart-header,
-            #table_div .gchart-header-cell,
-            #table_div .gchart-row,
-            #table_div .gchart-cell {
-                font-size: 0.9rem !important;
-                padding: 6px 2px !important;
-                height: 24px !important;
-            }
-        }
-        @media (max-width: 400px) {
-            #table_div table,
-            #table_div table th,
-            #table_div table td,
-            #table_div .gchart-header,
-            #table_div .gchart-header-cell,
-            #table_div .gchart-row,
-            #table_div .gchart-cell {
-                font-size: 0.7rem !important;
-                padding: 3px 1px !important;
-                height: 18px !important;
             }
         }
     </style>
@@ -895,23 +869,6 @@
 
         google.charts.load('current', {'packages':['table']});
         google.charts.setOnLoadCallback(() => drawTable(currentCity));
-
-        // Функция для вывода разрешения экрана в консоль
-        function logScreenResolution() {
-            const width = window.innerWidth;
-            const height = window.innerHeight;
-            const screenWidth = window.screen.width;
-            const screenHeight = window.screen.height;
-            const devicePixelRatio = window.devicePixelRatio;
-            
-            console.log('=== РАЗРЕШЕНИЕ ЭКРАНА ===');
-            console.log(`Внутреннее окно браузера: ${width}x${height}px`);
-            console.log(`Физическое разрешение экрана: ${screenWidth}x${screenHeight}px`);
-            console.log(`Плотность пикселей: ${devicePixelRatio}`);
-            console.log(`Эффективное разрешение: ${Math.round(width * devicePixelRatio)}x${Math.round(height * devicePixelRatio)}px`);
-            console.log(`Тип устройства: ${width <= 768 ? 'Мобильное' : width <= 1024 ? 'Планшет' : 'Десктоп'}`);
-            console.log('========================');
-        }
 
         let lastTableHTML = '';
 
@@ -1076,8 +1033,6 @@
                     }
                 });
                 
-                applyAdaptiveTableStylesDelayed();
-                
                 // Применяем сортировку по умолчанию по столбцу "Сумма Р.Б." (индекс 4)
                 setTimeout(() => {
                     table.setSortInfo({column: 4, desc: true});
@@ -1085,7 +1040,7 @@
                 lastTableHTML = newDiv.innerHTML;
                 // Анимация: новый въезжает справа
                 gsap.fromTo(newDiv, {x: '100%', autoAlpha: 1}, {duration: 1.2, x: 0, autoAlpha: 1, ease: "power4.out"});
-                // После анимации сбрасываем старый слой и применяем масштабирование
+                // После анимации сбрасываем старый слой
                 setTimeout(() => {
                     document.getElementById('table_fade_old').innerHTML = '';
                     document.getElementById('table_fade_old').style.transform = 'translateX(0)';
@@ -1120,7 +1075,6 @@
                                     };
                                 });
                             }
-                            applyAdaptiveTableStylesDelayed();
                         }, 100);
                     });
                 }
@@ -1522,44 +1476,34 @@
             tr.classList.remove('gchart-row-hover');
         });
 
-        function getTableScale() {
-            // Минимальная и максимальная ширина для масштабирования
-            const minW = 320, maxW = 1200;
-            const w = Math.max(minW, Math.min(window.innerWidth, maxW));
-            // scale = 1 при 1200px, scale = 0.7 при 320px
-            return 0.7 + 0.3 * ((w - minW) / (maxW - minW));
-        }
-
-        function applyAdaptiveTableStyles() {
-            const scale = getTableScale();
-            const baseFont = 28;
-            const baseThFont = 32;
-            const basePadding = 16;
-            const baseHeight = 48;
-
-            // th и td
-            document.querySelectorAll('#table_div th, #table_div td').forEach(el => {
-                el.style.setProperty('font-size', (baseFont * scale) + 'px', 'important');
-                el.style.setProperty('padding', (basePadding * scale) + 'px ' + (8 * scale) + 'px', 'important');
-                el.style.setProperty('height', (baseHeight * scale) + 'px', 'important');
-            });
-            // th отдельно
-            document.querySelectorAll('#table_div th').forEach(el => {
-                el.style.setProperty('font-size', (baseThFont * scale) + 'px', 'important');
-            });
-            // вложенные span и div
-            document.querySelectorAll('#table_div th span, #table_div td span, #table_div th div, #table_div td div').forEach(el => {
-                el.style.setProperty('font-size', (baseFont * scale) + 'px', 'important');
+        // Автоматическое уменьшение шрифта в ячейках таблицы на мобильных
+        function autoFitTableFont() {
+            if (window.innerWidth > 600) return; // Только для мобильных
+            const table = document.querySelector('#table_div table');
+            if (!table) return;
+            const cells = table.querySelectorAll('th, td');
+            cells.forEach(cell => {
+                let fontSize = 14;
+                cell.style.setProperty('white-space', 'nowrap', 'important');
+                cell.style.setProperty('word-break', 'normal', 'important');
+                cell.style.setProperty('overflow', 'hidden', 'important');
+                cell.style.setProperty('text-overflow', 'ellipsis', 'important');
+                cell.style.setProperty('font-size', fontSize + 'px', 'important');
+                while (cell.scrollWidth > cell.clientWidth && fontSize > 8) {
+                    fontSize--;
+                    cell.style.setProperty('font-size', fontSize + 'px', 'important');
+                }
             });
         }
-
-        function applyAdaptiveTableStylesDelayed() {
-            setTimeout(applyAdaptiveTableStyles, 100);
-        }
-
-        // Добавить вызов applyAdaptiveTableStyles при изменении размера окна
-        window.addEventListener('resize', applyAdaptiveTableStylesDelayed);
-        window.addEventListener('orientationchange', () => setTimeout(applyAdaptiveTableStylesDelayed, 200));
+        // Вызов после отрисовки таблицы
+        window.addEventListener('load', autoFitTableFont);
+        window.addEventListener('resize', autoFitTableFont);
+        // Также вызывать после каждой перерисовки таблицы Google Charts
+        const origDrawTable = window.drawTable;
+        window.drawTable = function() {
+            if (origDrawTable) origDrawTable.apply(this, arguments);
+            setTimeout(autoFitTableFont, 200);
+        };
     </script>
 </head>
 <body style="background: #f5f7fa;">
