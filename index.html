@@ -848,6 +848,33 @@
                 font-size: 1.2rem;
             }
         }
+
+        @media (max-width: 600px) {
+            #table_div table,
+            #table_div table th,
+            #table_div table td,
+            #table_div .gchart-header,
+            #table_div .gchart-header-cell,
+            #table_div .gchart-row,
+            #table_div .gchart-cell {
+                font-size: 0.9rem !important;
+                padding: 6px 2px !important;
+                height: 24px !important;
+            }
+        }
+        @media (max-width: 400px) {
+            #table_div table,
+            #table_div table th,
+            #table_div table td,
+            #table_div .gchart-header,
+            #table_div .gchart-header-cell,
+            #table_div .gchart-row,
+            #table_div .gchart-cell {
+                font-size: 0.7rem !important;
+                padding: 3px 1px !important;
+                height: 18px !important;
+            }
+        }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -1091,6 +1118,7 @@
                                     };
                                 });
                             }
+                            fixTableFontSize();
                         }, 100);
                     });
                 }
@@ -1492,7 +1520,25 @@
             tr.classList.remove('gchart-row-hover');
         });
 
+        // Функция для принудительного уменьшения шрифта и отступов таблицы Google Charts
+        function fixTableFontSize() {
+            if (window.innerWidth <= 400) {
+                document.querySelectorAll('#table_div table, #table_div th, #table_div td').forEach(el => {
+                    el.style.fontSize = '0.7rem';
+                    el.style.padding = '3px 1px';
+                    el.style.height = '18px';
+                });
+            } else if (window.innerWidth <= 600) {
+                document.querySelectorAll('#table_div table, #table_div th, #table_div td').forEach(el => {
+                    el.style.fontSize = '0.9rem';
+                    el.style.padding = '6px 2px';
+                    el.style.height = '24px';
+                });
+            }
+        }
 
+        // Добавить вызов fixTableFontSize при изменении размера окна
+        window.addEventListener('resize', fixTableFontSize);
     </script>
 </head>
 <body style="background: #f5f7fa;">
