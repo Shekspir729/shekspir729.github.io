@@ -1076,6 +1076,8 @@
                     }
                 });
                 
+                applyAdaptiveTableStyles();
+                
                 // Применяем сортировку по умолчанию по столбцу "Сумма Р.Б." (индекс 4)
                 setTimeout(() => {
                     table.setSortInfo({column: 4, desc: true});
@@ -1118,7 +1120,7 @@
                                     };
                                 });
                             }
-                            fixTableFontSize();
+                            applyAdaptiveTableStyles();
                         }, 100);
                     });
                 }
@@ -1520,25 +1522,35 @@
             tr.classList.remove('gchart-row-hover');
         });
 
-        // Функция для принудительного уменьшения шрифта и отступов таблицы Google Charts
-        function fixTableFontSize() {
-            if (window.innerWidth <= 400) {
-                document.querySelectorAll('#table_div table, #table_div th, #table_div td').forEach(el => {
-                    el.style.fontSize = '0.7rem';
-                    el.style.padding = '3px 1px';
-                    el.style.height = '18px';
-                });
-            } else if (window.innerWidth <= 600) {
-                document.querySelectorAll('#table_div table, #table_div th, #table_div td').forEach(el => {
-                    el.style.fontSize = '0.9rem';
-                    el.style.padding = '6px 2px';
-                    el.style.height = '24px';
-                });
-            }
+        function getTableScale() {
+            // Минимальная и максимальная ширина для масштабирования
+            const minW = 320, maxW = 1200;
+            const w = Math.max(minW, Math.min(window.innerWidth, maxW));
+            // scale = 1 при 1200px, scale = 0.7 при 320px
+            return 0.7 + 0.3 * ((w - minW) / (maxW - minW));
         }
 
-        // Добавить вызов fixTableFontSize при изменении размера окна
-        window.addEventListener('resize', fixTableFontSize);
+        function applyAdaptiveTableStyles() {
+            const scale = getTableScale();
+            // Базовые значения для десктопа
+            const baseFont = 28; // px
+            const baseThFont = 32;
+            const basePadding = 16;
+            const baseHeight = 48;
+
+            document.querySelectorAll('#table_div th, #table_div td').forEach(el => {
+                el.style.fontSize = (baseFont * scale) + 'px';
+                el.style.padding = (basePadding * scale) + 'px ' + (8 * scale) + 'px';
+                el.style.height = (baseHeight * scale) + 'px';
+            });
+            document.querySelectorAll('#table_div th').forEach(el => {
+                el.style.fontSize = (baseThFont * scale) + 'px';
+            });
+        }
+
+        // Добавить вызов applyAdaptiveTableStyles при изменении размера окна
+        window.addEventListener('resize', applyAdaptiveTableStyles);
+        window.addEventListener('orientationchange', () => setTimeout(applyAdaptiveTableStyles, 200));
     </script>
 </head>
 <body style="background: #f5f7fa;">
