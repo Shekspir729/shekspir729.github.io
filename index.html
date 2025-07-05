@@ -849,6 +849,111 @@
                 font-size: 1.2rem;
             }
         }
+
+        /* Мобильные карточки вместо таблицы */
+        .mobile-table-cards {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            /* Скрываем обычную таблицу */
+            #table_div table {
+                display: none !important;
+            }
+            
+            /* Показываем мобильные блоки */
+            .mobile-table-cards {
+                display: block !important;
+            }
+            
+            .table-card {
+                background: #ededed;
+                border-radius: 12px;
+                margin: 8px 0;
+                padding: 16px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                border: 2px solid #FFD600;
+            }
+            
+            .table-card-header {
+                display: flex;
+                align-items: center;
+                margin-bottom: 12px;
+            }
+            
+            .place-badge {
+                background: #FFD600;
+                color: #222;
+                border-radius: 50%;
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                margin-right: 12px;
+                font-size: 1.2rem;
+            }
+            
+            .team-name {
+                font-size: 1.2rem;
+                font-weight: bold;
+                color: #222;
+            }
+            
+            .table-card-data {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            
+            .data-item {
+                display: flex;
+                justify-content: space-between;
+                padding: 4px 0;
+                border-bottom: 1px solid #ddd;
+            }
+            
+            .data-label {
+                color: #666;
+                font-size: 0.9rem;
+            }
+            
+            .data-value {
+                font-weight: bold;
+                color: #222;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .table-card {
+                padding: 12px;
+                margin: 6px 0;
+            }
+            
+            .place-badge {
+                width: 28px;
+                height: 28px;
+                font-size: 1rem;
+            }
+            
+            .team-name {
+                font-size: 1.1rem;
+            }
+            
+            .table-card-data {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+            
+            .data-label {
+                font-size: 0.8rem;
+            }
+            
+            .data-value {
+                font-size: 0.9rem;
+            }
+        }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
@@ -1078,6 +1183,9 @@
                         }, 100);
                     });
                 }
+
+                // Функция для создания мобильных карточек
+                createMobileCards(teams);
             } catch (error) {
                 console.error('Error in handleQueryResponse:', error);
                 const newDiv = document.getElementById('table_fade_new');
@@ -1504,6 +1612,98 @@
             if (origDrawTable) origDrawTable.apply(this, arguments);
             setTimeout(autoFitTableFont, 200);
         };
+
+        // Функция для создания мобильных карточек
+        function createMobileCards(teams) {
+            const container = document.getElementById('table_div');
+            let mobileCards = container.querySelector('.mobile-table-cards');
+            
+            // Удаляем старые карточки если есть
+            if (mobileCards) {
+                mobileCards.remove();
+            }
+            
+            // Создаем новые карточки
+            mobileCards = document.createElement('div');
+            mobileCards.className = 'mobile-table-cards';
+            
+            teams.forEach((team, index) => {
+                const card = document.createElement('div');
+                card.className = 'table-card';
+                
+                // Заголовок карточки
+                const header = document.createElement('div');
+                header.className = 'table-card-header';
+                
+                const placeBadge = document.createElement('div');
+                placeBadge.className = 'place-badge';
+                if (index === 0) placeBadge.innerHTML = '🏆';
+                else if (index === 1) placeBadge.innerHTML = '🥈';
+                else if (index === 2) placeBadge.innerHTML = '🥉';
+                else placeBadge.textContent = index + 1;
+                
+                const teamName = document.createElement('div');
+                teamName.className = 'team-name';
+                teamName.textContent = team.name;
+                
+                header.appendChild(placeBadge);
+                header.appendChild(teamName);
+                
+                // Данные команды
+                const dataSection = document.createElement('div');
+                dataSection.className = 'table-card-data';
+                
+                const dataItems = [
+                    { label: 'Сумма баллов', value: team.sumRegular },
+                    { label: 'Сумма Р.Б.', value: team.sumRating },
+                    { label: 'Игр', value: team.count },
+                    { label: 'Средний балл', value: team.avgRegular },
+                    { label: 'Средний Р.Б.', value: team.avgRating }
+                ];
+                
+                dataItems.forEach(item => {
+                    const dataItem = document.createElement('div');
+                    dataItem.className = 'data-item';
+                    
+                    const label = document.createElement('span');
+                    label.className = 'data-label';
+                    label.textContent = item.label;
+                    
+                    const value = document.createElement('span');
+                    value.className = 'data-value';
+                    value.textContent = item.value;
+                    
+                    dataItem.appendChild(label);
+                    dataItem.appendChild(value);
+                    dataSection.appendChild(dataItem);
+                });
+                
+                card.appendChild(header);
+                card.appendChild(dataSection);
+                mobileCards.appendChild(card);
+            });
+            
+            container.appendChild(mobileCards);
+        }
+
+        // Функция для переключения между режимами
+        function toggleTableMode() {
+            const isMobile = window.innerWidth <= 768;
+            const table = document.querySelector('#table_div table');
+            const mobileCards = document.querySelector('.mobile-table-cards');
+            
+            if (isMobile) {
+                if (table) table.style.display = 'none';
+                if (mobileCards) mobileCards.style.display = 'block';
+            } else {
+                if (table) table.style.display = 'table';
+                if (mobileCards) mobileCards.style.display = 'none';
+            }
+        }
+
+        // Обработчики для переключения режимов
+        window.addEventListener('resize', toggleTableMode);
+        window.addEventListener('orientationchange', () => setTimeout(toggleTableMode, 200));
     </script>
 </head>
 <body style="background: #f5f7fa;">
