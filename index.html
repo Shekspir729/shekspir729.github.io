@@ -1310,6 +1310,15 @@
 
                 // Функция для создания мобильных карточек
                 createMobileCards(teams);
+                console.log('createMobileCards called with teams:', teams.length);
+                
+                // Сбрасываем активную сортировку при смене города
+                const sortItems = document.querySelectorAll('#mobile-sort-content .mobile-dropdown-item');
+                sortItems.forEach(item => item.classList.remove('active'));
+                if (sortItems.length > 0) {
+                    sortItems[0].classList.add('active'); // По умолчанию сортировка по рейтингу
+                }
+                document.getElementById('mobile-sort-btn').textContent = 'Сортировка: По рейтингу';
             } catch (error) {
                 console.error('Error in handleQueryResponse:', error);
                 const newDiv = document.getElementById('table_fade_new');
@@ -1749,7 +1758,18 @@
 
         // Функция для создания мобильных карточек
         function createMobileCards(teams) {
+            // Проверяем, что мы на мобильном устройстве
+            if (window.innerWidth > 768) {
+                console.log('Not on mobile device, skipping mobile cards creation');
+                return;
+            }
+            
             const container = document.getElementById('table_div');
+            if (!container) {
+                console.log('Table container not found');
+                return;
+            }
+            
             let mobileCards = container.querySelector('.mobile-table-cards');
             
             // Удаляем старые карточки если есть
@@ -1833,6 +1853,7 @@
             
             // Сохраняем данные команд глобально для сортировки
             window.lastTeamsData = teams;
+            console.log('Mobile cards created and teams data saved:', teams.length, 'teams');
         }
 
         // Функция для открытия мини-таблицы в мобильной версии
@@ -2009,7 +2030,15 @@
                     document.getElementById('mobile-sort-btn').classList.remove('active');
                     
                     // Применяем сортировку к мобильным карточкам
-                    sortMobileCards(sortType);
+                    setTimeout(() => {
+                        // Проверяем, есть ли мобильные карточки, если нет - создаем их
+                        const mobileCards = document.querySelector('.mobile-table-cards');
+                        if (!mobileCards && window.lastTeamsData) {
+                            console.log('Mobile cards not found, recreating them');
+                            createMobileCards(window.lastTeamsData);
+                        }
+                        sortMobileCards(sortType);
+                    }, 100);
                 });
             });
 
@@ -2034,12 +2063,28 @@
 
         // Функция сортировки мобильных карточек
         function sortMobileCards(sortType) {
+            console.log('sortMobileCards called with:', sortType);
+            
+            // Проверяем, что мы на мобильном устройстве
+            if (window.innerWidth > 768) {
+                console.log('Not on mobile device, skipping mobile cards sorting');
+                return;
+            }
+            
             const container = document.querySelector('.mobile-table-cards');
-            if (!container) return;
+            if (!container) {
+                console.log('Mobile cards container not found');
+                return;
+            }
 
             // Используем сохраненные данные команд
             const teamsData = window.lastTeamsData;
-            if (!teamsData || teamsData.length === 0) return;
+            if (!teamsData || teamsData.length === 0) {
+                console.log('No teams data available for sorting');
+                return;
+            }
+
+            console.log('Teams data found:', teamsData.length, 'teams');
 
             // Создаем копию данных для сортировки
             const sortedTeams = [...teamsData].sort((a, b) => {
@@ -2058,6 +2103,8 @@
                         return b.sumRating - a.sumRating;
                 }
             });
+
+            console.log('Teams sorted by:', sortType);
 
             // Очищаем контейнер
             container.innerHTML = '';
@@ -2130,6 +2177,8 @@
                 
                 container.appendChild(card);
             });
+            
+            console.log('Mobile cards recreated with new sorting');
         }
 
         // Инициализируем дропдауны после загрузки страницы
