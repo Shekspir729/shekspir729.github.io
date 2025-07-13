@@ -2122,6 +2122,8 @@
                         return parseFloat(b.avgRating) - parseFloat(a.avgRating);
                     case 'avg-regular':
                         return parseFloat(b.avgRegular) - parseFloat(a.avgRegular);
+                    case 'alphabet':
+                        return a.name.localeCompare(b.name, 'ru', {sensitivity: 'base'});
                     default:
                         return b.sumRating - a.sumRating;
                 }
@@ -2251,6 +2253,7 @@
                                     <div class="mobile-dropdown-item" data-sort="games">По количеству игр</div>
                                     <div class="mobile-dropdown-item" data-sort="avg-rating">По среднему рейтингу</div>
                                     <div class="mobile-dropdown-item" data-sort="avg-regular">По среднему баллу</div>
+                                    <div class="mobile-dropdown-item" data-sort="alphabet">По алфавиту</div>
                                 </div>
                             </div>
                         </div>
