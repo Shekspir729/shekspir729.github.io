@@ -1101,7 +1101,7 @@
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-        const sheetID = '2PACX-1vQdDic_LKJstK5zcw9Fbd3rgwLTC612jAYL4d2iPEiKMz7OQAsvxDLU6n7cspi22w';
+        const sheetID = '1mdtDdcMehEsu_KeX5sGeSQIlHFTMziCj';
         const cities = [
             { name: 'Московский', label: 'Московский' },
             { name: 'Н-Ф', label: 'Н-Ф' },
@@ -1137,7 +1137,7 @@
                 
                 updateActiveButton(city);
                 const queryString = encodeURIComponent('SELECT *');
-                const url = `https://docs.google.com/spreadsheets/d/e/${sheetID}/gviz/tq?sheet=${city}&tq=${queryString}`;
+                const url = `https://docs.google.com/spreadsheets/d/${sheetID}/gviz/tq?sheet=${city}&tq=${queryString}`;
                 const query = new google.visualization.Query(url);
                 
                 // Добавляем таймаут для загрузки
