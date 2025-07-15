@@ -1579,27 +1579,37 @@
                 let ratingStartCol = -1;
                 let ratingEndCol = -1;
                 let headerRowIndex = -1;
+                // Найти строку с заголовками (ищем "название команды" или строку, где подряд идут номера игр)
                 for (let row = 0; row < Math.min(data.getNumberOfRows(), 5); row++) {
                     const first = data.getValue(row, 0);
                     const second = data.getValue(row, 1);
                     const third = data.getValue(row, 2);
-                    console.log(`  Row ${row}: "${first}" | "${second}" | "${third}"`);
-                }
-                if (headerRowIndex === -1) {
-                    const firstCell = data.getValue(0, 0);
-                    const secondCell = data.getValue(0, 1);
-                    if (firstCell && typeof secondCell === 'number' && secondCell > 0 && secondCell < 100) {
-                        headerRowIndex = -1;
-                    } else {
-                        headerRowIndex = 0;
+                    if (first && first.toString().toLowerCase().includes('название')) {
+                        headerRowIndex = row;
+                        break;
+                    }
+                    // Если подряд несколько ячеек - числа (номера игр), считаем это строкой заголовков
+                    if (
+                        typeof second === 'number' && typeof third === 'number' &&
+                        second > 0 && third > 0 && second < 1000 && third < 1000
+                    ) {
+                        headerRowIndex = row;
+                        break;
                     }
                 }
-                if (headerRowIndex === -1) {
-                    for (let i = regularStartCol; i < totalCols; i++) {
+                // Определяем границы обычных баллов
+                for (let i = regularStartCol; i < totalCols; i++) {
+                    let header = headerRowIndex !== -1 ? data.getValue(headerRowIndex, i) : null;
+                    if (header && header.toString().toLowerCase().includes('сумма')) break;
+                    // Если в первых строках есть числа, это номера игр
+                    if (headerRowIndex !== -1 && header && /^\d+$/.test(header.toString().trim())) {
+                        regularEndCol = i;
+                    } else if (headerRowIndex === -1) {
+                        // Если нет строки заголовков, ищем по типу данных
                         let hasGameData = false;
                         for (let row = 0; row < Math.min(data.getNumberOfRows(), 5); row++) {
                             const cellValue = data.getValue(row, i);
-                            if (typeof cellValue === 'number' && cellValue > 0 && cellValue <= 100) {
+                            if (typeof cellValue === 'number' && cellValue > 0 && cellValue < 1000) {
                                 hasGameData = true;
                                 break;
                             }
@@ -1610,48 +1620,18 @@
                             break;
                         }
                     }
-                } else {
-                    for (let i = regularStartCol; i < totalCols; i++) {
-                        const header = data.getValue(headerRowIndex, i);
-                        if (!header) continue;
-                        const headerStr = header.toString().toLowerCase().trim();
-                        if (headerStr.includes('сумма')) {
-                            break;
-                        }
-                        const hasNumber = /\d+/.test(headerStr);
-                        const isGameColumn = hasNumber && !headerStr.includes('р.б.') && !headerStr.includes('сумма');
-                        if (isGameColumn) {
-                            regularEndCol = i;
-                        }
-                    }
                 }
-                if (headerRowIndex !== -1) {
-                    for (let i = regularEndCol + 1; i < totalCols; i++) {
-                        const header = data.getValue(headerRowIndex, i);
-                        if (!header) continue;
-                        const headerStr = header.toString().toLowerCase().trim();
-                        if (headerStr.includes('р.б.') || headerStr.includes('рб') || headerStr.includes('rating')) {
-                            if (ratingStartCol === -1) {
-                                ratingStartCol = i;
-                            }
-                            ratingEndCol = i;
-                        } else if (ratingStartCol !== -1 && headerStr.includes('сумма')) {
-                            break;
-                        }
-                    }
-                }
+                // Формируем массив номеров игр из строки заголовков
                 let gameHeaders = [];
-                if (typeof data.getValue === 'function' && data.getNumberOfRows() > 0 && regularEndCol >= regularStartCol) {
-                    if (headerRowIndex === -1) {
-                        for (let i = regularStartCol; i <= regularEndCol; i++) {
-                            const gameNumber = 195 + (i - regularStartCol);
-                            gameHeaders.push(`Игра ${gameNumber}`);
-                        }
-                    } else {
-                        for (let i = regularStartCol; i <= regularEndCol; i++) {
-                            let header = data.getValue(headerRowIndex, i);
-                            gameHeaders.push(header ? header.toString() : `Игра ${i}`);
-                        }
+                if (headerRowIndex !== -1 && regularEndCol >= regularStartCol) {
+                    for (let i = regularStartCol; i <= regularEndCol; i++) {
+                        let header = data.getValue(headerRowIndex, i);
+                        gameHeaders.push(header ? header.toString() : `Игра ${i}`);
+                    }
+                } else if (regularEndCol >= regularStartCol) {
+                    // fallback: если не нашли строку заголовков, просто нумеруем
+                    for (let i = regularStartCol; i <= regularEndCol; i++) {
+                        gameHeaders.push(`Игра ${i}`);
                     }
                 }
                 if (gameHeaders.length === 0) {
@@ -1665,8 +1645,7 @@
                 headerRow.appendChild(headerCell);
                 for (let i = 0; i < gameHeaders.length; i++) {
                     const th = document.createElement('th');
-                    const gameNumber = gameHeaders[i].toString().replace(/[^\d]/g, '') || (195 + i);
-                    th.textContent = gameNumber;
+                    th.textContent = gameHeaders[i];
                     headerRow.appendChild(th);
                 }
                 tbody.appendChild(headerRow);
@@ -1679,12 +1658,6 @@
                         actualRowIndex = i;
                         break;
                     }
-                }
-                console.log(`Looking for team: "${teamName}" in Google Sheets data`);
-                if (actualRowIndex !== -1) {
-                    console.log(`Found team "${teamName}" at row ${actualRowIndex} in Google Sheets`);
-                } else {
-                    console.log(`Team "${teamName}" not found in Google Sheets data`);
                 }
                 if (actualRowIndex === -1) {
                     container.innerHTML = '<div style="text-align: center; padding: 20px; color: #721c24;">Команда не найдена в исходных данных</div>';
@@ -1703,6 +1676,7 @@
                     pointsRow.appendChild(td);
                 }
                 tbody.appendChild(pointsRow);
+                // Рейтинговые баллы (оставляем как есть)
                 if (currentCity === 'Московский') {
                     var rbStartCol = 16;
                     var rbEndCol = 29;
